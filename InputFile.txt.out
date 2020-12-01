@@ -1,26 +1,26 @@
-integer func xz(string str)
+tiny func xz(symbolic str)
 [
-integer p : strlen(str).
-return p. 
+tiny p : symblen(str).
+giveback p.
 ]
-dvv
+zei
 [
-integer x : 10. 
-integer y : 10. 
-string str : "sp ace". 
-string mystr : "а бв?гдежзикламопростуфхцч".
-bool mb : false. 
-if(x=y)
+tiny x : 10.
+tiny y : 10.
+symbolic str : "sp ace".
+symbolic mystr : "а бв?гдежзикла	мопростуфхцч".
+logical mb : false. 
+when(x=y)
 [
-integer m : xz(str).
-print("string").
-print(m).
+tiny m : xz(str).
+show("string").
+show(m).
 ]
-else
+otherwise
 [
-string nb : substr(mystr,str).
-print(nb).
+symbolic nb : symbtotiny(mystr).
+show(nb).
 ]
-integer z :(x*y)*(x/y). 
-print(z).
+tiny z :(x*y)*(x/y).
+show(z).
 ]

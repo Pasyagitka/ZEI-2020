@@ -14,7 +14,7 @@ namespace IT
 
 	enum IDDATATYPE
 	{
-		INT = 1, STR, BOOL //типы данных идентификаторов
+		TINY = 1, SYMB, LGCL //типы данных идентификаторов
 	};
 
 	enum IDTYPE

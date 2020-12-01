@@ -384,7 +384,8 @@
 //						break;
 //					}
 //				}
-//				while (ltable.table[i].lexema != LEX_POINT)
+//				while (ltable.table[i].lexema != LEX_
+
 //				{
 //					if (ltable.table[i].lexema == LEX_LITERAL)
 //					{

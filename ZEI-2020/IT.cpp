@@ -64,21 +64,21 @@ namespace IT
 		{
 			*id.stream << itable.table[i].idxfirstLE + 1 << "\t";
 
-			if (itable.table[i].idtype == IT::INT)*id.stream << "variable";
-			else if (itable.table[i].idtype == IT::STR)*id.stream << "literal";
-			else if (itable.table[i].idtype == IT::BOOL)*id.stream << "function";
+			if (itable.table[i].idtype == IT::TINY)*id.stream << "variable";
+			else if (itable.table[i].idtype == IT::SYMB)*id.stream << "literal";
+			else if (itable.table[i].idtype == IT::LGCL)*id.stream << "function";
 
 			*id.stream << "\t\t";
 
-			if (itable.table[i].iddatatype == IT::INT)*id.stream << "tiny";
-			else if (itable.table[i].iddatatype == IT::STR)*id.stream << "symbolic";
-			else if (itable.table[i].iddatatype == IT::BOOL)*id.stream << "logical";
+			if (itable.table[i].iddatatype == IT::TINY)*id.stream << "tiny";
+			else if (itable.table[i].iddatatype == IT::SYMB)*id.stream << "symbolic";
+			else if (itable.table[i].iddatatype == IT::LGCL)*id.stream << "logical";
 
 			*id.stream << "\t\t" << itable.table[i].id << "\t";
 
-			if (itable.table[i].iddatatype == IT::INT)			*id.stream << itable.table[i].value.vint;
-			else if (itable.table[i].iddatatype == IT::STR)		*id.stream << itable.table[i].value.vstr->str;
-			else if (itable.table[i].iddatatype == IT::BOOL)	*id.stream << itable.table[i].value.vbool;
+			if (itable.table[i].iddatatype == IT::TINY)			*id.stream << itable.table[i].value.vint;
+			else if (itable.table[i].iddatatype == IT::SYMB)		*id.stream << itable.table[i].value.vstr->str;
+			else if (itable.table[i].iddatatype == IT::LGCL)	*id.stream << itable.table[i].value.vbool;
 			*id.stream << std::endl;
 		}
 	}
