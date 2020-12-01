@@ -109,7 +109,7 @@
 	FST::RELATION('7', 1), FST::RELATION('8', 1), FST::RELATION('9', 1), FST::RELATION('0', 1)),\
 	FST::NODE()
 
-//TODO Нужна ли литералу лексема?
+//TODO Нужна ли литералу лексема
 #define FST_STRLIT 4, \
 	FST::NODE(1, FST::RELATION('"', 1)),\
 	FST::NODE(154, \
