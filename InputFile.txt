@@ -1,0 +1,26 @@
+integer	 func xz(string str) ~fewf
+[
+integer p    : strlen(str).
+return p. 
+]
+dvv
+[	~efewfko
+integer x :   10. 
+integer y : 10. ~ауал
+string 	str : "sp ace". 
+string  mystr : "а бв?гдежзикламопростуфхцч".
+bool mb : false. ~алащуащуа
+if (x = y)
+[
+integer m : xz(str).
+print("string").
+print	 (m).
+]
+else
+[
+string nb : substr(mystr,str).
+print (nb).
+]
+integer z :		 (x * y)	* (x /y). 
+print (z).
+]

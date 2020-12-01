@@ -1,0 +1,18 @@
+------------ Таблица идентификаторов--------------------------- 01.12.2020 16:12:48 ---------
+Строка	Тип ID		Тип данных	Имя	Значение
+1	function		tiny		xz	0
+1	variable		symbolic		str	
+3	variable		tiny		p	0
+8	variable		tiny		x	0
+8	literal		tiny		LTR	10
+9	variable		tiny		y	0
+10	variable		symbolic		str	
+10	literal		symbolic		LTR	"sp ace"
+11	variable		symbolic		mystr	
+11	literal		symbolic		LTR	"а бв?гдежзикламопростуфхцч"
+12	variable		logical		mb	
+12	literal		logical		LTR	false
+15	variable		tiny		m	0
+16	literal		symbolic		LTR	"string"
+21	variable		symbolic		nb	
+24	variable		tiny		z	0
