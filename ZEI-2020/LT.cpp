@@ -66,10 +66,11 @@ namespace LT
 		{
 			if (compLine != ltable.table[i].sn)
 			{
-				*lx.stream << endl << ltable.table[i].sn << "\t";
+				*lx.stream << endl << ltable.table[i].sn << "\t" ;
 				compLine = ltable.table[i].sn;
 			}
 			*lx.stream << ltable.table[i].lexema;
+			//if (ltable.table[i].indxTI != -1) *lx.stream << ltable.table[i].indxTI;
 		}
 	}
 	void WriteLexHeading(LEX lx)

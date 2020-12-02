@@ -11,9 +11,10 @@
 namespace Pn {
 	void ToPolish(LT::LexTable& lextable, IT::IdTable& idtable) {
 		for (int i = 0; i < lextable.size; i++) {
-			if (lextable.table[i].lexema == ':' || lextable.table[i].lexema == 'h')
-				PolishNotation(i+1, lextable, idtable);
-
+			if (lextable.table[i].lexema == ':')
+				PolishNotation(i +1, lextable, idtable);
+			if (lextable.table[i].lexema == 'h')
+				PolishNotation(i, lextable, idtable);
 		}
 	}
 
@@ -39,7 +40,8 @@ namespace Pn {
 		{
 			temp = LT::GetEntry(lextable, i);
 
-			if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL || temp.lexema == LEX_LIBFUNC)
+
+			if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL || temp.lexema == LEX_LIBFUNC || temp.lexema == LEX_SHOW)
 			{
 				if (idtable.table[lextable.table[i].indxTI].idtype== IT::F || idtable.table[lextable.table[i].indxTI].idtype == IT::B) functionflag = true; //идентификатор функции удаляется А ТИП???
 				else ResultingString += temp.lexema;

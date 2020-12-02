@@ -41,7 +41,7 @@ namespace IT
 	int IsId(IdTable& idtable, char id[ID_MAXSIZE]) {
 		for (int i = 0; i < idtable.size; i++) {
 			if (!strcmp(idtable.table[i].id, id))
-				return idtable.table[i].idxfirstLE;
+				return i; //idtable.table[i].idxfirstLE;
 		}
 		return TI_NULLIDX;
 	}
@@ -89,6 +89,7 @@ namespace IT
 			if (itable.table[i].iddatatype == IT::TINY)			*id.stream << itable.table[i].value.vint;
 			else if (itable.table[i].iddatatype == IT::SYMB)	*id.stream << itable.table[i].value.vstr->str;
 			else if (itable.table[i].iddatatype == IT::LGCL)	*id.stream << itable.table[i].value.vbool;
+
 			*id.stream << std::endl;
 		}
 	}
