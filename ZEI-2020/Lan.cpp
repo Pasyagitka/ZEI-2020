@@ -7,12 +7,15 @@
 
 #include "SEM.h"
 #define EMPTY_LITERAL "-"
+//TODO: сделать всё в одном стиле
+//TODO: обработка ошибок
+//TODO: сделать вместо точки !
 namespace Lan
 {
 	void Analysis(char inText[], Log::LOG, LT::LexTable& lextable, IT::IdTable& idtable)
 	{
-		int line = 0, col = 0, sizeofbuf = 0;
-		bool linkflag(false), provsep(false), proverka(false), newflag(false), secondflag(false), flag(false);
+		int currentLine = 0, currentColumn = 0, sizeofbuf = 0;
+		bool linkflag(false), TokenIsCommited(false), proverka(false), newflag(false), secondflag(false), flag(false);
 		bool quoteFlag(false);
 
 		char postfix[LT_MAXSIZE];
@@ -34,23 +37,21 @@ namespace Lan
 			sizeofbuf++;
 			linkflag = false;
 			secondflag = false;
-			provsep = false;
+			TokenIsCommited = false;
 			if (newflag)
 			{
-				line++;
-				col = 0;
+				currentLine++;
+				currentColumn = 0;
 				newflag = false;
 			}//TODO: добавить знаки,чтоб выражения х=х распознавались правильно +-=пробел*/<>
 			if (inText[i] == LEX_SPACE || inText[i] == LEX_ENDL || inText[i] == LEX_POINT || inText[i] == LEX_COMMA || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_COMMA
-				|| inText[i + 1] == LEX_MINUS || inText[i + 1] == LEX_PLUS || inText[i + 1] == LEX_EQUALITY || inText[i + 1] == LEX_STAR || inText[i + 1] == LEX_SLASH || inText[i + 1] == LEX_MORE || inText[i + 1] ==  LEX_LESS 
+				|| inText[i + 1] == LEX_MINUS || inText[i + 1] == LEX_PLUS || inText[i + 1] == LEX_EQUALITY || inText[i + 1] == LEX_STAR || inText[i + 1] == LEX_SLASH || inText[i + 1] == LEX_MORE || inText[i + 1] ==  LEX_LESS
 				|| inText[i] == LEX_MINUS || inText[i] == LEX_PLUS || inText[i] == LEX_EQUALITY || inText[i] == LEX_STAR || inText[i] == LEX_SLASH || inText[i] == LEX_MORE || inText[i] == LEX_LESS
 				)
 			{
-				if (inText[i] == LEX_ENDL)
-					newflag = true;
+				if (inText[i] == LEX_ENDL)	newflag = true;
 
-				if (quoteFlag) 
-					continue;
+				if (quoteFlag) 	continue;
 
 				if (inText[i] == LEX_POINT || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_COMMA)	{
 					newbuf[0] = buffer[sizeofbuf - 1];
@@ -64,17 +65,17 @@ namespace Lan
 					if (!quoteFlag) buffer[sizeofbuf - 1] = LEX_END;
 
 				sizeofbuf = 0;
-				provsep = true;
+				TokenIsCommited = true;
 				if (buffer[sizeofbuf] == LEX_SPACE || buffer[sizeofbuf] == LEX_ENDL)
 					continue;
 			}
-			col++;
-			if (provsep)
+			currentColumn++;
+			if (TokenIsCommited)
 			{
 				FST::FST FSTTiny(buffer, FST_TINY);
 				if (FST::execute(FSTTiny))
 				{
-					LT::Entry lEntry = { LEX_TINY , line, col };
+					LT::Entry lEntry = { LEX_TINY , currentLine, currentColumn };
 					strcpy_s(lEntry.buf, buffer);
 					LT::Add(*ltable, lEntry);
 					dataType = IT::TINY;
@@ -84,7 +85,7 @@ namespace Lan
 				FST::FST FSTSymbolic(buffer, FST_SYMBOLIC);
 				if (FST::execute(FSTSymbolic))
 				{
-					LT::Entry lEntry = { LEX_SYMBOLIC, line, col };
+					LT::Entry lEntry = { LEX_SYMBOLIC, currentLine, currentColumn };
 					strcpy_s(lEntry.buf, buffer);
 					LT::Add(*ltable, lEntry);
 					dataType = IT::SYMB;
@@ -94,7 +95,7 @@ namespace Lan
 				FST::FST FSTLogical(buffer, FST_LOGICAL);
 				if (FST::execute(FSTLogical))
 				{
-					LT::Entry lEntry = { LEX_LOGICAL, line, col };
+					LT::Entry lEntry = { LEX_LOGICAL, currentLine, currentColumn };
 					strcpy_s(lEntry.buf, buffer);
 					LT::Add(*ltable, lEntry);
 					dataType = IT::LGCL;
@@ -104,7 +105,7 @@ namespace Lan
 				FST::FST FSTFunc(buffer, FST_FUNC);
 				if (FST::execute(FSTFunc))
 				{
-					LT::Entry lEntry = { LEX_FUNCTION, line, col };
+					LT::Entry lEntry = { LEX_FUNCTION, currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					idType = IT::F;
 					linkflag = true;
@@ -112,7 +113,7 @@ namespace Lan
 				FST::FST FSTGiveback(buffer, FST_GIVEBACK);
 				if (FST::execute(FSTGiveback))
 				{
-					LT::Entry lEntry = { LEX_GIVEBACK, line, col };
+					LT::Entry lEntry = { LEX_GIVEBACK, currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					idType = IT::V;
 					linkflag = true;
@@ -120,7 +121,7 @@ namespace Lan
 				FST::FST FSTShow(buffer, FST_SHOW);
 				if (FST::execute(FSTShow))
 				{
-					LT::Entry lEntry = { LEX_SHOW, line, col };
+					LT::Entry lEntry = { LEX_SHOW, currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					idType = IT::V;
 					linkflag = true;
@@ -128,7 +129,7 @@ namespace Lan
 				FST::FST FSTLib(buffer, FST_LIB);
 				if (FST::execute(FSTLib))
 				{
-					LT::Entry lEntry = { LEX_LIB, line, col };
+					LT::Entry lEntry = { LEX_LIB, currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					strcpy_s(postfix, buffer);
 					//SA::OneDvv(*ltable, flag);
@@ -138,28 +139,28 @@ namespace Lan
 				FST::FST FSTWhen(buffer, FST_WHEN);
 				if (FST::execute(FSTWhen))
 				{
-					LT::Entry lEntry = { LEX_WHEN, line, col };
+					LT::Entry lEntry = { LEX_WHEN, currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					linkflag = true;
 				}
 				FST::FST FSTOtherwise(buffer, FST_OTHERWISE);
 				if (FST::execute(FSTOtherwise))
 				{
-					LT::Entry lEntry = { LEX_OTHERWISE, line, col };
+					LT::Entry lEntry = { LEX_OTHERWISE, currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					linkflag = true;
 				}
 				FST::FST FSTSymblen(buffer, FST_SYMBLEN);
 				if (FST::execute(FSTSymblen))
 				{
-					LT::Entry lEntry = { LEX_LIBFUNC, line, col, 1 };
+					LT::Entry lEntry = { LEX_LIBFUNC, currentLine, currentColumn, 1 };
 					LT::Add(*ltable, lEntry);
 					linkflag = true;
 				}
 				FST::FST FSTSymbtotiny(buffer, FST_SYMBTOTINY);
 				if (FST::execute(FSTSymbtotiny))
 				{
-					LT::Entry lEntry = { LEX_LIBFUNC, line, col, 2 };
+					LT::Entry lEntry = { LEX_LIBFUNC, currentLine, currentColumn, 2 };
 					LT::Add(*ltable, lEntry);
 					linkflag = true;
 				}
@@ -167,7 +168,7 @@ namespace Lan
 				FST::FST FSTLogicalLiteralFalse(buffer, FST_FALSE);
 				if (FST::execute(FSTLogicalLiteralFalse) || FST::execute(FSTLogicalLiteralTrue))
 				{
-					LT::Entry lEntry = { LEX_LITERAL, line, col };
+					LT::Entry lEntry = { LEX_LITERAL, currentLine, currentColumn };
 					lEntry.sign = -1;
 					strcpy_s(lEntry.buf, buffer);
 					LT::Add(*ltable, lEntry);
@@ -186,7 +187,7 @@ namespace Lan
 						}
 						else proverka = false;
 					}
-					iEntry.idxfirstLE = line;
+					iEntry.idxfirstLE = currentLine;
 					if (!proverka)
 					{
 						IT::Add(*itable, iEntry);
@@ -198,8 +199,8 @@ namespace Lan
 					if (FST::execute(FSTIdentifier))
 					{
 						if (strlen(buffer) > 20)
-							throw ERROR_THROW(122, line, col);
-						LT::Entry lEntry = { LEX_ID, line, col };
+							throw ERROR_THROW(122, currentLine, currentColumn);
+						LT::Entry lEntry = { LEX_ID, currentLine, currentColumn };
 						strcpy_s(lEntry.buf, buffer);
 						LT::Add(*ltable, lEntry);
 						IT::Entry iEntry;
@@ -236,7 +237,7 @@ namespace Lan
 							iEntry.value.vint = TI_INT_DEFAULT;
 							iEntry.value.vstr->len = TI_STR_DEFAULT;
 							strcpy_s(iEntry.value.vstr->str, "");
-							iEntry.idxfirstLE = line;
+							iEntry.idxfirstLE = currentLine;
 							IT::Add(*itable, iEntry);
 						}
 						linkflag = true;
@@ -245,7 +246,7 @@ namespace Lan
 					if (FST::execute(FSTTinyLiteral))
 					{
 						long double bufNum = std::atoi(buffer);
-						LT::Entry lEntry = { LEX_LITERAL, line, col };
+						LT::Entry lEntry = { LEX_LITERAL, currentLine, currentColumn };
 						lEntry.sign = bufNum;
 						strcpy_s(lEntry.buf, buffer);
 						LT::Add(*ltable, lEntry);
@@ -256,7 +257,7 @@ namespace Lan
 						iEntry.idtype = IT::L;
 						if (bufNum >= INT_MAX)
 						{
-							throw ERROR_THROW(121, line, col);
+							throw ERROR_THROW(121, currentLine, currentColumn);
 						}
 						iEntry.value.vint = (int)bufNum;
 						strcpy_s(iEntry.value.vstr->str, buffer);
@@ -269,7 +270,7 @@ namespace Lan
 							}
 							else  proverka = false;
 						}
-						iEntry.idxfirstLE = line;
+						iEntry.idxfirstLE = currentLine;
 						if (!proverka)
 						{
 							IT::Add(*itable, iEntry);
@@ -279,7 +280,7 @@ namespace Lan
 					FST::FST FSTSymbolicLiteral(buffer, FST_SYMBOLICLITERAL);
 					if (FST::execute(FSTSymbolicLiteral))
 					{
-						LT::Entry lEntry = { LEX_LITERAL, line, col };
+						LT::Entry lEntry = { LEX_LITERAL, currentLine, currentColumn };
 						lEntry.sign = -1;
 						strcpy_s(lEntry.buf, buffer);
 						LT::Add(*ltable, lEntry);
@@ -288,7 +289,7 @@ namespace Lan
 						iEntry.iddatatype = IT::SYMB;
 						iEntry.idtype = IT::L;
 						if (strlen(buffer) > 255)
-							throw ERROR_THROW(120, line, col);
+							throw ERROR_THROW(120, currentLine, currentColumn);
 						iEntry.value.vstr->len = strlen(buffer);
 						strcpy_s(iEntry.value.vstr->str, buffer);
 						for (int i = 0; i < itable->size; i++)
@@ -301,7 +302,7 @@ namespace Lan
 							}
 							else proverka = false;
 						}
-						iEntry.idxfirstLE = line;
+						iEntry.idxfirstLE = currentLine;
 						if (!proverka)
 						{
 							IT::Add(*itable, iEntry);
@@ -311,14 +312,14 @@ namespace Lan
 					FST::FST FSTPoint(buffer, FST_POINT);
 					if (FST::execute(FSTPoint))
 					{
-						LT::Entry lEntry = { LEX_POINT, line, col };
+						LT::Entry lEntry = { LEX_POINT, currentLine, currentColumn };
 						LT::Add(*ltable, lEntry);
 						continue;
 					}
 					FST::FST FSTComma(buffer, FST_COMMA);
 					if (FST::execute(FSTComma))
 					{
-						LT::Entry lEntry = { LEX_COMMA, line, col };
+						LT::Entry lEntry = { LEX_COMMA, currentLine, currentColumn };
 						lEntry.priority = 1;
 						LT::Add(*ltable, lEntry);
 						continue;
@@ -326,21 +327,21 @@ namespace Lan
 					FST::FST FSTLeftBrace(buffer, FST_LEFTBRACE);
 					if (FST::execute(FSTLeftBrace))
 					{
-						LT::Entry lEntry = { LEX_LEFTBRACE, line, col };
+						LT::Entry lEntry = { LEX_LEFTBRACE, currentLine, currentColumn };
 						LT::Add(*ltable, lEntry);
 						continue;
 					}
 					FST::FST FSTRightBrace(buffer, FST_RIGHTBRACE);
 					if (FST::execute(FSTRightBrace))
 					{
-						LT::Entry lEntry = { LEX_RIGHTBRACE, line, col };
+						LT::Entry lEntry = { LEX_RIGHTBRACE, currentLine, currentColumn };
 						LT::Add(*ltable, lEntry);
 						continue;
 					}
 					FST::FST FSTLeftThesis(buffer, FST_LEFTHESIS);
 					if (FST::execute(FSTLeftThesis))
 					{
-						LT::Entry lEntry = { LEX_LEFTHESIS, line, col };
+						LT::Entry lEntry = { LEX_LEFTHESIS, currentLine, currentColumn };
 						lEntry.priority = 0;
 						LT::Add(*ltable, lEntry);
 						continue;
@@ -348,7 +349,7 @@ namespace Lan
 					FST::FST FSTRightThesis(buffer, FST_RIGHTHESIS);
 					if (FST::execute(FSTRightThesis))
 					{
-						LT::Entry lEntry = { LEX_RIGHTHESIS, line, col };
+						LT::Entry lEntry = { LEX_RIGHTHESIS, currentLine, currentColumn };
 						lEntry.priority = 0;
 						LT::Add(*ltable, lEntry);
 						continue;
@@ -356,7 +357,7 @@ namespace Lan
 					FST::FST FSTMore(buffer, FST_MORE);
 					if (FST::execute(FSTMore))
 					{
-						LT::Entry lEntry = { LEX_MORE, line, col };
+						LT::Entry lEntry = { LEX_MORE, currentLine, currentColumn };
 						lEntry.sign = 2;
 						LT::Add(*ltable, lEntry);
 						linkflag = true;
@@ -364,7 +365,7 @@ namespace Lan
 					FST::FST FSTLess(buffer, FST_LESS);
 					if (FST::execute(FSTLess))
 					{
-						LT::Entry lEntry = { LEX_LESS, line, col };
+						LT::Entry lEntry = { LEX_LESS, currentLine, currentColumn };
 						lEntry.sign = 2;
 						LT::Add(*ltable, lEntry);
 						linkflag = true;
@@ -372,7 +373,7 @@ namespace Lan
 					FST::FST FSTEquality(buffer, FST_EQUALITY);
 					if (FST::execute(FSTEquality))
 					{
-						LT::Entry lEntry = { LEX_EQUALITY, line, col };
+						LT::Entry lEntry = { LEX_EQUALITY, currentLine, currentColumn };
 						lEntry.sign = 2;
 						LT::Add(*ltable, lEntry);
 						linkflag = true;
@@ -380,14 +381,14 @@ namespace Lan
 					FST::FST FSTCompare(buffer, FST_COMPARE);
 					if (FST::execute(FSTCompare))
 					{
-						LT::Entry lEntry = { LEX_COMPARE, line, col };
+						LT::Entry lEntry = { LEX_COMPARE, currentLine, currentColumn };
 						LT::Add(*ltable, lEntry);
 						linkflag = true;
 					}
 					FST::FST FSTPlus(buffer, FST_PLUS);
 					if (FST::execute(FSTPlus))
 					{
-						LT::Entry lEntry = { LEX_PLUS, line, col };
+						LT::Entry lEntry = { LEX_PLUS, currentLine, currentColumn };
 						lEntry.sign = 1;
 						lEntry.priority = 2;
 						LT::Add(*ltable, lEntry);
@@ -396,7 +397,7 @@ namespace Lan
 					FST::FST FSTMinus(buffer, FST_MINUS);
 					if (FST::execute(FSTMinus))
 					{
-						LT::Entry lEntry = { LEX_MINUS, line, col };
+						LT::Entry lEntry = { LEX_MINUS, currentLine, currentColumn };
 						lEntry.sign = 1;
 						lEntry.priority = 2;
 						LT::Add(*ltable, lEntry);
@@ -405,7 +406,7 @@ namespace Lan
 					FST::FST FSTStar(buffer, FST_STAR);
 					if (FST::execute(FSTStar))
 					{
-						LT::Entry lEntry = { LEX_STAR, line, col };
+						LT::Entry lEntry = { LEX_STAR, currentLine, currentColumn };
 						lEntry.sign = 1;
 						lEntry.priority = 3;
 						LT::Add(*ltable, lEntry);
@@ -414,7 +415,7 @@ namespace Lan
 					FST::FST FSTSlash(buffer, FST_SLASH);
 					if (FST::execute(FSTSlash))
 					{
-						LT::Entry lEntry = { LEX_SLASH, line, col };
+						LT::Entry lEntry = { LEX_SLASH, currentLine, currentColumn };
 						lEntry.sign = 1;
 						lEntry.priority = 3;
 						LT::Add(*ltable, lEntry);
@@ -425,45 +426,46 @@ namespace Lan
 		if (linkflag)
 			if (secondflag)
 			{
+
 				FST::FST FSTPoint(newbuf, FST_POINT);
 				if (FST::execute(FSTPoint))
 				{
-					LT::Entry lEntry = { LEX_POINT , line, col };
+					LT::Entry lEntry = { LEX_POINT , currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					continue;
 				}
 				FST::FST FSTLeftThesis(newbuf, FST_LEFTHESIS);
 				if (FST::execute(FSTLeftThesis))
 				{
-					LT::Entry lEntry = { LEX_LEFTHESIS , line, col };
+					LT::Entry lEntry = { LEX_LEFTHESIS , currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					continue;
 				}
 				FST::FST FSTRightThesis(newbuf, FST_RIGHTHESIS);
 				if (FST::execute(FSTRightThesis))
 				{
-					LT::Entry lEntry = { LEX_RIGHTHESIS , line, col };
+					LT::Entry lEntry = { LEX_RIGHTHESIS , currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					continue;
 				}
 				FST::FST FSTRightbrace(newbuf, FST_RIGHTBRACE);
 				if (FST::execute(FSTRightbrace))
 				{
-					LT::Entry lEntry = { LEX_RIGHTBRACE , line, col };
+					LT::Entry lEntry = { LEX_RIGHTBRACE , currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					continue;
 				}
 				FST::FST FSTLeftbrace(newbuf, FST_LEFTBRACE);
 				if (FST::execute(FSTLeftbrace))
 				{
-					LT::Entry lEntry = { LEX_LEFTBRACE , line, col };
+					LT::Entry lEntry = { LEX_LEFTBRACE , currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					continue;
 				}
 				FST::FST FSTComma(newbuf, FST_COMMA);
 				if (FST::execute(FSTComma))
 				{
-					LT::Entry lEntry = { LEX_COMMA, line, col };
+					LT::Entry lEntry = { LEX_COMMA, currentLine, currentColumn };
 					LT::Add(*ltable, lEntry);
 					continue;
 				}

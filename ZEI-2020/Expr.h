@@ -177,10 +177,6 @@
     FST::NODE(1, FST::RELATION('e',5)),\
     FST::NODE()
 
-#define FST_EXCLAMATION 2,\
-    FST::NODE(1, FST::RELATION('!',1)),\
-    FST::NODE()
-
 #define FST_POINT 2,\
     FST::NODE(1, FST::RELATION('.',1)),\
     FST::NODE()

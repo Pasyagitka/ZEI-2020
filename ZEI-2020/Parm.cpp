@@ -2,7 +2,7 @@
 #include "Error.h"
 #include <iostream>
 #include <tchar.h>
-
+//TODO: ןאנאלוענû הכÿ lex ט עה
 namespace Parm
 {
 	PARM getparm(int argc, _TCHAR* argv[])

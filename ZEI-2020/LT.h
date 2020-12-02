@@ -42,7 +42,6 @@
 #define LEX_QUOTE		'"'
 #define LEX_FREE		'%'	//для удаленных
 #define LEX_AT			'@'
-#define LEX_EXCLAMATION '!'
 
 namespace LT
 {

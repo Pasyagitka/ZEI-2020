@@ -9,7 +9,7 @@ tiny x :   10.
 tiny y : 10.
 symbolic 	str : "sp ace".
 symbolic  mystr : "а бв?гдежзикла	мопростуфхцч".
-logical mb : false.                                                                            ~алащуащуа
+logical mb : false.                                                                    ~алащуащуа
 when (x = y)
 [
 tiny m : xz(str).
