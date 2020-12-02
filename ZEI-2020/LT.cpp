@@ -10,7 +10,7 @@ namespace LT
 	LexTable Create(int size)
 	{
 		if (size >= LT_MAXSIZE)
-		throw ERROR_THROW(300); //превышен размер таблицы лексем
+			throw ERROR_THROW(300); //превышен размер таблицы лексем
 		LexTable ltable = { size, 0, new Entry[size] };
 		return ltable;
 	}
@@ -18,7 +18,7 @@ namespace LT
 	void Add(LexTable& ltable, Entry& lstr)
 	{
 		if (ltable.size >= ltable.maxsize)
-		throw ERROR_THROW(113); //таблица переполнена
+			throw ERROR_THROW(113); //таблица переполнена
 		ltable.table[ltable.size] = lstr;
 		ltable.size++;
 	}
@@ -26,15 +26,15 @@ namespace LT
 	void Delete(LexTable& ltable)
 	{
 		if (!&ltable)
-		throw ERROR_THROW(302); //таблица лексем, вероятно, ещё не создана
+			throw ERROR_THROW(302); //таблица лексем, вероятно, ещё не создана
 		delete ltable.table;
 		ltable.table = nullptr;
 	}
 
 	Entry GetEntry(LexTable& ltable, int nstr)
 	{
-		if (ltable.size > nstr)
-		throw ERROR_THROW(115); //номер недопустимый
+		if (ltable.size < nstr)
+			throw ERROR_THROW(115); //номер недопустимый
 		return ltable.table[nstr];
 	}
 
@@ -42,10 +42,10 @@ namespace LT
 	{
 		LEX lx;
 		wcscpy_s(lx.lexfile, lexfile);
-		ofstream *FILE = new ofstream;
+		ofstream* FILE = new ofstream;
 		(*FILE).open(lexfile);
 		if (!(*FILE).is_open())
-		throw ERROR_THROW(113); //ошибка файла lex
+			throw ERROR_THROW(113); //ошибка файла lex
 		lx.stream = FILE;
 		return lx;
 	}
@@ -66,7 +66,7 @@ namespace LT
 		{
 			if (compLine != ltable.table[i].sn)
 			{
-				*lx.stream << endl << ltable.table[i].sn+1 << "\t";
+				*lx.stream << endl << ltable.table[i].sn << "\t";
 				compLine = ltable.table[i].sn;
 			}
 			*lx.stream << ltable.table[i].lexema;

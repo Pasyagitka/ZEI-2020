@@ -9,6 +9,7 @@
 #include "Log.h"
 #include "Lan.h"
 #include "Out.h"
+#include "Polish.h"
 //TODO система счисления - восьмеричная просто 0 впереди
 
 //TODO польскую запись, затем синтаксический
@@ -56,6 +57,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		IT::WriteId(id, itable);	
 		LT::Close(lx);
 		IT::Close(id);
+
+		//Pn::ToPolish(ltable, itable);
 		Log::Close(log);
 		//delete in.text;
 	}

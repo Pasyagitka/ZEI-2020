@@ -6,8 +6,16 @@
 #include <queue>
 #include <string>
 #include <iostream>
-
+//TODO первое вхождение идентификатора?
 namespace Pn {
+	void ToPolish(LT::LexTable& lextable, IT::IdTable& idtable) {
+		for (int i = 0; i < lextable.size; i++) {
+			if (lextable.table[i].lexema == ':')
+				PolishNotation(i+1, lextable, idtable);
+
+		}
+	}
+
 
 	int GetPriority(char c) {
 		if (c == LEX_LEFTHESIS || c == LEX_RIGHTHESIS) return 0;
@@ -30,9 +38,9 @@ namespace Pn {
 		{
 			temp = LT::GetEntry(lextable, i);
 
-			if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL)
+			if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL || temp.lexema == LEX_LIBFUNC)
 			{
-				if (LT::GetEntry(lextable, i + 1).lexema == LEX_LEFTHESIS) functionflag = true; //идентификатор функции удаляется
+				if (idtable.table[i].idtype== IT::F) functionflag = true; //идентификатор функции удаляется А ТИП???
 				else ResultingString += temp.lexema;
 				continue;
 			}
@@ -81,7 +89,7 @@ namespace Pn {
 				continue;
 			}
 
-			if (temp.lexema == LEX_SEMICOLON) {
+			if (temp.lexema == LEX_EXCLAMATION) {
 				isCompleted = true;
 			}
 
@@ -92,11 +100,11 @@ namespace Pn {
 				}
 				std::cout << ResultingString << std::endl; //таблица лексем
 				int i = lextable_pos;
-				for (int j = 0; lextable.table[i].lexema != LEX_SEMICOLON; i++, j++) {
+				for (int j = 0; lextable.table[i].lexema != LEX_EXCLAMATION; i++, j++) {
 					if (j < ResultingString.length())
 						lextable.table[i].lexema = ResultingString[j];
 					else if (j == ResultingString.length())
-						lextable.table[i].lexema = LEX_SEMICOLON;
+						lextable.table[i].lexema = LEX_EXCLAMATION;
 					else {
 						for (int k = i; k > lextable_pos + ResultingString.length(); k--)
 							lextable.table[k].lexema = LEX_FREE;

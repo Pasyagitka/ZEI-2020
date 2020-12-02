@@ -34,6 +34,12 @@
     FST::NODE(1, FST::RELATION('n', 3)), \
     FST::NODE(1, FST::RELATION('c', 4)), \
     FST::NODE()
+//HACK добавлен SET как DECLARE
+#define FST_SET 4, \
+    FST::NODE(1, FST::RELATION('s', 1)), \
+    FST::NODE(1, FST::RELATION('e', 2)), \
+    FST::NODE(1, FST::RELATION('t', 3)), \
+    FST::NODE()
 
 #define FST_GIVEBACK 9, \
 	FST::NODE(1, FST::RELATION('g', 1)),\
@@ -175,6 +181,10 @@
     FST::NODE(1, FST::RELATION('l',3)),\
     FST::NODE(1, FST::RELATION('s',4)),\
     FST::NODE(1, FST::RELATION('e',5)),\
+    FST::NODE()
+
+#define FST_EXCLAMATION 2,\
+    FST::NODE(1, FST::RELATION('!',1)),\
     FST::NODE()
 
 #define FST_POINT 2,\

@@ -19,6 +19,7 @@
 #define LEX_GIVEBACK	'g'
 #define LEX_PERFORM		'p'
 #define LEX_LOOP		'y'
+#define LEX_SET			's'
 
 #define LEX_POINT		'.'
 #define LEX_COMMA		','
@@ -42,6 +43,8 @@
 #define LEX_QUOTE		'"'
 #define LEX_FREE		'%'	//дл€ удаленных
 #define LEX_AT			'@'
+#define LEX_EXCLAMATION '!'
+
 
 namespace LT
 {
@@ -53,7 +56,7 @@ namespace LT
 		int parm; // количество параметров в функции
 		char buf[LT_MAXSIZE * 2]; // буффер дл€ св€зи с таблицей лексем
 		int sign;
-		int priority;
+		//int priority;
 	};
 
 	struct LexTable//экземп€р таблицы лексем

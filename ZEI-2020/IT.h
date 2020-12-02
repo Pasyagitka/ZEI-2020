@@ -2,7 +2,7 @@
 #include "Parm.h"
 #include <fstream>
 #define TI_TABLE_SIZE 100
-#define ID_MAXSIZE 5					//макс кол-во символов в идентификаторе
+#define ID_MAXSIZE 15					//макс кол-во символов в идентификаторе
 #define TI_MAXSIZE 1024					//макс кол-во строк в таблице индентификаторов
 #define TI_INT_DEFAULT 0x00000000		//значение по умолчанию для типа инт
 #define TI_STR_DEFAULT 0x00				//значение по умолчанию для типа стр

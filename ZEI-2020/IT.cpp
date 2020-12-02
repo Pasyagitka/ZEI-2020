@@ -62,11 +62,11 @@ namespace IT
 		*id.stream << "Строка\tТип ID\t\tТип данных\tИмя\tЗначение\n";
 		for (unsigned int i = 0; i < (unsigned int)itable.size; i++)
 		{
-			*id.stream << itable.table[i].idxfirstLE + 1 << "\t";
+			*id.stream << itable.table[i].idxfirstLE << "\t";
 
-			if (itable.table[i].idtype == IT::TINY)*id.stream << "variable";
-			else if (itable.table[i].idtype == IT::SYMB)*id.stream << "literal";
-			else if (itable.table[i].idtype == IT::LGCL)*id.stream << "function";
+			if (itable.table[i].idtype == IT::V)*id.stream << "variable";
+			else if (itable.table[i].idtype == IT::L)*id.stream << "literal";
+			else if (itable.table[i].idtype == IT::F)*id.stream << "function";
 
 			*id.stream << "\t\t";
 

@@ -1,26 +1,27 @@
 tiny func xz(symbolic str)
 [
-tiny p : symblen(str).
-giveback p.
+set tiny p : symblen(str)!
+giveback p!
 ]
 zei
 [
-tiny x : 10.
-tiny y : 10.
-symbolic str : "sp ace".
-symbolic mystr : "а бв?гдежзикламопростуфхцч".
-logical mb : false. 
+set tiny x : 10!
+set tiny y : 10!
+set tiny a :(x*y)*(x/y)!
+set symbolic str : "sp ace"!
+set symbolic mystr : "а бв?гдежзикла	мопростуфхцч"!
+set logical mb : false! 
 when(x=y)
 [
-tiny m : xz(str).
-show("string").
-show(m).
+set tiny m : xz(str)!
+show("string")!
+show(m)!
 ]
 otherwise
 [
-symbolic nb : symbtotiny(mystr).
-show(nb).
+set symbolic nb : symbtotiny(mystr)!
+show(nb)!
 ]
-tiny z :(x*y)*(x/y).
-show(z).
+set tiny z :(x*y)*(x/y)!
+show(z)!
 ]

@@ -8,7 +8,7 @@ namespace In
 	{
 		IN newIn{ 0, 1 };
 
-		newIn.text = new unsigned char[SIZE];
+		newIn.text = new unsigned char[IN_MAX_LEN_TEXT];
 		unsigned char* newInPointer = newIn.text;
 		unsigned char symbol;
 		bool quotesFlag = false;
@@ -113,7 +113,7 @@ namespace In
 					case IN_CODE_SPACE: {
 						in.size--;  continue;
 					}
-					case IN_CODE_SEMICOLON : case IN_CODE_COMMA : case IN_CODE_LEFTBRACE: case IN_CODE_RIGHTBRACE: case IN_CODE_OPENBRACKET: case IN_CODE_CLOSEBRACKET: case IN_CODE_ASSIGNMENT: case IN_CODE_PLUS: case IN_CODE_MINUS: case IN_CODE_SLASH: case IN_CODE_STAR: {
+					 case IN_CODE_COMMA : case IN_CODE_LEFTBRACE: case IN_CODE_RIGHTBRACE: case IN_CODE_OPENBRACKET: case IN_CODE_CLOSEBRACKET: case IN_CODE_ASSIGNMENT: case IN_CODE_PLUS: case IN_CODE_MINUS: case IN_CODE_SLASH: case IN_CODE_STAR: {
 						in.size--;  continue;
 					}
 				}
@@ -133,9 +133,9 @@ namespace In
 			}
 			if (in.text[i] == IN_CODE_SPACE) {
 				switch (in.text[i - 1]) {
-				case IN_CODE_SEMICOLON: case IN_CODE_COMMA: case IN_CODE_LEFTBRACE: case IN_CODE_RIGHTBRACE: case IN_CODE_OPENBRACKET:	case IN_CODE_CLOSEBRACKET: case IN_CODE_ASSIGNMENT: case IN_CODE_PLUS: case IN_CODE_MINUS: case IN_CODE_SLASH: case IN_CODE_STAR: {
-						in.size--;  continue;
-					}
+					 case IN_CODE_COMMA: case IN_CODE_LEFTBRACE: case IN_CODE_RIGHTBRACE: case IN_CODE_OPENBRACKET:	case IN_CODE_CLOSEBRACKET: case IN_CODE_ASSIGNMENT: case IN_CODE_PLUS: case IN_CODE_MINUS: case IN_CODE_SLASH: case IN_CODE_STAR: {
+							in.size--;  continue;
+					 }
 				}
 			}
 			*Pointer = in.text[i]; Pointer++;

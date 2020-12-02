@@ -1,11 +1,11 @@
 #pragma once
 #define IN_MAX_LEN_TEXT 1024*1024	// максимальный размер исходного кода = 1MB
-#define SIZE 1000
+#define SIZE 10000
 #define IN_CODE_ENDL '\n'		//символ конца строки
 #define IN_CODE_N '\0'			//символ конца
 #define IN_CODE_QUOTE			'"' 
 #define IN_CODE_SPACE			' '
-#define IN_CODE_SEMICOLON		';'
+#define IN_CODE_COMPARE			':'
 #define IN_CODE_COMMA			','
 #define IN_CODE_LEFTBRACE		'{'
 #define IN_CODE_RIGHTBRACE		'}'
