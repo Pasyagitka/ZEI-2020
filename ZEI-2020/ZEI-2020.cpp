@@ -51,15 +51,17 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 		
 		Lan::Analysis((char*)in.text, log, ltable, itable);
+		//TODO: ошибку записи если закрыт lex id и тп
 		id = IT::getid(idpath);
 		lx = LT::getlex(lexpath);
-		LT::WriteLex(lx, ltable);
+		//LT::WriteLex(lx, ltable);
 		IT::WriteId(id, itable);	
-		LT::Close(lx);
-		IT::Close(id);
+		
 
 		Pn::ToPolish(ltable, itable);
 		LT::WriteLex(lx, ltable);
+		LT::Close(lx);
+		IT::Close(id);
 		Log::Close(log);
 		//delete in.text;
 	}

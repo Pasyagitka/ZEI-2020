@@ -13,8 +13,9 @@ namespace Lan
 {
 	void Analysis(char inText[], Log::LOG, LT::LexTable& lextable, IT::IdTable& idtable)
 	{
+		int IDindex = 0;
 		int currentLine = 1, currentColumn = 1, sizeofbuf = 0;
-		bool linkflag(false), TokenIsCommited(false), proverka(false), newflag(false), secondflag(false), flag(false);
+		bool linkflag(false), TokenIsCommited(false), doubleid(false), newflag(false), secondflag(false), flag(false);
 		bool quoteFlag(false);
 
 		char postfix[LT_MAXSIZE];
@@ -72,7 +73,7 @@ namespace Lan
 			if (TokenIsCommited)	{
 				FST::FST FSTTiny(buffer, FST_TINY);
 					if (FST::execute(FSTTiny))	{
-						LT::Entry newLTEntry = { LEX_TINY , currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_TINY , currentLine };
 						strcpy_s(newLTEntry.buf, buffer);
 						LT::Add(*newLexTable, newLTEntry);
 						dataType = IT::TINY;
@@ -81,7 +82,7 @@ namespace Lan
 					}
 				FST::FST FSTSymbolic(buffer, FST_SYMBOLIC);
 					if (FST::execute(FSTSymbolic)) 	{
-						LT::Entry newLTEntry = { LEX_SYMBOLIC, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_SYMBOLIC, currentLine };
 						strcpy_s(newLTEntry.buf, buffer);
 						LT::Add(*newLexTable, newLTEntry);
 						dataType = IT::SYMB;
@@ -90,7 +91,7 @@ namespace Lan
 					}
 				FST::FST FSTLogical(buffer, FST_LOGICAL);
 					if (FST::execute(FSTLogical))	{
-						LT::Entry newLTEntry = { LEX_LOGICAL, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_LOGICAL, currentLine };
 						strcpy_s(newLTEntry.buf, buffer);
 						LT::Add(*newLexTable, newLTEntry);
 						dataType = IT::LGCL;
@@ -99,27 +100,27 @@ namespace Lan
 					}
 				FST::FST FSTFunc(buffer, FST_FUNC);
 					if (FST::execute(FSTFunc)) {
-						LT::Entry newLTEntry = { LEX_FUNCTION, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_FUNCTION, currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						idType = IT::F;
 						linkflag = true;
 					}
 				FST::FST FSTGiveback(buffer, FST_GIVEBACK);
 					if (FST::execute(FSTGiveback)) {
-						LT::Entry newLTEntry = { LEX_GIVEBACK, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_GIVEBACK, currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						idType = IT::V;
 						linkflag = true;
 					}
 				FST::FST FSTSet(buffer, FST_SET);
 					if (FST::execute(FSTSet)) {
-						LT::Entry newLTEntry = { LEX_SET, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_SET, currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
 				FST::FST FSTShow(buffer, FST_SHOW);
 					if (FST::execute(FSTShow))	{
-						LT::Entry newLTEntry = { LEX_SHOW, currentLine, idtable.size, 1 };
+						LT::Entry newLTEntry = { LEX_SHOW, currentLine, IDindex, 1 };
 						LT::Add(*newLexTable, newLTEntry);
 						idType = IT::B;
 
@@ -136,7 +137,7 @@ namespace Lan
 					}
 				FST::FST FSTLib(buffer, FST_LIB);
 					if (FST::execute(FSTLib))	{
-						LT::Entry newLTEntry = { LEX_LIB, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_LIB, currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						strcpy_s(postfix, buffer);
 						//SA::OneDvv(*ltable, flag);
@@ -145,20 +146,20 @@ namespace Lan
 					}
 				FST::FST FSTWhen(buffer, FST_WHEN);
 					if (FST::execute(FSTWhen))	{
-						LT::Entry newLTEntry = { LEX_WHEN, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_WHEN, currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
 				FST::FST FSTOtherwise(buffer, FST_OTHERWISE);
 					if (FST::execute(FSTOtherwise)) {
-						LT::Entry newLTEntry = { LEX_OTHERWISE, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_OTHERWISE, currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
 					//TODO: библиотечные функции в таблицу ID
 				FST::FST FSTSymblen(buffer, FST_SYMBLEN);
 					if (FST::execute(FSTSymblen))	{
-						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine, idtable.size, 1 };
+						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine, IDindex, 1 };
 						LT::Add(*newLexTable, newLTEntry);
 						idType = IT::B;
 						dataType = IT::SYMB;
@@ -175,7 +176,7 @@ namespace Lan
 					}
 				FST::FST FSTSymbtotiny(buffer, FST_SYMBTOTINY);
 					if (FST::execute(FSTSymbtotiny))	{
-						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine,  idtable.size, 1 };
+						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine,  IDindex, 1 };
 						LT::Add(*newLexTable, newLTEntry);
 						idType = IT::B;
 						dataType = IT::SYMB;
@@ -194,10 +195,6 @@ namespace Lan
 				FST::FST FSTLogicalLiteralTrue(buffer, FST_TRUE);
 				FST::FST FSTLogicalLiteralFalse(buffer, FST_FALSE);
 					if (FST::execute(FSTLogicalLiteralFalse) || FST::execute(FSTLogicalLiteralTrue))	{
-						LT::Entry newLTEntry = { LEX_LITERAL, currentLine, currentColumn };
-						newLTEntry.sign = -1;
-						strcpy_s(newLTEntry.buf, buffer);
-						LT::Add(*newLexTable, newLTEntry);
 						IT::Entry iEntry;
 						strcpy_s(iEntry.id, EMPTY_LITERAL);
 						iEntry.iddatatype = IT::LGCL;
@@ -206,23 +203,27 @@ namespace Lan
 						strcpy_s(iEntry.value.vbool, buffer);
 						for (int i = 0; i < newIDTable->size; i++)	{
 							if (strcmp((*newIDTable).table[i].value.vbool, iEntry.value.vbool) == 0)	{
-								proverka = true;
+								doubleid = true;
 								break;
 							}
-							else proverka = false;
+							/*else doubleid = false;*/
 						}
+						if (doubleid) continue;
+						LT::Entry newLTEntry = { LEX_LITERAL, currentLine, IDindex };
+						newLTEntry.sign = -1;
 						iEntry.idxfirstLE = currentLine;
-						if (!proverka)
-							IT::Add(*newIDTable, iEntry);
+						strcpy_s(newLTEntry.buf, buffer);
+						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
-				
+				//TODO: лексемы сдвига
+
 				FST::FST FSTIdentifier(buffer, FST_ID);
 					if (!linkflag)
 						if (FST::execute(FSTIdentifier))	{
 							if (strlen(buffer) > ID_MAXSIZE)
 								throw ERROR_THROW_IN(308, currentLine, currentColumn);
-							LT::Entry newLTEntry = { LEX_ID, currentLine, currentColumn };
+							LT::Entry newLTEntry = { LEX_ID, currentLine, IDindex };
 							strcpy_s(newLTEntry.buf, buffer);
 							LT::Add(*newLexTable, newLTEntry);
 							IT::Entry iEntry;
@@ -257,7 +258,7 @@ namespace Lan
 				FST::FST FSTTinyLiteral(buffer, FST_TINYLITERAL);
 						if (FST::execute(FSTTinyLiteral))	{
 							long double bufNum = std::atoi(buffer);
-							LT::Entry newLTEntry = { LEX_LITERAL, currentLine, currentColumn };
+							LT::Entry newLTEntry = { LEX_LITERAL, currentLine, idtable.size };
 							newLTEntry.sign = bufNum;
 							strcpy_s(newLTEntry.buf, buffer);
 							LT::Add(*newLexTable, newLTEntry);
@@ -272,19 +273,19 @@ namespace Lan
 							strcpy_s(iEntry.value.vstr->str, buffer);
 							for (int i = 0; i < newIDTable->size; i++)	{
 								if (iEntry.value.vint == (*newIDTable).table[i].value.vint) {
-									proverka = true;
+									doubleid = true;
 									break;
 								}
-								else  proverka = false;
+								else  doubleid = false;
 							}
 							iEntry.idxfirstLE = currentLine;
-							if (!proverka)
+							if (!doubleid)
 								IT::Add(*newIDTable, iEntry);
 							linkflag = true;
 						}
 				FST::FST FSTSymbolicLiteral(buffer, FST_SYMBOLICLITERAL);
 					if (FST::execute(FSTSymbolicLiteral))	{
-						LT::Entry newLTEntry = { LEX_LITERAL, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_LITERAL, currentLine, idtable.size };
 						newLTEntry.sign = -1;
 						strcpy_s(newLTEntry.buf, buffer);
 						LT::Add(*newLexTable, newLTEntry);
@@ -301,13 +302,13 @@ namespace Lan
 							if (strcmp(iEntry.value.vstr->str, (*newIDTable).table[i].value.vstr->str) == 0)
 							{
 
-								proverka = true;
+								doubleid = true;
 								break;
 							}
-							else proverka = false;
+							else doubleid = false;
 						}
 						iEntry.idxfirstLE = currentLine;
-						if (!proverka)
+						if (!doubleid)
 						{
 							IT::Add(*newIDTable, iEntry);
 						}
@@ -316,97 +317,97 @@ namespace Lan
 
 					FST::FST FSTExclamation(buffer, FST_EXCLAMATION);
 					if (FST::execute(FSTExclamation)) {
-						LT::Entry newLTEntry = { LEX_EXCLAMATION, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_EXCLAMATION, currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 					FST::FST FSTPoint(buffer, FST_POINT);
 					if (FST::execute(FSTPoint)) {
-						LT::Entry newLTEntry = { LEX_POINT , currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_POINT , currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 					FST::FST FSTLefthesis(buffer, FST_LEFTHESIS);
 					if (FST::execute(FSTLefthesis)) {
-						LT::Entry newLTEntry = { LEX_LEFTHESIS , currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_LEFTHESIS , currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 					FST::FST FSTRighthesis(buffer, FST_RIGHTHESIS);
 					if (FST::execute(FSTRighthesis)) {
-						LT::Entry newLTEntry = { LEX_RIGHTHESIS , currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_RIGHTHESIS , currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 					FST::FST FSTRightbrace(buffer, FST_RIGHTBRACE);
 					if (FST::execute(FSTRightbrace)) {
-						LT::Entry newLTEntry = { LEX_RIGHTBRACE , currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_RIGHTBRACE , currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 					FST::FST FSTLeftbrace(buffer, FST_LEFTBRACE);
 					if (FST::execute(FSTLeftbrace)) {
-						LT::Entry newLTEntry = { LEX_LEFTBRACE , currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_LEFTBRACE , currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 					FST::FST FSTComma(buffer, FST_COMMA);
 					if (FST::execute(FSTComma)) {
-						LT::Entry newLTEntry = { LEX_COMMA, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_COMMA, currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 					FST::FST FSTMore(buffer, FST_MORE);
 					if (FST::execute(FSTMore)) {
-						LT::Entry newLTEntry = { LEX_MORE, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_MORE, currentLine };
 						newLTEntry.sign = 2;
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
 					FST::FST FSTLess(buffer, FST_LESS);
 					if (FST::execute(FSTLess)) {
-						LT::Entry newLTEntry = { LEX_LESS, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_LESS, currentLine };
 						newLTEntry.sign = 2;
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
 					FST::FST FSTEquality(buffer, FST_EQUALITY);
 					if (FST::execute(FSTEquality)) {
-						LT::Entry newLTEntry = { LEX_EQUALITY, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_EQUALITY, currentLine };
 						newLTEntry.sign = 2;
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
 					FST::FST FSTCompare(buffer, FST_COMPARE);
 					if (FST::execute(FSTCompare)) {
-						LT::Entry newLTEntry = { LEX_COMPARE, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_COMPARE, currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
 					FST::FST FSTPlus(buffer, FST_PLUS);
 					if (FST::execute(FSTPlus)) {
-						LT::Entry newLTEntry = { LEX_PLUS, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_PLUS, currentLine };
 						newLTEntry.sign = 1;
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
 					FST::FST FSTMinus(buffer, FST_MINUS);
 					if (FST::execute(FSTMinus)) {
-						LT::Entry newLTEntry = { LEX_MINUS, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_MINUS, currentLine };
 						newLTEntry.sign = 1;
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
 					FST::FST FSTStar(buffer, FST_STAR);
 					if (FST::execute(FSTStar)) {
-						LT::Entry newLTEntry = { LEX_STAR, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_STAR, currentLine };
 						newLTEntry.sign = 1;
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
 					FST::FST FSTSlash(buffer, FST_SLASH);
 					if (FST::execute(FSTSlash)) {
-						LT::Entry newLTEntry = { LEX_SLASH, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_SLASH, currentLine };
 						newLTEntry.sign = 1;
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
@@ -418,43 +419,43 @@ namespace Lan
 			{
 				FST::FST FSTExclamation(newbuf, FST_EXCLAMATION);
 					if (FST::execute(FSTExclamation)) {
-						LT::Entry newLTEntry = { LEX_EXCLAMATION, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_EXCLAMATION, currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 				FST::FST FSTPoint(newbuf, FST_POINT);
 					if (FST::execute(FSTPoint)) {
-						LT::Entry newLTEntry = { LEX_POINT , currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_POINT , currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 				FST::FST FSTLefthesis(newbuf, FST_LEFTHESIS);
 					if (FST::execute(FSTLefthesis)) 	{
-						LT::Entry newLTEntry = { LEX_LEFTHESIS , currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_LEFTHESIS , currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 				FST::FST FSTRighthesis(newbuf, FST_RIGHTHESIS);
 					if (FST::execute(FSTRighthesis)) 	{
-						LT::Entry newLTEntry = { LEX_RIGHTHESIS , currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_RIGHTHESIS , currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 				FST::FST FSTRightbrace(newbuf, FST_RIGHTBRACE);
 					if (FST::execute(FSTRightbrace)) {
-						LT::Entry newLTEntry = { LEX_RIGHTBRACE , currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_RIGHTBRACE , currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 				FST::FST FSTLeftbrace(newbuf, FST_LEFTBRACE);
 					if (FST::execute(FSTLeftbrace)) {
-						LT::Entry newLTEntry = { LEX_LEFTBRACE , currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_LEFTBRACE , currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}
 				FST::FST FSTComma(newbuf, FST_COMMA);
 					if (FST::execute(FSTComma)) {
-						LT::Entry newLTEntry = { LEX_COMMA, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_COMMA, currentLine };
 						LT::Add(*newLexTable, newLTEntry);
 						continue;
 					}

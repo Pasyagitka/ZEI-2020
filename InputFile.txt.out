@@ -7,7 +7,7 @@ zei
 [
 set tiny x : 10!
 set tiny y : 10!
-set tiny a :(x*y)*(x/y)!
+set tiny a : x+y+2!
 set symbolic str : "sp ace"!
 set symbolic mystr : "а бв?гдежзикла	мопростуфхцч"!
 set logical mb : false! 

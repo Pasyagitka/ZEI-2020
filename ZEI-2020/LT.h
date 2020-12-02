@@ -52,7 +52,7 @@ namespace LT
 	{
 		char lexema;
 		int sn;//номер строки в тексте
-		int indxTI;//индекс в таблице идентификаторов или LT_TI_NULLIDX
+		int indxTI = LT_TI_NULLIDX;//индекс в таблице идентификаторов или LT_TI_NULLIDX
 		int parm; // количество параметров в функции
 		char buf[LT_MAXSIZE * 2]; // буффер для связи с таблицей лексем
 		int sign;

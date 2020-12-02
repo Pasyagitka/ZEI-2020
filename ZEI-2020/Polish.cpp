@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 //TODO первое вхождение идентификатора?
+//TODO как он узнает, что это за функция была?? b h - там где-то идентификатор удаляется
 namespace Pn {
 	void ToPolish(LT::LexTable& lextable, IT::IdTable& idtable) {
 		for (int i = 0; i < lextable.size; i++) {
@@ -16,7 +17,7 @@ namespace Pn {
 		}
 	}
 
-
+	//switch
 	int GetPriority(char c) {
 		if (c == LEX_LEFTHESIS || c == LEX_RIGHTHESIS) return 0;
 		if (c == LEX_COMMA) return 1;
@@ -100,7 +101,8 @@ namespace Pn {
 				}
 				std::cout << ResultingString << std::endl; //таблица лексем
 				int i = lextable_pos;
-				for (int j = 0; lextable.table[i].lexema != LEX_EXCLAMATION; i++, j++) {
+				int j = 0;
+				for (; lextable.table[i].lexema != LEX_EXCLAMATION; i++, j++) {
 					if (j < ResultingString.length())
 						lextable.table[i].lexema = ResultingString[j];
 					else if (j == ResultingString.length())
@@ -110,7 +112,7 @@ namespace Pn {
 							lextable.table[k].lexema = LEX_FREE;
 					}
 				}
-				lextable.table[i].lexema = LEX_FREE;
+				if (j != ResultingString.length()) lextable.table[i].lexema = LEX_FREE;
 				return true;
 			}
 		}

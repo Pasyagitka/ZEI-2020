@@ -11,7 +11,7 @@ namespace LT
 	{
 		if (size >= LT_MAXSIZE)
 			throw ERROR_THROW(300); //превышен размер таблицы лексем
-		LexTable ltable = { size, 0, new Entry[size] };
+		LexTable ltable = { size, 0, new Entry[size]};
 		return ltable;
 	}
 
