@@ -38,6 +38,15 @@ namespace IT
 		return itable.table[nstr];
 	}
 
+	int IsId(IdTable& idtable, char id[ID_MAXSIZE]) {
+		for (int i = 0; i < idtable.size; i++) {
+			if (!strcmp(idtable.table[i].id, id))
+				return idtable.table[i].idxfirstLE;
+		}
+		return TI_NULLIDX;
+	}
+
+
 	ID getid(wchar_t idfile[])
 	{
 		ID id;

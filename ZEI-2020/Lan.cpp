@@ -206,7 +206,7 @@ namespace Lan
 								doubleid = true;
 								break;
 							}
-							/*else doubleid = false;*/
+							else doubleid = false;
 						}
 						if (doubleid) continue;
 						LT::Entry newLTEntry = { LEX_LITERAL, currentLine, IDindex };
@@ -221,11 +221,21 @@ namespace Lan
 				FST::FST FSTIdentifier(buffer, FST_ID);
 					if (!linkflag)
 						if (FST::execute(FSTIdentifier))	{
-							if (strlen(buffer) > ID_MAXSIZE)
-								throw ERROR_THROW_IN(308, currentLine, currentColumn);
-							LT::Entry newLTEntry = { LEX_ID, currentLine, IDindex };
-							strcpy_s(newLTEntry.buf, buffer);
-							LT::Add(*newLexTable, newLTEntry);
+							if (strlen(buffer) > ID_MAXSIZE)	throw ERROR_THROW_IN(308, currentLine, currentColumn);
+
+							int idx = IT::IsId(idtable, buffer);
+							if (idx != TI_NULLIDX)
+							{
+								LT::Entry newLTEntry = { LEX_ID, currentLine, idx };
+								strcpy_s(newLTEntry.buf, buffer);
+								LT::Add(*newLexTable, newLTEntry);
+							}
+							else {
+								LT::Entry newLTEntry = { LEX_ID, IDindex, idx };
+								strcpy_s(newLTEntry.buf, buffer);
+								LT::Add(*newLexTable, newLTEntry);
+							}
+
 							IT::Entry iEntry;
 							strcpy_s(anotherbuf, buffer);
 							if (idType == IT::F)
@@ -258,10 +268,7 @@ namespace Lan
 				FST::FST FSTTinyLiteral(buffer, FST_TINYLITERAL);
 						if (FST::execute(FSTTinyLiteral))	{
 							long double bufNum = std::atoi(buffer);
-							LT::Entry newLTEntry = { LEX_LITERAL, currentLine, idtable.size };
-							newLTEntry.sign = bufNum;
-							strcpy_s(newLTEntry.buf, buffer);
-							LT::Add(*newLexTable, newLTEntry);
+							
 							//SA::ZeroDivision(*ltable, buffer);
 							IT::Entry iEntry;
 							strcpy_s(iEntry.id, EMPTY_LITERAL);
@@ -279,16 +286,18 @@ namespace Lan
 								else  doubleid = false;
 							}
 							iEntry.idxfirstLE = currentLine;
-							if (!doubleid)
-								IT::Add(*newIDTable, iEntry);
+							if (doubleid) continue;
+
+							LT::Entry newLTEntry = { LEX_LITERAL, currentLine, IDindex };
+							newLTEntry.sign = bufNum;
+							strcpy_s(newLTEntry.buf, buffer);
+							LT::Add(*newLexTable, newLTEntry);
+							IT::Add(*newIDTable, iEntry); 
 							linkflag = true;
 						}
 				FST::FST FSTSymbolicLiteral(buffer, FST_SYMBOLICLITERAL);
 					if (FST::execute(FSTSymbolicLiteral))	{
-						LT::Entry newLTEntry = { LEX_LITERAL, currentLine, idtable.size };
-						newLTEntry.sign = -1;
-						strcpy_s(newLTEntry.buf, buffer);
-						LT::Add(*newLexTable, newLTEntry);
+						
 						IT::Entry iEntry;
 						strcpy_s(iEntry.id, EMPTY_LITERAL);
 						iEntry.iddatatype = IT::SYMB;
@@ -308,10 +317,14 @@ namespace Lan
 							else doubleid = false;
 						}
 						iEntry.idxfirstLE = currentLine;
-						if (!doubleid)
-						{
-							IT::Add(*newIDTable, iEntry);
-						}
+						if (doubleid) continue;
+					
+						LT::Entry newLTEntry = { LEX_LITERAL, currentLine, IDindex };
+						newLTEntry.sign = -1;
+						strcpy_s(newLTEntry.buf, buffer);
+						LT::Add(*newLexTable, newLTEntry);
+						IT::Add(*newIDTable, iEntry);
+						
 						linkflag = true;
 					}
 
