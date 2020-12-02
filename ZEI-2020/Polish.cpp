@@ -10,7 +10,7 @@
 namespace Pn {
 	void ToPolish(LT::LexTable& lextable, IT::IdTable& idtable) {
 		for (int i = 0; i < lextable.size; i++) {
-			if (lextable.table[i].lexema == ':')
+			if (lextable.table[i].lexema == ':' || lextable.table[i].lexema == 'h')
 				PolishNotation(i+1, lextable, idtable);
 
 		}
@@ -40,7 +40,7 @@ namespace Pn {
 
 			if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL || temp.lexema == LEX_LIBFUNC)
 			{
-				if (idtable.table[i].idtype== IT::F) functionflag = true; //идентификатор функции удаляется А ТИП???
+				if (idtable.table[lextable.table[i].indxTI].idtype== IT::F || idtable.table[lextable.table[i].indxTI].idtype == IT::B) functionflag = true; //идентификатор функции удаляется А ТИП???
 				else ResultingString += temp.lexema;
 				continue;
 			}

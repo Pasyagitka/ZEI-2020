@@ -59,7 +59,7 @@ namespace IT
 	void WriteId(ID id, IT::IdTable& itable)
 	{
 		WriteIdHeading(id);
-		*id.stream << "Строка\tТип ID\t\tТип данных\tИмя\tЗначение\n";
+		*id.stream << "Строка\tТип ID\t\tТип данных\tИмя\t\tЗначение\n";
 		for (unsigned int i = 0; i < (unsigned int)itable.size; i++)
 		{
 			*id.stream << itable.table[i].idxfirstLE << "\t";
@@ -67,6 +67,7 @@ namespace IT
 			if (itable.table[i].idtype == IT::V)*id.stream << "variable";
 			else if (itable.table[i].idtype == IT::L)*id.stream << "literal";
 			else if (itable.table[i].idtype == IT::F)*id.stream << "function";
+			else if (itable.table[i].idtype == IT::B)*id.stream << "libfunc";
 
 			*id.stream << "\t\t";
 
@@ -74,10 +75,10 @@ namespace IT
 			else if (itable.table[i].iddatatype == IT::SYMB)*id.stream << "symbolic";
 			else if (itable.table[i].iddatatype == IT::LGCL)*id.stream << "logical";
 
-			*id.stream << "\t\t" << itable.table[i].id << "\t";
+			*id.stream << "\t\t" << itable.table[i].id << "\t\t";
 
 			if (itable.table[i].iddatatype == IT::TINY)			*id.stream << itable.table[i].value.vint;
-			else if (itable.table[i].iddatatype == IT::SYMB)		*id.stream << itable.table[i].value.vstr->str;
+			else if (itable.table[i].iddatatype == IT::SYMB)	*id.stream << itable.table[i].value.vstr->str;
 			else if (itable.table[i].iddatatype == IT::LGCL)	*id.stream << itable.table[i].value.vbool;
 			*id.stream << std::endl;
 		}

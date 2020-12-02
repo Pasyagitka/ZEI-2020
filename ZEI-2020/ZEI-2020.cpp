@@ -58,7 +58,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		LT::Close(lx);
 		IT::Close(id);
 
-		//Pn::ToPolish(ltable, itable);
+		Pn::ToPolish(ltable, itable);
+		LT::WriteLex(lx, ltable);
 		Log::Close(log);
 		//delete in.text;
 	}

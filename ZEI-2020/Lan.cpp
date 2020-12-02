@@ -119,9 +119,19 @@ namespace Lan
 					}
 				FST::FST FSTShow(buffer, FST_SHOW);
 					if (FST::execute(FSTShow))	{
-						LT::Entry newLTEntry = { LEX_SHOW, currentLine, currentColumn };
+						LT::Entry newLTEntry = { LEX_SHOW, currentLine, idtable.size, 1 };
 						LT::Add(*newLexTable, newLTEntry);
-						idType = IT::V;
+						idType = IT::B;
+
+						IT::Entry newIDEntry;
+						strcpy_s(newIDEntry.id, buffer);
+						newIDEntry.idtype = idType;
+						newIDEntry.iddatatype = dataType;
+						newIDEntry.value.vint = TI_INT_DEFAULT;
+						newIDEntry.value.vstr->len = TI_STR_DEFAULT;
+						strcpy_s(newIDEntry.value.vstr->str, "");
+						newIDEntry.idxfirstLE = currentLine;
+						IT::Add(*newIDTable, newIDEntry);
 						linkflag = true;
 					}
 				FST::FST FSTLib(buffer, FST_LIB);
@@ -145,18 +155,42 @@ namespace Lan
 						LT::Add(*newLexTable, newLTEntry);
 						linkflag = true;
 					}
+					//TODO: библиотечные функции в таблицу ID
 				FST::FST FSTSymblen(buffer, FST_SYMBLEN);
 					if (FST::execute(FSTSymblen))	{
-						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine, currentColumn, 1 };
+						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine, idtable.size, 1 };
 						LT::Add(*newLexTable, newLTEntry);
+						idType = IT::B;
+						dataType = IT::SYMB;
+						IT::Entry newIDEntry;
+						strcpy_s(newIDEntry.id, buffer);
+						newIDEntry.idtype = idType;
+						newIDEntry.iddatatype = dataType;
+						newIDEntry.value.vint = TI_INT_DEFAULT;
+						newIDEntry.value.vstr->len = TI_STR_DEFAULT;
+						strcpy_s(newIDEntry.value.vstr->str, "");
+						newIDEntry.idxfirstLE = currentLine;
+						IT::Add(*newIDTable, newIDEntry);
 						linkflag = true;
 					}
 				FST::FST FSTSymbtotiny(buffer, FST_SYMBTOTINY);
 					if (FST::execute(FSTSymbtotiny))	{
-						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine, currentColumn, 2 };
+						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine,  idtable.size, 1 };
 						LT::Add(*newLexTable, newLTEntry);
+						idType = IT::B;
+						dataType = IT::SYMB;
+						IT::Entry newIDEntry;
+						strcpy_s(newIDEntry.id, buffer);
+						newIDEntry.idtype = idType;
+						newIDEntry.iddatatype = dataType;
+						newIDEntry.value.vint = TI_INT_DEFAULT;
+						newIDEntry.value.vstr->len = TI_STR_DEFAULT;
+						strcpy_s(newIDEntry.value.vstr->str, "");
+						newIDEntry.idxfirstLE = currentLine;
+						IT::Add(*newIDTable, newIDEntry);
 						linkflag = true;
 					}
+					//TODO: добавление правильного индекса в таблицу лекс
 				FST::FST FSTLogicalLiteralTrue(buffer, FST_TRUE);
 				FST::FST FSTLogicalLiteralFalse(buffer, FST_FALSE);
 					if (FST::execute(FSTLogicalLiteralFalse) || FST::execute(FSTLogicalLiteralTrue))	{

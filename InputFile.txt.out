@@ -1,0 +1,27 @@
+tiny func xz(symbolic str)
+[
+set tiny p : symblen(str)!
+giveback p!
+]
+zei
+[
+set tiny x : 10!
+set tiny y : 10!
+set tiny a :(x*y)*(x/y)!
+set symbolic str : "sp ace"!
+set symbolic mystr : "а бв?гдежзикла	мопростуфхцч"!
+set logical mb : false! 
+when(x=y)
+[
+set tiny m : xz(str)!
+show("string")!
+show(m)!
+]
+otherwise
+[
+set symbolic nb : symbtotiny(mystr)!
+show(nb)!
+]
+set tiny z :(x*y)*(x/y)!
+show(z)!
+]
