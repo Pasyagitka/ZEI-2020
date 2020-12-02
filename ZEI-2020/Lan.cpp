@@ -13,9 +13,9 @@ namespace Lan
 {
 	void Analysis(char inText[], Log::LOG, LT::LexTable& lextable, IT::IdTable& idtable)
 	{
-		int IDindex = 0;
+		int IDindex;
 		int currentLine = 1, currentColumn = 1, sizeofbuf = 0;
-		bool linkflag(false), TokenIsCommited(false), doubleid(false), newflag(false), secondflag(false), flag(false);
+		bool linkflag(false), TokenIsCommited(false), proverka(false), newflag(false), secondflag(false), flag(false);
 		bool quoteFlag(false);
 
 		char postfix[LT_MAXSIZE];
@@ -120,7 +120,7 @@ namespace Lan
 					}
 				FST::FST FSTShow(buffer, FST_SHOW);
 					if (FST::execute(FSTShow))	{
-						LT::Entry newLTEntry = { LEX_SHOW, currentLine, IDindex, 1 };
+						LT::Entry newLTEntry = { LEX_SHOW, currentLine, idtable.size, 1 };
 						LT::Add(*newLexTable, newLTEntry);
 						idType = IT::B;
 
@@ -159,7 +159,7 @@ namespace Lan
 					//TODO: библиотечные функции в таблицу ID
 				FST::FST FSTSymblen(buffer, FST_SYMBLEN);
 					if (FST::execute(FSTSymblen))	{
-						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine, IDindex, 1 };
+						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine, idtable.size, 1 };
 						LT::Add(*newLexTable, newLTEntry);
 						idType = IT::B;
 						dataType = IT::SYMB;
@@ -176,7 +176,7 @@ namespace Lan
 					}
 				FST::FST FSTSymbtotiny(buffer, FST_SYMBTOTINY);
 					if (FST::execute(FSTSymbtotiny))	{
-						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine,  IDindex, 1 };
+						LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine,  idtable.size, 1 };
 						LT::Add(*newLexTable, newLTEntry);
 						idType = IT::B;
 						dataType = IT::SYMB;
@@ -195,6 +195,10 @@ namespace Lan
 				FST::FST FSTLogicalLiteralTrue(buffer, FST_TRUE);
 				FST::FST FSTLogicalLiteralFalse(buffer, FST_FALSE);
 					if (FST::execute(FSTLogicalLiteralFalse) || FST::execute(FSTLogicalLiteralTrue))	{
+						LT::Entry newLTEntry = { LEX_LITERAL, currentLine, idtable.size };
+						newLTEntry.sign = -1;
+						strcpy_s(newLTEntry.buf, buffer);
+						LT::Add(*newLexTable, newLTEntry);
 						IT::Entry iEntry;
 						strcpy_s(iEntry.id, EMPTY_LITERAL);
 						iEntry.iddatatype = IT::LGCL;
@@ -203,17 +207,14 @@ namespace Lan
 						strcpy_s(iEntry.value.vbool, buffer);
 						for (int i = 0; i < newIDTable->size; i++)	{
 							if (strcmp((*newIDTable).table[i].value.vbool, iEntry.value.vbool) == 0)	{
-								doubleid = true;
+								proverka = true;
 								break;
 							}
-							else doubleid = false;
+							else proverka = false;
 						}
-						if (doubleid) continue;
-						LT::Entry newLTEntry = { LEX_LITERAL, currentLine, IDindex };
-						newLTEntry.sign = -1;
 						iEntry.idxfirstLE = currentLine;
-						strcpy_s(newLTEntry.buf, buffer);
-						LT::Add(*newLexTable, newLTEntry);
+						if (!proverka)
+							IT::Add(*newIDTable, iEntry);
 						linkflag = true;
 					}
 				//TODO: лексемы сдвига
@@ -221,21 +222,11 @@ namespace Lan
 				FST::FST FSTIdentifier(buffer, FST_ID);
 					if (!linkflag)
 						if (FST::execute(FSTIdentifier))	{
-							if (strlen(buffer) > ID_MAXSIZE)	throw ERROR_THROW_IN(308, currentLine, currentColumn);
-
-							int idx = IT::IsId(idtable, buffer);
-							if (idx != TI_NULLIDX)
-							{
-								LT::Entry newLTEntry = { LEX_ID, currentLine, idx };
-								strcpy_s(newLTEntry.buf, buffer);
-								LT::Add(*newLexTable, newLTEntry);
-							}
-							else {
-								LT::Entry newLTEntry = { LEX_ID, IDindex, idx };
-								strcpy_s(newLTEntry.buf, buffer);
-								LT::Add(*newLexTable, newLTEntry);
-							}
-
+							if (strlen(buffer) > ID_MAXSIZE)
+								throw ERROR_THROW_IN(308, currentLine, currentColumn);
+							LT::Entry newLTEntry = { LEX_ID, currentLine, idtable.size };
+							strcpy_s(newLTEntry.buf, buffer);
+							LT::Add(*newLexTable, newLTEntry);
 							IT::Entry iEntry;
 							strcpy_s(anotherbuf, buffer);
 							if (idType == IT::F)
@@ -268,7 +259,10 @@ namespace Lan
 				FST::FST FSTTinyLiteral(buffer, FST_TINYLITERAL);
 						if (FST::execute(FSTTinyLiteral))	{
 							long double bufNum = std::atoi(buffer);
-							
+							LT::Entry newLTEntry = { LEX_LITERAL, currentLine, idtable.size };
+							newLTEntry.sign = bufNum;
+							strcpy_s(newLTEntry.buf, buffer);
+							LT::Add(*newLexTable, newLTEntry);
 							//SA::ZeroDivision(*ltable, buffer);
 							IT::Entry iEntry;
 							strcpy_s(iEntry.id, EMPTY_LITERAL);
@@ -280,24 +274,22 @@ namespace Lan
 							strcpy_s(iEntry.value.vstr->str, buffer);
 							for (int i = 0; i < newIDTable->size; i++)	{
 								if (iEntry.value.vint == (*newIDTable).table[i].value.vint) {
-									doubleid = true;
+									proverka = true;
 									break;
 								}
-								else  doubleid = false;
+								else  proverka = false;
 							}
 							iEntry.idxfirstLE = currentLine;
-							if (doubleid) continue;
-
-							LT::Entry newLTEntry = { LEX_LITERAL, currentLine, IDindex };
-							newLTEntry.sign = bufNum;
-							strcpy_s(newLTEntry.buf, buffer);
-							LT::Add(*newLexTable, newLTEntry);
-							IT::Add(*newIDTable, iEntry); 
+							if (!proverka)
+								IT::Add(*newIDTable, iEntry);
 							linkflag = true;
 						}
 				FST::FST FSTSymbolicLiteral(buffer, FST_SYMBOLICLITERAL);
 					if (FST::execute(FSTSymbolicLiteral))	{
-						
+						LT::Entry newLTEntry = { LEX_LITERAL, currentLine, idtable.size };
+						newLTEntry.sign = -1;
+						strcpy_s(newLTEntry.buf, buffer);
+						LT::Add(*newLexTable, newLTEntry);
 						IT::Entry iEntry;
 						strcpy_s(iEntry.id, EMPTY_LITERAL);
 						iEntry.iddatatype = IT::SYMB;
@@ -311,20 +303,16 @@ namespace Lan
 							if (strcmp(iEntry.value.vstr->str, (*newIDTable).table[i].value.vstr->str) == 0)
 							{
 
-								doubleid = true;
+								proverka = true;
 								break;
 							}
-							else doubleid = false;
+							else proverka = false;
 						}
 						iEntry.idxfirstLE = currentLine;
-						if (doubleid) continue;
-					
-						LT::Entry newLTEntry = { LEX_LITERAL, currentLine, IDindex };
-						newLTEntry.sign = -1;
-						strcpy_s(newLTEntry.buf, buffer);
-						LT::Add(*newLexTable, newLTEntry);
-						IT::Add(*newIDTable, iEntry);
-						
+						if (!proverka)
+						{
+							IT::Add(*newIDTable, iEntry);
+						}
 						linkflag = true;
 					}
 
