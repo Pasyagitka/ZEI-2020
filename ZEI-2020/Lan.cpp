@@ -10,8 +10,6 @@
 #define EMPTY_LITERAL "-"
 //TODO: max длина строки
 //TODO: получается номер и у H(16)
-//TODO: проверить все ошибки
-//TODO: переделоть на статическое
 namespace Lan
 {
 
