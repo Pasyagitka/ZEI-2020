@@ -21,10 +21,9 @@ namespace Lan
 		bool quoteFlag(false);
 		bool parsed = false;
 
-		char postfix[LT_MAXSIZE];
-		char buffer[LT_MAXSIZE];
-		char* newbuf = new char[LT_MAXSIZE];
-		char anotherbuf[LT_MAXSIZE];
+		char postfix[10];
+		char buffer[258];
+		char anotherbuf[10];
 
 		LT::LexTable* newLexTable = &lextable;
 		IT::IdTable* newIDTable = &idtable;
@@ -48,7 +47,8 @@ namespace Lan
 				currentColumn = 1;
 				newlineflag = false;
 			}//TODO: добавить знаки,чтоб выражения х=х распознавались правильно +-=пробел*/<>
-			if (inText[i] == LEX_SPACE || inText[i] == LEX_ENDL || inText[i] == LEX_POINT || inText[i] == LEX_COMMA || inText[i] == LEX_EXCLAMATION || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_COMMA
+			if (inText[i] == LEX_SPACE || inText[i] == LEX_ENDL || inText[i] == LEX_POINT || inText[i] == LEX_COMMA || inText[i] == LEX_EXCLAMATION || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_COMMA 
+				|| inText[i + 1] == LEX_POINT || inText[i + 1] == LEX_COMMA || inText[i +1 ] == LEX_EXCLAMATION || inText[i +1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS || inText[i+1] == LEX_RIGHTBRACE || inText[i+1] == LEX_LEFTBRACE || inText[i+1] == LEX_COMMA
 				|| inText[i + 1] == LEX_MINUS || inText[i + 1] == LEX_PLUS || inText[i + 1] == LEX_EQUALITY || inText[i + 1] == LEX_STAR || inText[i + 1] == LEX_SLASH /*|| inText[i + 1] == LEX_MORE || inText[i + 1] ==  LEX_LESS*/
 				|| inText[i] == LEX_MINUS || inText[i] == LEX_PLUS || inText[i] == LEX_EQUALITY || inText[i] == LEX_STAR || inText[i] == LEX_SLASH  /*inText[i] == LEX_MORE || inText[i] == LEX_LESS*/
 				)
@@ -57,16 +57,12 @@ namespace Lan
 
 				if (quoteFlag) 	continue;
 
-				if (inText[i] == LEX_EXCLAMATION || inText[i] == LEX_POINT || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_COMMA) {
-					newbuf[0] = buffer[sizeofbuf - 1];
-					newbuf[1] = LEX_END;
-					secondflag = true;
-				}
-				if (sizeofbuf == 1) {
+				if (sizeofbuf == 1 || inText[i+1] == LEX_EXCLAMATION || inText[i+1] == LEX_POINT || inText[i+1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS ||  inText[i+1] == LEX_COMMA) {
 					buffer[sizeofbuf] = LEX_END;
 				}
 				else
 					if (!quoteFlag) buffer[sizeofbuf - 1] = LEX_END;
+					
 
 				sizeofbuf = 0;
 				TokenIsCommited = true;
@@ -431,53 +427,6 @@ namespace Lan
 					linkflag = true;
 				}
 			}
-
-			if (linkflag && secondflag) {
-				FST::FST FSTExclamation(newbuf, FST_EXCLAMATION);
-				if (FST::execute(FSTExclamation)) {
-					LT::Entry newLTEntry = { LEX_EXCLAMATION, currentLine, LT_TI_NULLIDX };
-					LT::Add(*newLexTable, newLTEntry);
-					continue;
-				}
-				FST::FST FSTPoint(newbuf, FST_POINT);
-				if (FST::execute(FSTPoint)) {
-					LT::Entry newLTEntry = { LEX_POINT , currentLine, LT_TI_NULLIDX };
-					LT::Add(*newLexTable, newLTEntry);
-					continue;
-				}
-				FST::FST FSTLefthesis(newbuf, FST_LEFTHESIS);
-				if (FST::execute(FSTLefthesis)) {
-					LT::Entry newLTEntry = { LEX_LEFTHESIS , currentLine, LT_TI_NULLIDX };
-					LT::Add(*newLexTable, newLTEntry);
-					continue;
-				}
-				FST::FST FSTRighthesis(newbuf, FST_RIGHTHESIS);
-				if (FST::execute(FSTRighthesis)) {
-					LT::Entry newLTEntry = { LEX_RIGHTHESIS , currentLine, LT_TI_NULLIDX };
-					LT::Add(*newLexTable, newLTEntry);
-					continue;
-				}
-				FST::FST FSTRightbrace(newbuf, FST_RIGHTBRACE);
-				if (FST::execute(FSTRightbrace)) {
-					LT::Entry newLTEntry = { LEX_RIGHTBRACE , currentLine, LT_TI_NULLIDX };
-					LT::Add(*newLexTable, newLTEntry);
-					continue;
-				}
-				FST::FST FSTLeftbrace(newbuf, FST_LEFTBRACE);
-				if (FST::execute(FSTLeftbrace)) {
-					LT::Entry newLTEntry = { LEX_LEFTBRACE , currentLine, LT_TI_NULLIDX };
-					LT::Add(*newLexTable, newLTEntry);
-					continue;
-				}
-				FST::FST FSTComma(newbuf, FST_COMMA);
-				if (FST::execute(FSTComma)) {
-					LT::Entry newLTEntry = { LEX_COMMA, currentLine, LT_TI_NULLIDX };
-					LT::Add(*newLexTable, newLTEntry);
-					continue;
-				}
-			}
 		}
-	/*	if (linkflag == false && parsed ==false)
-			throw ERROR_THROW_IN(311, currentLine, currentColumn);*/
 	}
 }
