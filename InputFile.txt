@@ -5,8 +5,9 @@ giveback p!
 ]
 zei
 [	~efewfko
-set tiny x : 10!
-set tiny y : 10!
+set tiny x : 0!
+set tiny y : 017!
+y > 2!
 set tiny a : x+y+2!
 set symbolic 	str : "sp ace"!
 set symbolic  mystr : "а бв?гдежзикла	мопростуфхцч"!

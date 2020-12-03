@@ -43,7 +43,9 @@ namespace Pn {
 
 			if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL || temp.lexema == LEX_LIBFUNC || temp.lexema == LEX_SHOW)
 			{
-				if (idtable.table[lextable.table[i].indxTI].idtype== IT::F || idtable.table[lextable.table[i].indxTI].idtype == IT::B) functionflag = true; //идентификатор функции удаляется А ТИП???
+				if (lextable.table[i].indxTI != -1 && (idtable.table[lextable.table[i].indxTI].idtype== IT::F
+					|| idtable.table[lextable.table[i].indxTI].idtype == IT::B))
+					functionflag = true; //идентификатор функции удаляется А ТИП???
 				else ResultingString += temp.lexema;
 				continue;
 			}
@@ -101,7 +103,7 @@ namespace Pn {
 					ResultingString += stack.top();
 					stack.pop();
 				}
-				std::cout << ResultingString << std::endl; //таблица лексем
+				//std::cout << ResultingString << std::endl; //таблица лексем
 				int i = lextable_pos;
 				int j = 0;
 				for (; lextable.table[i].lexema != LEX_EXCLAMATION; i++, j++) {

@@ -1,26 +1,26 @@
------------- Таблица идентификаторов--------------------------- 03.12.2020 02:42:30 ---------
+------------ Таблица идентификаторов--------------------------- 03.12.2020 15:43:14 ---------
 Строка	Тип ID		Тип данных	Имя		Значение
 1	function		tiny		xz		0
 1	variable		symbolic		str		
 3	variable		tiny		p		0
 3	libfunc		symbolic		symblen		
 8	variable		tiny		x		0
-8	literal		tiny		-		10
 9	variable		tiny		y		0
-10	variable		tiny		a		0
+9	literal		tiny		-		15
 10	literal		tiny		-		2
-11	variable		symbolic		str		
-11	literal		symbolic		-		"sp ace"
-12	variable		symbolic		mystr		
-12	literal		symbolic		-		"а бв?гдежзикла	мопростуфхцч"
-13	variable		logical		mb		
-13	literal		logical		-		false
-16	variable		tiny		m		0
-17	libfunc		tiny		show		0
-17	literal		symbolic		-		"string"
+11	variable		tiny		a		0
+12	variable		symbolic		str		
+12	literal		symbolic		-		"sp ace"
+13	variable		symbolic		mystr		
+13	literal		symbolic		-		"а бв?гдежзикла	мопростуфхцч"
+14	variable		logical		mb		
+14	literal		logical		-		false
+17	variable		tiny		m		0
 18	libfunc		tiny		show		0
-22	variable		symbolic		nb		
-22	libfunc		symbolic		symbtotiny		
-23	libfunc		symbolic		show		
-25	variable		tiny		z		0
-26	libfunc		tiny		show		0
+18	literal		symbolic		-		"string"
+19	libfunc		tiny		show		0
+23	variable		symbolic		nb		
+23	libfunc		symbolic		symbtotiny		
+24	libfunc		symbolic		show		
+26	variable		tiny		z		0
+27	libfunc		tiny		show		0

@@ -4,7 +4,7 @@
 
 #define LT_TABLE_SIZE 300
 #define LT_MAXSIZE 4096					//максимальнео кол-во строк в таблице лексем
-#define LT_TI_NULLIDX 0xffffffff		//нет эл-та таблицы индентификаторов
+#define LT_TI_NULLIDX  -1		//нет эл-та таблицы индентификаторов
 #define LEX_TINY		't'
 #define LEX_SYMBOLIC	't'
 #define LEX_LOGICAL		't'
@@ -20,6 +20,8 @@
 #define LEX_PERFORM		'p'
 #define LEX_LOOP		'y'
 #define LEX_SET			's'
+#define LEX_LEFTSHIFT   'j'
+#define LEX_RIGHTSHIFT	'r'
 
 #define LEX_POINT		'.'
 #define LEX_COMMA		','

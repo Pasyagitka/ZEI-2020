@@ -1,11 +1,12 @@
 #pragma once
 #include "Error.h"
 typedef short GRBALPHABET;
+#define NS(n) GRB::Rule::Chain::N(n)
+#define TS(n) GRB::Rule::Chain::T(n)
 
 namespace GRB
 {
-#define NS(n) Rule::Chain::N(n)
-#define TS(n) Rule::Chain::T(n)
+
 	struct Rule
 	{
 		GRBALPHABET nn;

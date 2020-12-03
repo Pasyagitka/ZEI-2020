@@ -15,8 +15,10 @@
 #define IN_CODE_MINUS			'-' 
 #define	IN_CODE_STAR			'*' 
 #define IN_CODE_SLASH			'/' 
-#define IN_CODE_ASSIGNMENT		'='
+#define IN_CODE_EUALITY			'='
 #define IN_CODE_COMMENT			'~'
+#define IN_CODE_LEFTSHIFT       '<'
+#define IN_CODE_RIGHTSHIFT      '>'
 
 
 // таблица проверки входной информации, индекс = код (Windows-1251) символа

@@ -1,5 +1,6 @@
 #include <cstring>
 #include "GRB.h"
+#include "GRBRules.h"
 #define GRB_ERROR_SERIES 600
 
 namespace GRB
@@ -32,10 +33,10 @@ namespace GRB
 			rules[i] = p[i];
 	}
 
-	/*Greibach getGreibach()
+	Greibach getGreibach()
 	{
 		return greibach;
-	}*/
+	}
 
 	short Greibach::getRule(GRBALPHABET pnn, Rule& prule)
 	{
@@ -56,7 +57,7 @@ namespace GRB
 		return rc;
 	}
 
-	char* Rule::getCRule(char* b, short nchain)
+	char* Rule::getCRule(char* b, short nchain) 	// Получить правило в виде N -> цепочка
 	{
 		char bchain[200];
 		b[0] = Chain::alphabet_to_char(nn);
