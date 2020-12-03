@@ -56,7 +56,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		IT::WriteId(id, itable);	
 		
 
-//		Pn::ToPolish(ltable, itable);
+		//Pn::ToPolish(ltable, itable);
 		LT::WriteLex(lx, ltable);
 		LT::Close(lx);
 		IT::Close(id);

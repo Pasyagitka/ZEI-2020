@@ -8,18 +8,17 @@
 #include <string>
 #include "FSTExpr.h"
 #define EMPTY_LITERAL "-"
+//TODO: max длина строки
 //TODO: получается номер и у H(16)
 //TODO: проверить все ошибки
-//TODO: добавить ошибку нераспознанной лексемы
 namespace Lan
 {
 
 	void Analysis(char inText[], Log::LOG, LT::LexTable& lextable, IT::IdTable& idtable)
 	{
-		int currentLine = 1, currentColumn = 1, sizeofbuf = 0;
-		bool linkflag(false), TokenIsCommited(false), proverka(false), newlineflag(false), secondflag(false), flag(false);
+		int currentLine = 1, currentColumn = 0, sizeofbuf = 0;
+		bool TokenIsCommited(false), proverka(false), newlineflag(false), flag(false);
 		bool quoteFlag(false);
-		bool parsed = false;
 
 		char postfix[10];
 		char buffer[258];
@@ -36,15 +35,13 @@ namespace Lan
 			if (inText[i] == LEX_QUOTE)
 				quoteFlag = !quoteFlag;
 
-			
 			sizeofbuf++;
-			linkflag = false;
-			secondflag = false;
 			TokenIsCommited = false;
+
 			if (newlineflag)
 			{
 				currentLine++;
-				currentColumn = 1;
+				currentColumn = 0;
 				newlineflag = false;
 			}//TODO: добавить знаки,чтоб выражения х=х распознавались правильно +-=пробел*/<>
 			if (inText[i] == LEX_SPACE || inText[i] == LEX_ENDL || inText[i] == LEX_POINT || inText[i] == LEX_COMMA || inText[i] == LEX_EXCLAMATION || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_COMMA 
@@ -116,50 +113,50 @@ namespace Lan
 				}
 				FST::FST FSTTiny(buffer, FST_TINY);
 				if (FST::execute(FSTTiny)) {
+					dataType = IT::TINY;
+					idType = IT::V;
 					LT::Entry newLTEntry = { LEX_TINY , currentLine, IT::IsId(idtable, buffer) };
 					strcpy_s(newLTEntry.buf, buffer);
 					LT::Add(*newLexTable, newLTEntry);
-					dataType = IT::TINY;
-					idType = IT::V;
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTSymbolic(buffer, FST_SYMBOLIC);
 				if (FST::execute(FSTSymbolic)) {
+					dataType = IT::SYMB;
+					idType = IT::V;
 					LT::Entry newLTEntry = { LEX_SYMBOLIC, currentLine, IT::IsId(idtable, buffer) };
 					strcpy_s(newLTEntry.buf, buffer);
 					LT::Add(*newLexTable, newLTEntry);
-					dataType = IT::SYMB;
-					idType = IT::V;
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTLogical(buffer, FST_LOGICAL);
 				if (FST::execute(FSTLogical)) {
+					dataType = IT::LGCL;
+					idType = IT::V;
 					LT::Entry newLTEntry = { LEX_LOGICAL, currentLine, IT::IsId(idtable, buffer) };
 					strcpy_s(newLTEntry.buf, buffer);
 					LT::Add(*newLexTable, newLTEntry);
-					dataType = IT::LGCL;
-					idType = IT::V;
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTFunc(buffer, FST_FUNC);
 				if (FST::execute(FSTFunc)) {
 					LT::Entry newLTEntry = { LEX_FUNCTION, currentLine, IT::IsId(idtable, buffer) };
 					LT::Add(*newLexTable, newLTEntry);
 					idType = IT::F;
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTGiveback(buffer, FST_GIVEBACK);
 				if (FST::execute(FSTGiveback)) {
 					LT::Entry newLTEntry = { LEX_GIVEBACK, currentLine, IT::IsId(idtable, buffer) };
 					LT::Add(*newLexTable, newLTEntry);
 					idType = IT::V;
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTSet(buffer, FST_SET);
 				if (FST::execute(FSTSet)) {
 					LT::Entry newLTEntry = { LEX_SET, currentLine, IT::IsId(idtable, buffer) };
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTShow(buffer, FST_SHOW);
 				if (FST::execute(FSTShow)) {
@@ -178,7 +175,7 @@ namespace Lan
 
 					LT::Entry newLTEntry = { LEX_SHOW, currentLine, IT::IsId(idtable, buffer) , 1 };
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTLib(buffer, FST_LIB);
 				if (FST::execute(FSTLib)) {
@@ -187,21 +184,20 @@ namespace Lan
 					strcpy_s(postfix, buffer);
 					//SA::OneDvv(*ltable, flag);
 					flag = true;
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTWhen(buffer, FST_WHEN);
 				if (FST::execute(FSTWhen)) {
 					LT::Entry newLTEntry = { LEX_WHEN, currentLine, IT::IsId(idtable, buffer) };
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTOtherwise(buffer, FST_OTHERWISE);
 				if (FST::execute(FSTOtherwise)) {
 					LT::Entry newLTEntry = { LEX_OTHERWISE, currentLine, IT::IsId(idtable, buffer) };
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
-				//TODO: библиотечные функции в таблицу ID
 				FST::FST FSTSymblen(buffer, FST_SYMBLEN);
 				if (FST::execute(FSTSymblen)) {
 					idType = IT::B;
@@ -217,11 +213,10 @@ namespace Lan
 					IT::Add(*newIDTable, newIDEntry);
 					LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine, IT::IsId(idtable, buffer) , 1 };
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTSymbtotiny(buffer, FST_SYMBTOTINY);
 				if (FST::execute(FSTSymbtotiny)) {
-
 					idType = IT::B;
 					dataType = IT::SYMB;
 					IT::Entry newIDEntry;
@@ -236,7 +231,7 @@ namespace Lan
 
 					LT::Entry newLTEntry = { LEX_LIBFUNC, currentLine, IT::IsId(idtable, buffer) , 1 };
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTLogicalLiteralTrue(buffer, FST_TRUE);
 				FST::FST FSTLogicalLiteralFalse(buffer, FST_FALSE);
@@ -263,48 +258,8 @@ namespace Lan
 					newLTEntry.sign = -1;
 					strcpy_s(newLTEntry.buf, buffer);
 					LT::Add(*newLexTable, newLTEntry);
-					parsed = true;
-					linkflag = true;
+					continue;
 				}
-				FST::FST FSTIdentifier(buffer, FST_ID);
-				if (!linkflag)
-					if (FST::execute(FSTIdentifier)) {
-						if (strlen(buffer) > ID_MAXSIZE)
-							throw ERROR_THROW_IN(308, currentLine, currentColumn);
-
-						IT::Entry iEntry;
-						strcpy_s(anotherbuf, buffer);
-						if (idType == IT::F)
-							strcpy_s(postfix, buffer);
-						strcpy_s(iEntry.postfix, postfix);
-						bool isExecute = false;
-						//SA::Proverka(*ltable, *itable);
-						//SA::Pereobyavl(*ltable, *itable, buffer, postfix, line, col);
-						for (int i = 0; i <= (*newIDTable).size; i++)
-							if (strcmp((*newIDTable).table[i].id, buffer) == 0)
-							{
-								isExecute = true;
-								if (newIDTable->table[i].idtype == IT::F)
-									break;
-								if (strcmp((*newIDTable).table[i].postfix, iEntry.postfix) != 0)
-									isExecute = false;
-							}
-						if (!isExecute) { //если переменная не объявлена	
-							strcpy_s(iEntry.id, buffer);
-							iEntry.idtype = idType;
-							iEntry.iddatatype = dataType;
-							iEntry.value.vint = TI_INT_DEFAULT;
-							iEntry.value.vstr->len = TI_STR_DEFAULT;
-							strcpy_s(iEntry.value.vstr->str, "");
-							iEntry.idxfirstLE = currentLine;
-							IT::Add(*newIDTable, iEntry);
-						}
-
-						LT::Entry newLTEntry = { LEX_ID, currentLine, IT::IsId(idtable, buffer) };
-						strcpy_s(newLTEntry.buf, buffer);
-						LT::Add(*newLexTable, newLTEntry);
-						linkflag = true;
-					}
 				//HACK не понятно, правильно ли работает 0dec, 09hex
 				FST::FST FSTTinyLiteral10(buffer, FST_TINYLITERAL10);
 				FST::FST FSTTinyLiteral8(buffer, FST_TINYLITERAL8);
@@ -334,8 +289,7 @@ namespace Lan
 					newLTEntry.sign = bufNum;
 					strcpy_s(newLTEntry.buf, buffer);
 					LT::Add(*newLexTable, newLTEntry);
-					parsed = true;
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTSymbolicLiteral(buffer, FST_SYMBOLICLITERAL);
 				if (FST::execute(FSTSymbolicLiteral)) {
@@ -368,64 +322,100 @@ namespace Lan
 					newLTEntry.sign = -1;
 					strcpy_s(newLTEntry.buf, buffer);
 					LT::Add(*newLexTable, newLTEntry);
-					parsed = true;
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTEquality(buffer, FST_EQUALITY);
 				if (FST::execute(FSTEquality)) {
 					LT::Entry newLTEntry = { LEX_EQUALITY, currentLine, LT_TI_NULLIDX };
 					newLTEntry.sign = 2;
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTCompare(buffer, FST_COMPARE);
 				if (FST::execute(FSTCompare)) {
 					LT::Entry newLTEntry = { LEX_COMPARE, currentLine, LT_TI_NULLIDX };
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTPlus(buffer, FST_PLUS);
 				if (FST::execute(FSTPlus)) {
 					LT::Entry newLTEntry = { LEX_PLUS, currentLine, LT_TI_NULLIDX };
 					newLTEntry.sign = 1;
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTMinus(buffer, FST_MINUS);
 				if (FST::execute(FSTMinus)) {
 					LT::Entry newLTEntry = { LEX_MINUS, currentLine, LT_TI_NULLIDX };
 					newLTEntry.sign = 1;
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTStar(buffer, FST_STAR);
 				if (FST::execute(FSTStar)) {
 					LT::Entry newLTEntry = { LEX_STAR, currentLine, LT_TI_NULLIDX };
 					newLTEntry.sign = 1;
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTSlash(buffer, FST_SLASH);
 				if (FST::execute(FSTSlash)) {
 					LT::Entry newLTEntry = { LEX_SLASH, currentLine, LT_TI_NULLIDX };
 					newLTEntry.sign = 1;
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTLeftshift(buffer, FST_LEFTSHIFT);
 				if (FST::execute(FSTLeftshift)) {
 					LT::Entry newLTEntry = { LEX_LEFTSHIFT, currentLine, LT_TI_NULLIDX };
 					newLTEntry.sign = 1;
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
 				FST::FST FSTRightshift(buffer, FST_RIGHTSHIFT);
 				if (FST::execute(FSTRightshift)) {
 					LT::Entry newLTEntry = { LEX_RIGHTSHIFT, currentLine, LT_TI_NULLIDX };
 					newLTEntry.sign = 1;
 					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
+					continue;
 				}
+				FST::FST FSTIdentifier(buffer, FST_ID);
+				if (FST::execute(FSTIdentifier)) {
+					if (strlen(buffer) > ID_MAXSIZE)
+						throw ERROR_THROW_IN(308, currentLine, currentColumn);
+					IT::Entry iEntry;
+					strcpy_s(anotherbuf, buffer);
+					if (idType == IT::F)
+						strcpy_s(postfix, buffer);
+					strcpy_s(iEntry.postfix, postfix);
+					bool isExecute = false;
+					//SA::Proverka(*ltable, *itable);
+					//SA::Pereobyavl(*ltable, *itable, buffer, postfix, line, col);
+					for (int i = 0; i <= (*newIDTable).size; i++)
+						if (strcmp((*newIDTable).table[i].id, buffer) == 0)
+						{
+							isExecute = true;
+							if (newIDTable->table[i].idtype == IT::F)
+								break;
+							if (strcmp((*newIDTable).table[i].postfix, iEntry.postfix) != 0)
+								isExecute = false;
+						}
+					if (!isExecute) { //если переменная не объявлена	
+						strcpy_s(iEntry.id, buffer);
+						iEntry.idtype = idType;
+						iEntry.iddatatype = dataType;
+						iEntry.value.vint = TI_INT_DEFAULT;
+						iEntry.value.vstr->len = TI_STR_DEFAULT;
+						strcpy_s(iEntry.value.vstr->str, "");
+						iEntry.idxfirstLE = currentLine;
+						IT::Add(*newIDTable, iEntry);
+					}
+					LT::Entry newLTEntry = { LEX_ID, currentLine, IT::IsId(idtable, buffer) };
+					strcpy_s(newLTEntry.buf, buffer);
+					LT::Add(*newLexTable, newLTEntry);
+					continue;
+				}
+				throw ERROR_THROW_IN(311, currentLine, currentColumn);
 			}
 		}
 	}
