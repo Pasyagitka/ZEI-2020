@@ -17,10 +17,9 @@ namespace IT
 
 	void Add(IdTable& itable, Entry istr)
 	{
-		itable.table[itable.size] = istr;
-		itable.size++;
 		if (itable.size >= itable.maxsize)
-			throw ERROR_THROW(305);//таблица переполнена
+			throw ERROR_THROW(305); //таблица переполнена
+		itable.table[itable.size++] = istr;
 	}
 
 	void Delete(IdTable& itable)
@@ -100,7 +99,7 @@ namespace IT
 		localtime_s(&currentTime, &t);
 		char str[TIME_SIZE];
 		strftime(str, TIME_SIZE, "%d.%m.%Y %H:%M:%S", &currentTime);
-		*id.stream << "------------ Таблица идентификаторов--------------------------- " << str << " ---------" << std::endl;
+		*id.stream << "------------ Таблица идентификаторов----------------------------------------------------- " << str << " -------------" << std::endl;
 	}
 	
 }

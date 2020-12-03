@@ -9,6 +9,7 @@
 #define TI_NULLIDX 0xffffffff			//нет элемента таблицы идентификаторов
 #define TI_STR_MAXSIZE 255
 
+
 namespace IT
 {
 
