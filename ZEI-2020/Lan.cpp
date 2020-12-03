@@ -65,64 +65,57 @@ namespace Lan
 
 			currentColumn++;
 			if (tokenIsCommited) {
-				FST::FST *FSTExclamation = new FST::FST(token, FST_EXCLAMATION);
-				if (FST::execute(*FSTExclamation)) {
+				FST::FST FSTExclamation(token, FST_EXCLAMATION);
+				if (FST::execute(FSTExclamation)) {
 					LT::Entry *newLTEntry = new LT::Entry{ LEX_EXCLAMATION, currentLine, LT_TI_NULLIDX };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTExclamation;
-				FST::FST *FSTPoint = new FST::FST(token, FST_POINT);
-				if (FST::execute(*FSTPoint)) {
+				FST::FST FSTPoint (token, FST_POINT);
+				if (FST::execute(FSTPoint)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_POINT, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTPoint;
-				FST::FST *FSTLefthesis = new FST::FST(token, FST_LEFTHESIS);
-				if (FST::execute(*FSTLefthesis)) {
+				FST::FST FSTLefthesis (token, FST_LEFTHESIS);
+				if (FST::execute(FSTLefthesis)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_LEFTHESIS, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTLefthesis;
-				FST::FST *FSTRighthesis = new FST::FST(token, FST_RIGHTHESIS);
-				if (FST::execute(*FSTRighthesis)) {
+				FST::FST FSTRighthesis(token, FST_RIGHTHESIS);
+				if (FST::execute(FSTRighthesis)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_RIGHTHESIS, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTRighthesis;
-				FST::FST *FSTRightbrace = new FST::FST(token, FST_RIGHTBRACE);
-				if (FST::execute(*FSTRightbrace)) {
+				FST::FST FSTRightbrace(token, FST_RIGHTBRACE);
+				if (FST::execute(FSTRightbrace)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_RIGHTBRACE, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTRightbrace;
-				FST::FST *FSTLeftbrace = new FST::FST(token, FST_LEFTBRACE);
-				if (FST::execute(*FSTLeftbrace)) {
+				FST::FST FSTLeftbrace(token, FST_LEFTBRACE);
+				if (FST::execute(FSTLeftbrace)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_LEFTBRACE, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTLeftbrace;
-				FST::FST *FSTComma = new FST::FST(token, FST_COMMA);
-				if (FST::execute(*FSTComma)) {
+				FST::FST FSTComma(token, FST_COMMA);
+				if (FST::execute(FSTComma)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_COMMA, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTComma;
-				FST::FST *FSTTiny = new FST::FST(token, FST_TINY);
-				if (FST::execute(*FSTTiny)) {
+				FST::FST FSTTiny(token, FST_TINY);
+				if (FST::execute(FSTTiny)) {
 					dataType = IT::TINY;
 					idType = IT::V;
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_TINY, currentLine, IT::IsId(idtable, token) };
@@ -131,9 +124,8 @@ namespace Lan
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTTiny;
-				FST::FST *FSTSymbolic = new FST::FST(token, FST_SYMBOLIC);
-				if (FST::execute(*FSTSymbolic)) {
+				FST::FST FSTSymbolic(token, FST_SYMBOLIC);
+				if (FST::execute(FSTSymbolic)) {
 					dataType = IT::SYMB;
 					idType = IT::V;
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_SYMBOLIC, currentLine, IT::IsId(idtable, token) };
@@ -142,9 +134,8 @@ namespace Lan
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTSymbolic;
-				FST::FST *FSTLogical = new FST::FST(token, FST_LOGICAL);
-				if (FST::execute(*FSTLogical)) {
+				FST::FST FSTLogical(token, FST_LOGICAL);
+				if (FST::execute(FSTLogical)) {
 					dataType = IT::LGCL;
 					idType = IT::V;
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_LOGICAL, currentLine, IT::IsId(idtable, token) };
@@ -153,35 +144,31 @@ namespace Lan
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTLogical;
-				FST::FST *FSTFunc = new FST::FST(token, FST_FUNC);
-				if (FST::execute(*FSTFunc)) {
+				FST::FST FSTFunc(token, FST_FUNC);
+				if (FST::execute(FSTFunc)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_FUNCTION, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					idType = IT::F;
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTFunc;
-				FST::FST *FSTGiveback = new FST::FST(token, FST_GIVEBACK);
-				if (FST::execute(*FSTGiveback)) {
+				FST::FST FSTGiveback(token, FST_GIVEBACK);
+				if (FST::execute(FSTGiveback)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_GIVEBACK, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					idType = IT::V;
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTGiveback;
-				FST::FST *FSTSet = new FST::FST(token, FST_SET);
-				if (FST::execute(*FSTSet)) {
+				FST::FST FSTSet(token, FST_SET);
+				if (FST::execute(FSTSet)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_SET, currentLine, IT::IsId(idtable, token)  };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTSet;
-				FST::FST *FSTShow = new FST::FST(token, FST_SHOW);
-				if (FST::execute(*FSTShow)) {;
+				FST::FST FSTShow(token, FST_SHOW);
+				if (FST::execute(FSTShow)) {;
 					idType = IT::B;
 
 					IT::Entry *newIDEntry = new IT::Entry{};
@@ -200,9 +187,8 @@ namespace Lan
 					delete newIDEntry;
 					continue;
 				}
-				delete FSTShow;
-				FST::FST *FSTLib = new FST::FST(token, FST_LIB);
-				if (FST::execute(*FSTLib)) {
+				FST::FST FSTLib(token, FST_LIB);
+				if (FST::execute(FSTLib)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_LIB, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					strcpy_s(postfix, token);
@@ -211,25 +197,22 @@ namespace Lan
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTLib;
-				FST::FST *FSTWhen = new FST::FST(token, FST_WHEN);
-				if (FST::execute(*FSTWhen)) {
+				FST::FST FSTWhen(token, FST_WHEN);
+				if (FST::execute(FSTWhen)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_WHEN, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTWhen;
-				FST::FST *FSTOtherwise = new FST::FST(token, FST_OTHERWISE);
-				if (FST::execute(*FSTOtherwise)) {
+				FST::FST FSTOtherwise(token, FST_OTHERWISE);
+				if (FST::execute(FSTOtherwise)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_OTHERWISE, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTOtherwise;
-				FST::FST *FSTSymblen = new FST::FST(token, FST_SYMBLEN);
-				if (FST::execute(*FSTSymblen)) {
+				FST::FST FSTSymblen(token, FST_SYMBLEN);
+				if (FST::execute(FSTSymblen)) {
 					idType = IT::B;
 					dataType = IT::SYMB;
 					IT::Entry* newIDEntry = new IT::Entry{};
@@ -248,9 +231,8 @@ namespace Lan
 					delete newIDEntry;
 					continue;
 				}
-				delete FSTSymblen;
-				FST::FST *FSTSymbtotiny = new FST::FST(token, FST_SYMBTOTINY);
-				if (FST::execute(*FSTSymbtotiny)) {
+				FST::FST FSTSymbtotiny(token, FST_SYMBTOTINY);
+				if (FST::execute(FSTSymbtotiny)) {
 					idType = IT::B;
 					dataType = IT::SYMB;
 					IT::Entry* newIDEntry = new IT::Entry{};
@@ -269,10 +251,9 @@ namespace Lan
 					delete newIDEntry;
 					continue;
 				}
-				delete FSTSymbtotiny;
-				FST::FST *FSTLogicalLiteralTrue = new FST::FST(token, FST_TRUE);
-				FST::FST *FSTLogicalLiteralFalse = new FST:: FST(token, FST_FALSE);
-				if (FST::execute(*FSTLogicalLiteralFalse) || FST::execute(*FSTLogicalLiteralTrue)) {
+				FST::FST FSTLogicalLiteralTrue(token, FST_TRUE);
+				FST::FST FSTLogicalLiteralFalse(token, FST_FALSE);
+				if (FST::execute(FSTLogicalLiteralFalse) || FST::execute(FSTLogicalLiteralTrue)) {
 					IT::Entry* newIDEntry = new IT::Entry{};
 					strcpy_s(newIDEntry->id, EMPTY_LITERAL);
 					newIDEntry->iddatatype = IT::LGCL;
@@ -298,11 +279,10 @@ namespace Lan
 					delete newIDEntry;
 					continue;
 				}
-				delete FSTLogicalLiteralTrue, FSTLogicalLiteralFalse;
 				////HACK не понятно, правильно ли работает 0dec, 09hex
-				FST::FST *FSTTinyLiteral10 = new FST::FST(token, FST_TINYLITERAL10);
-				FST::FST *FSTTinyLiteral8 = new FST::FST(token, FST_TINYLITERAL8);
-				if (FST::execute(*FSTTinyLiteral10) || FST::execute(*FSTTinyLiteral8)) {
+				FST::FST FSTTinyLiteral10(token, FST_TINYLITERAL10);
+				FST::FST FSTTinyLiteral8(token, FST_TINYLITERAL8);
+				if (FST::execute(FSTTinyLiteral10) || FST::execute(FSTTinyLiteral8)) {
 					int bufNum = std::strtol(token, NULL, 0); //HACK перевод в 8-ричную 
 					//SA::ZeroDivision(*ltable, buffer);
 					IT::Entry* newIDEntry = new IT::Entry{};
@@ -331,9 +311,8 @@ namespace Lan
 					delete newIDEntry;
 					continue;
 				}
-				delete FSTTinyLiteral10, FSTTinyLiteral8;
-				FST::FST *FSTSymbolicLiteral = new FST::FST(token, FST_SYMBOLICLITERAL);
-				if (FST::execute(*FSTSymbolicLiteral)) {
+				FST::FST FSTSymbolicLiteral(token, FST_SYMBOLICLITERAL);
+				if (FST::execute(FSTSymbolicLiteral)) {
 
 					IT::Entry* newIDEntry = new IT::Entry{};
 					strcpy_s(newIDEntry->id, EMPTY_LITERAL);
@@ -367,78 +346,69 @@ namespace Lan
 					delete newIDEntry;
 					continue;
 				}
-				delete FSTSymbolicLiteral;
-				FST::FST *FSTEquality = new FST::FST(token, FST_EQUALITY);
-				if (FST::execute(*FSTEquality)) {
+				FST::FST FSTEquality(token, FST_EQUALITY);
+				if (FST::execute(FSTEquality)) {
 					LT::Entry *newLTEntry = new LT::Entry{ LEX_EQUALITY, currentLine, LT_TI_NULLIDX };
 					newLTEntry->sign = 2;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTEquality;
-				FST::FST *FSTCompare = new FST::FST(token, FST_COMPARE);
-				if (FST::execute(*FSTCompare)) {
+				FST::FST FSTCompare(token, FST_COMPARE);
+				if (FST::execute(FSTCompare)) {
 					LT::Entry *newLTEntry = new LT::Entry{ LEX_COMPARE, currentLine, LT_TI_NULLIDX };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTCompare;
-				FST::FST *FSTPlus = new FST::FST(token, FST_PLUS);
-				if (FST::execute(*FSTPlus)) {
+				FST::FST FSTPlus(token, FST_PLUS);
+				if (FST::execute(FSTPlus)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_PLUS, currentLine, LT_TI_NULLIDX };
 					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTPlus;
-				FST::FST *FSTMinus = new FST::FST(token, FST_MINUS);
-				if (FST::execute(*FSTMinus)) {
+				FST::FST FSTMinus(token, FST_MINUS);
+				if (FST::execute(FSTMinus)) {
 					LT::Entry* newLTEntry = new  LT::Entry{ LEX_MINUS, currentLine, LT_TI_NULLIDX };
 					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTMinus;
-				FST::FST *FSTStar = new FST::FST(token, FST_STAR);
-				if (FST::execute(*FSTStar)) {
+				FST::FST FSTStar(token, FST_STAR);
+				if (FST::execute(FSTStar)) {
 					LT::Entry *newLTEntry = new  LT::Entry{ LEX_STAR, currentLine, LT_TI_NULLIDX };
 					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTStar;
-				FST::FST *FSTSlash = new FST::FST(token, FST_SLASH);
-				if (FST::execute(*FSTSlash)) {
+				FST::FST FSTSlash(token, FST_SLASH);
+				if (FST::execute(FSTSlash)) {
 					LT::Entry *newLTEntry = new  LT::Entry{ LEX_SLASH, currentLine, LT_TI_NULLIDX };
 					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTSlash;
-				FST::FST *FSTLeftshift = new FST::FST(token, FST_LEFTSHIFT);
-				if (FST::execute(*FSTLeftshift)) {
+				FST::FST FSTLeftshift(token, FST_LEFTSHIFT);
+				if (FST::execute(FSTLeftshift)) {
 					LT::Entry* newLTEntry = new  LT::Entry{ LEX_LEFTSHIFT, currentLine, LT_TI_NULLIDX };
 					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTLeftshift;
-				FST::FST *FSTRightshift = new FST::FST(token, FST_RIGHTSHIFT);
-				if (FST::execute(*FSTRightshift)) {
+				FST::FST FSTRightshift(token, FST_RIGHTSHIFT);
+				if (FST::execute(FSTRightshift)) {
 					LT::Entry* newLTEntry = new  LT::Entry{ LEX_RIGHTSHIFT, currentLine, LT_TI_NULLIDX };
 					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
 				}
-				delete FSTRightshift;
 				FST::FST FSTIdentifier(token, FST_ID);
 				if (FST::execute(FSTIdentifier)) {
 					if (strlen(token) > ID_MAXSIZE)
