@@ -9,7 +9,6 @@
 #include "FSTExpr.h"
 #define EMPTY_LITERAL "-"
 //TODO: получается номер и у H(16)
-//TODO: сделать всё в одном стиле
 //TODO: проверить все ошибки
 //TODO: добавить ошибку нераспознанной лексемы
 namespace Lan
@@ -18,7 +17,7 @@ namespace Lan
 	void Analysis(char inText[], Log::LOG, LT::LexTable& lextable, IT::IdTable& idtable)
 	{
 		int currentLine = 1, currentColumn = 1, sizeofbuf = 0;
-		bool linkflag(false), TokenIsCommited(false), proverka(false), newflag(false), secondflag(false), flag(false);
+		bool linkflag(false), TokenIsCommited(false), proverka(false), newlineflag(false), secondflag(false), flag(false);
 		bool quoteFlag(false);
 		bool parsed = false;
 
@@ -43,18 +42,18 @@ namespace Lan
 			linkflag = false;
 			secondflag = false;
 			TokenIsCommited = false;
-			if (newflag)
+			if (newlineflag)
 			{
 				currentLine++;
 				currentColumn = 1;
-				newflag = false;
+				newlineflag = false;
 			}//TODO: добавить знаки,чтоб выражения х=х распознавались правильно +-=пробел*/<>
 			if (inText[i] == LEX_SPACE || inText[i] == LEX_ENDL || inText[i] == LEX_POINT || inText[i] == LEX_COMMA || inText[i] == LEX_EXCLAMATION || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_COMMA
 				|| inText[i + 1] == LEX_MINUS || inText[i + 1] == LEX_PLUS || inText[i + 1] == LEX_EQUALITY || inText[i + 1] == LEX_STAR || inText[i + 1] == LEX_SLASH /*|| inText[i + 1] == LEX_MORE || inText[i + 1] ==  LEX_LESS*/
 				|| inText[i] == LEX_MINUS || inText[i] == LEX_PLUS || inText[i] == LEX_EQUALITY || inText[i] == LEX_STAR || inText[i] == LEX_SLASH  /*inText[i] == LEX_MORE || inText[i] == LEX_LESS*/
 				)
 			{
-				if (inText[i] == LEX_ENDL)	newflag = true;
+				if (inText[i] == LEX_ENDL)	newlineflag = true;
 
 				if (quoteFlag) 	continue;
 
@@ -119,7 +118,6 @@ namespace Lan
 					LT::Add(*newLexTable, newLTEntry);
 					continue;
 				}
-
 				FST::FST FSTTiny(buffer, FST_TINY);
 				if (FST::execute(FSTTiny)) {
 					LT::Entry newLTEntry = { LEX_TINY , currentLine, IT::IsId(idtable, buffer) };
@@ -244,7 +242,6 @@ namespace Lan
 					LT::Add(*newLexTable, newLTEntry);
 					linkflag = true;
 				}
-				//TODO: добавление правильного индекса в таблицу лекс
 				FST::FST FSTLogicalLiteralTrue(buffer, FST_TRUE);
 				FST::FST FSTLogicalLiteralFalse(buffer, FST_FALSE);
 				if (FST::execute(FSTLogicalLiteralFalse) || FST::execute(FSTLogicalLiteralTrue)) {
@@ -378,20 +375,6 @@ namespace Lan
 					parsed = true;
 					linkflag = true;
 				}
-				/*FST::FST FSTMore(buffer, FST_MORE);
-				if (FST::execute(FSTMore)) {
-					LT::Entry newLTEntry = { LEX_MORE, currentLine, LT_TI_NULLIDX };
-					newLTEntry.sign = 2;
-					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
-				}
-				FST::FST FSTLess(buffer, FST_LESS);
-				if (FST::execute(FSTLess)) {
-					LT::Entry newLTEntry = { LEX_LESS, currentLine, LT_TI_NULLIDX };
-					newLTEntry.sign = 2;
-					LT::Add(*newLexTable, newLTEntry);
-					linkflag = true;
-				}*/
 				FST::FST FSTEquality(buffer, FST_EQUALITY);
 				if (FST::execute(FSTEquality)) {
 					LT::Entry newLTEntry = { LEX_EQUALITY, currentLine, LT_TI_NULLIDX };
@@ -493,8 +476,6 @@ namespace Lan
 					continue;
 				}
 			}
-
-
 		}
 	/*	if (linkflag == false && parsed ==false)
 			throw ERROR_THROW_IN(311, currentLine, currentColumn);*/

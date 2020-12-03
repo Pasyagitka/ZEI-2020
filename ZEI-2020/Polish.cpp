@@ -6,7 +6,7 @@
 #include <queue>
 #include <string>
 #include <iostream>
-//TODO первое вхождение идентификатора?
+//TODO первое вхождение идентификатора? str
 //TODO как он узнает, что это за функция была?? b h - там где-то идентификатор удаляется
 namespace Pn {
 	void ToPolish(LT::LexTable& lextable, IT::IdTable& idtable) {

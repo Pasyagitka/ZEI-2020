@@ -10,9 +10,7 @@
 #include "Lan.h"
 #include "Out.h"
 #include "Polish.h"
-//TODO система счисления - восьмеричная просто 0 впереди
 
-//TODO польскую запись, затем синтаксический
 int _tmain(int argc, _TCHAR* argv[])
 {
 	setlocale(LC_ALL, "Russian");
