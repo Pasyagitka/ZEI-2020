@@ -13,12 +13,37 @@ namespace GRB {
 	*/
 
 	/* Мой новый
-		S ->		| tfi(F){NgE!}!S
-		N -> tfi(F)
-		E -> i | l | (E) | 
-		M ->
-		F -> ti | ti, F
-		W ->
+		S -> ftiFBS | g{N} | ftiFB
+		F -> [P] | []
+		P -> ti | ti&P
+		B -> {Nr[I].}
+		I -> li
+		U -> {N}
+		N -> vti.N | vti=E.N | i=E.N | c[R]{X}N | c[R]{X}u{X}N | ~K.N | ^K.N | o[I].N | n.N | iK.N
+			| vti. | vti= E.| i=E. |c[R]{X} | c[R]{X}u{X} | !K. | ~K. | ^K. | oK. | n. | iK.
+		R -> i | ibi | lbi | lbl
+		K -> [W] | []
+		E -> i | l | (E) | iK | ~K | ^K| !K | iM | lM | (E)M | iKM | ~KM | ^KM | !KM
+		W -> i | l | i&w | l&W
+		M -> sE | seM
+		X -> i=E.N | ~K.N | !K.N | o[I].N | c.N | iK.N | i=E. | ~K. | !K. | ^K. | oK. | c. | iK.
+	*/
+
+	/*
+		S -> ftiFBS | g{N} | ftiFB
+		F -> [P] | []
+		P -> ti | ti&P
+		B -> {Nr[I].}
+		I -> li
+		U -> {N}
+		N -> vti.N | vti=E.N | i=E.N | c[R]{X}N | c[R]{X}u{X}N | ~K.N | ^K.N | o[I].N | n.N | iK.N
+			| vti. | vti= E.| i=E. |c[R]{X} | c[R]{X}u{X} | !K. | ~K. | ^K. | oK. | n. | iK.
+		R -> i | ibi | lbi | lbl
+		K -> [W] | []
+		E -> i | l | (E) | iK | ~K | ^K| !K | iM | lM | (E)M | iKM | ~KM | ^KM | !KM
+		W -> i | l | i&w | l&W
+		M -> sE | seM
+		X -> i=E.N | ~K.N | !K.N | o[I].N | c.N | iK.N | i=E. | ~K. | !K. | ^K. | oK. | c. | iK.
 	*/
 
 	/*

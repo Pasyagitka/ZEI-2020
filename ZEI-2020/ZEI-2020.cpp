@@ -10,6 +10,7 @@
 #include "Lan.h"
 #include "Out.h"
 #include "Polish.h"
+#include "MFST.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -52,12 +53,21 @@ int _tmain(int argc, _TCHAR* argv[])
 		//TODO: ошибку записи если закрыт lex id и тп
 		id = IT::getid(idpath);
 		lx = LT::getlex(lexpath);
+		
 		//LT::WriteLex(lx, ltable);
 		IT::WriteId(id, itable);	
 		
 
-		//Pn::ToPolish(ltable, itable);
+		Pn::ToPolish(ltable, itable);
 		LT::WriteLex(lx, ltable);
+
+		//MFST_TRACE_START //отладка
+		//	MFST::Mfst synt = MFST::Mfst::Mfst(ltable, GRB::getGreibach()); //автомат
+		//	//mfst.start();		//старт синтаксического анализа
+		//synt.start();
+		//synt.savededucation();
+		//synt.printrules();
+		
 		LT::Close(lx);
 		IT::Close(id);
 		Log::Close(log);

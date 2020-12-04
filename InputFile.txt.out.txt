@@ -5,6 +5,9 @@ giveback p!
 ]
 zei
 [
+]
+perform 
+[
 set tiny x : 10!
 set tiny y : 017!
 y > 2!
@@ -26,3 +29,4 @@ show(nb)!
 set tiny z :(x*y)*(x/y)!
 show(z)!
 ]
+

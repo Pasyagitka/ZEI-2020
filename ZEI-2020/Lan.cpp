@@ -158,6 +158,14 @@ namespace Lan
 					delete newLTEntry;
 					continue;
 				}
+				FST::FST FSTPerform(token, FST_PERFORM);
+				if (FST::execute(FSTPerform)) {
+					LT::Entry* newLTEntry = new LT::Entry{ LEX_PERFORM, currentLine, IT::IsId(idtable, token) };
+					LT::Add(*newLexTable, *newLTEntry);
+					idType = IT::F;
+					delete newLTEntry;
+					continue;
+				}
 				FST::FST FSTSet(token, FST_SET);
 				if (FST::execute(FSTSet)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_SET, currentLine, IT::IsId(idtable, token)  };

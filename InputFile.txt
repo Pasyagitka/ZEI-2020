@@ -5,6 +5,9 @@ giveback p!
 ]
 zei
 [	~efewfko
+]
+perform 
+[
 set tiny x : 10!
 set tiny y : 017!
 y > 2!
