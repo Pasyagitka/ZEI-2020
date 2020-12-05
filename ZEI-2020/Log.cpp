@@ -4,6 +4,7 @@
 #include "Parm.h"
 #include <ctime>
 #include <iostream>
+#include "LT.h"
 
 
 namespace Log
@@ -44,20 +45,20 @@ namespace Log
 		localtime_s(&currentTime, &t);
 		char str[TIME_SIZE];
 		strftime(str, TIME_SIZE, "%d.%m.%Y %H:%M:%S", &currentTime);
-		*newLog.stream << "--------- Протокол ---- Дата: " << str << "---------" << std::endl;
+		*newLog.stream <<"------------ Протокол----------------------------------------------------------------" << str << "------------" << std::endl;
 	}
 
 	void WriteParm(LOG newLog, Parm::PARM parameter) {
 		size_t n = 0;
 		char buffer[PARM_MAX_SIZE];
-		*newLog.stream << "--------- Параметры -------------------------------------" << std::endl;
+		*newLog.stream << "\n--------- Параметры -------------------------------------------------------------------------------------" << std::endl;
 		wcstombs_s(&n, buffer, parameter.log, PARM_MAX_SIZE);		*newLog.stream << "-log: " << buffer << std::endl;
 		wcstombs_s(&n, buffer, parameter.out, PARM_MAX_SIZE);		*newLog.stream << "-out: " << buffer << std::endl;
-		wcstombs_s(&n, buffer, parameter.in, PARM_MAX_SIZE);		*newLog.stream << "-in : " << buffer << std::endl;
+		wcstombs_s(&n, buffer, parameter.in, PARM_MAX_SIZE);		*newLog.stream << " -in: " << buffer << std::endl;
 	}
 
 	void WriteIn(LOG newLog, In::IN in) {
-		*newLog.stream << "--------- Исходные данные -------------------------------" << std::endl;
+		*newLog.stream << "\n--------- Исходные данные ----------------------------------------------------------------------------" << std::endl;
 		*newLog.stream << "Количество символов: " << in.size << std::endl;
 		*newLog.stream << "Проигнорировано    : " << in.ignor << std::endl;
 		*newLog.stream << "Количество строк   : " << in.lines << std::endl;
@@ -73,6 +74,52 @@ namespace Log
 				<< ", строка " << newError.inext.line << ", позиция " << newError.inext.col << std::endl;
 		}
 	}
+
+	void WriteLexTable(LOG newLog, LT::LexTable& lextable)
+	{
+		*newLog.stream << "\n------------ Таблица лексем ----------------------------------------------------------------------------";
+		unsigned int compLine = -1;
+		for (unsigned int i = 0; i < (unsigned int)lextable.size; i++)
+		{
+			if (compLine != lextable.table[i].sn)
+			{
+				*newLog.stream << std::endl << lextable.table[i].sn << "\t";
+				compLine = lextable.table[i].sn;
+			}
+			*newLog.stream << lextable.table[i].lexema;
+			//if (ltable.table[i].indxTI != -1) *lx.stream << ltable.table[i].indxTI;
+		}
+	}
+
+	void WriteIdTable(LOG newLog, IT::IdTable& idtable)
+	{
+		*newLog.stream << "\n\n------------ Таблица идентификаторов--------------------------------------------------------------------" << std::endl;
+		*newLog.stream << "Строка\tТип ID\t\tТип данных\tИмя\t\tЗначение\n";
+		for (unsigned int i = 0; i < (unsigned int)idtable.size; i++)
+		{
+			*newLog.stream << idtable.table[i].idxfirstLE << "\t";
+
+			if (idtable.table[i].idtype == IT::V)*newLog.stream << "variable";
+			else if (idtable.table[i].idtype == IT::L)*newLog.stream << "literal";
+			else if (idtable.table[i].idtype == IT::F)*newLog.stream << "function";
+			else if (idtable.table[i].idtype == IT::B)*newLog.stream << "libfunc";
+
+			*newLog.stream << "\t\t";
+
+			if (idtable.table[i].iddatatype == IT::TINY)*newLog.stream << "tiny";
+			else if (idtable.table[i].iddatatype == IT::SYMB)*newLog.stream << "symbolic";
+			else if (idtable.table[i].iddatatype == IT::LGCL)*newLog.stream << "logical";
+
+			*newLog.stream << "\t\t" << idtable.table[i].id << "\t\t";
+
+			if (idtable.table[i].iddatatype == IT::TINY)			*newLog.stream << idtable.table[i].value.vint;
+			else if (idtable.table[i].iddatatype == IT::SYMB)	*newLog.stream << idtable.table[i].value.vstr->str;
+			else if (idtable.table[i].iddatatype == IT::LGCL)	*newLog.stream << idtable.table[i].value.vbool;
+
+			*newLog.stream << std::endl;
+		}
+	}
+
 
 	void Close(LOG newLog) {
 		if (newLog.stream != nullptr) {

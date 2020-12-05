@@ -1,6 +1,8 @@
 #pragma once
 #include "In.h"
 #include "Error.h"
+#include "LT.h"
+#include "IT.h"
 #include "Parm.h"
 #include <fstream>
 #define TIME_SIZE 25
@@ -21,5 +23,7 @@ namespace Log // Работа с протоколом
 	void WriteParm(LOG log, Parm::PARM parm);		// вывести в пртокол информацию о входных параметрах
 	void WriteIn(LOG log, In::IN in);				//вывести в протокол информацию о входном потоке
 	void WriteError(LOG log, Error::ERROR error);	// вывести в протокол инфомацию об ошибке
+	void WriteLexTable(LOG log, LT::LexTable& ltable);
+	void WriteIdTable(LOG log, IT::IdTable& itable);
 	void Close(LOG log);							// закрыть протокол
 };

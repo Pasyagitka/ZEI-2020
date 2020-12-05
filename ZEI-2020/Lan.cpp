@@ -16,7 +16,7 @@ namespace Lan
 	void Analysis(char inText[], Log::LOG, LT::LexTable& lextable, IT::IdTable& idtable)
 	{
 		int currentLine = 1, currentColumn = 0, tokenlen = 0;
-		bool tokenIsCommited(false), proverka(false), newLineFlag(false), flag(false);
+		bool tokenIsCommited(false), check(false), newLineFlag(false), flag(false);
 		bool quoteFlag(false);
 
 		char postfix[10];
@@ -42,8 +42,8 @@ namespace Lan
 				newLineFlag = false;
 			}//TODO: добавить знаки,чтоб выражения х=х распознавались правильно +-=пробел*/<>
 			if (inText[i] == LEX_SPACE || inText[i] == LEX_ENDL 
-				|| inText[i] == LEX_POINT || inText[i] == LEX_COMMA || inText[i] == LEX_EXCLAMATION || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE
-				|| inText[i + 1] == LEX_POINT || inText[i + 1] == LEX_COMMA || inText[i +1 ] == LEX_EXCLAMATION || inText[i +1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS || inText[i+1] == LEX_RIGHTBRACE || inText[i+1] == LEX_LEFTBRACE
+				|| inText[i] == LEX_POINT || inText[i] == LEX_COMMA || inText[i] == LEX_EXCLAMATION || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_RIGHTFIGUREBRACE || inText[i] == LEX_LEFTFIGUREBRACE
+				|| inText[i + 1] == LEX_POINT || inText[i + 1] == LEX_COMMA || inText[i +1 ] == LEX_EXCLAMATION || inText[i +1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS || inText[i+1] == LEX_RIGHTBRACE || inText[i+1] == LEX_LEFTBRACE || inText[i + 1] == LEX_RIGHTFIGUREBRACE || inText[i + 1] == LEX_LEFTFIGUREBRACE
 				|| inText[i + 1] == LEX_MINUS || inText[i + 1] == LEX_PLUS || inText[i + 1] == LEX_EQUALITY || inText[i + 1] == LEX_STAR || inText[i + 1] == LEX_SLASH
 				|| inText[i] == LEX_MINUS || inText[i] == LEX_PLUS || inText[i] == LEX_EQUALITY || inText[i] == LEX_STAR || inText[i] == LEX_SLASH  
 				)
@@ -51,7 +51,7 @@ namespace Lan
 				if (quoteFlag) 	continue;
 				if (inText[i] == LEX_ENDL)	newLineFlag = true;
 
-				if (tokenlen == 1 || inText[i+1] == LEX_EXCLAMATION || inText[i+1] == LEX_POINT || inText[i+1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS ||  inText[i+1] == LEX_COMMA)
+				if (tokenlen == 1 || inText[i+1] == LEX_EXCLAMATION || inText[i+1] == LEX_POINT || inText[i+1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS ||  inText[i+1] == LEX_COMMA || inText[i+1] == LEX_RIGHTFIGUREBRACE || inText[i+1] == LEX_LEFTFIGUREBRACE)
 					token[tokenlen] = LEX_END;
 				else
 					if (!quoteFlag) token[tokenlen - 1] = LEX_END;
@@ -101,6 +101,20 @@ namespace Lan
 				FST::FST FSTLeftbrace(token, FST_LEFTBRACE);
 				if (FST::execute(FSTLeftbrace)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_LEFTBRACE, currentLine, IT::IsId(idtable, token) };
+					LT::Add(*newLexTable, *newLTEntry);
+					delete newLTEntry;
+					continue;
+				}
+				FST::FST FSTRightfigurebrace(token, FST_RIGHTFIGUREBRACE);
+				if (FST::execute(FSTRightfigurebrace)) {
+					LT::Entry* newLTEntry = new LT::Entry{ LEX_RIGHTFIGUREBRACE, currentLine, IT::IsId(idtable, token) };
+					LT::Add(*newLexTable, *newLTEntry);
+					delete newLTEntry;
+					continue;
+				}
+				FST::FST FSTLeftfigurebrace(token, FST_LEFTFIGUREBRACE);
+				if (FST::execute(FSTLeftfigurebrace)) {
+					LT::Entry* newLTEntry = new LT::Entry{ LEX_LEFTFIGUREBRACE, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -268,13 +282,13 @@ namespace Lan
 					strcpy_s(newIDEntry->value.vbool, token);
 					for (int i = 0; i < newIDTable->size; i++) {
 						if (strcmp((*newIDTable).table[i].value.vbool, newIDEntry->value.vbool) == 0) {
-							proverka = true;
+							check = true;
 							break;
 						}
-						else proverka = false;
+						else check = false;
 					}
 					newIDEntry->idxfirstLE = currentLine;
-					if (!proverka) {
+					if (!check) {
 						IT::Add(*newIDTable, *newIDEntry);
 					}
 					LT::Entry *newLTEntry = new LT::Entry{ LEX_LITERAL, currentLine, IT::IsId(idtable, token) };
@@ -301,13 +315,13 @@ namespace Lan
 					strcpy_s(newIDEntry->value.vstr->str, token);
 					for (int i = 0; i < newIDTable->size; i++) {
 						if (newIDEntry->value.vint == (*newIDTable).table[i].value.vint) {
-							proverka = true;
+							check = true;
 							break;
 						}
-						else  proverka = false;
+						else  check = false;
 					}
 					newIDEntry->idxfirstLE = currentLine;
-					if (!proverka)
+					if (!check)
 						IT::Add(*newIDTable, *newIDEntry);
 					LT::Entry *newLTEntry = new LT::Entry{ LEX_LITERAL, currentLine, IT::IsId(idtable, token) };
 					newLTEntry->sign = bufNum;
@@ -333,13 +347,13 @@ namespace Lan
 						if (strcmp(newIDEntry->value.vstr->str, (*newIDTable).table[i].value.vstr->str) == 0)
 						{
 
-							proverka = true;
+							check = true;
 							break;
 						}
-						else proverka = false;
+						else check = false;
 					}
 					newIDEntry->idxfirstLE = currentLine;
-					if (!proverka)
+					if (!check)
 					{
 						IT::Add(*newIDTable, *newIDEntry);
 					}

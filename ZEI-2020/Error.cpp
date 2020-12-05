@@ -2,6 +2,7 @@
 
 namespace Error
 {
+	//TODO: проверить позиции ошибок
 	//серии ошибок : 0 - 99 - системные ошибки
 	//				100 - 109 - ошибки параметров
 	//				110 - 119 - ошибки открытия и чтения файлов
@@ -43,11 +44,25 @@ namespace Error
 		ERROR_ENTRY_NODEF10(320), ERROR_ENTRY_NODEF10(330), ERROR_ENTRY_NODEF10(340), ERROR_ENTRY_NODEF10(350),
 		ERROR_ENTRY_NODEF10(360), ERROR_ENTRY_NODEF10(370), ERROR_ENTRY_NODEF10(380), ERROR_ENTRY_NODEF10(390),
 		ERROR_ENTRY_NODEF100(400),
-		ERROR_ENTRY(500, "[SEM] Неверная структура программы"),
-		ERROR_ENTRY(501, "[SEM] Ошибочный оператор"),
-		ERROR_ENTRY(502, "[SEM] Ошибка в выражении"),
-		ERROR_ENTRY(503, "[SEM] Ошибка в параметрах функции"),
-		ERROR_ENTRY(504, "[SEM] Ошибка в параметрах вызываемой фукнции"),
+		ERROR_ENTRY(500, "[SX] Неверная структура программы"),
+		ERROR_ENTRY(501, "[SX] Неверный список параметров функции"),
+		ERROR_ENTRY(502, "[SX] Неверный список параметров функции при её объявлении"),
+		ERROR_ENTRY(503, "[SX] Отсутствует тело функции"),
+		ERROR_ENTRY(504, "[SX] Неверное выражение. Ожидаются только идентификаторы и литералы"),
+		ERROR_ENTRY(505, "[SX] Ошибка в теле процедуры "),
+		ERROR_ENTRY(505, "[SX] Неверная конструкция в теле функции"),
+		ERROR_ENTRY(506, "[SX] Ошибка в условном выражении"),
+		ERROR_ENTRY(507, "[SX] Ошибка в вызове функции"),
+		ERROR_ENTRY(508, "[SX] Ошибка в вызове функции"),
+		ERROR_ENTRY(509, "[SX] Ошибка в параметрах вызываемой функции"),
+		ERROR_ENTRY(508, "[SX] Ошибка в арифметическом выражении"),
+		ERROR_ENTRY(511, "[SX] Неверная конструкция в теле цикла/условного выражения"),
+
+
+
+
+
+		//Семантика [SM]
 		ERROR_ENTRY_NODEF100(600), ERROR_ENTRY_NODEF100(700), ERROR_ENTRY_NODEF100(800), ERROR_ENTRY_NODEF100(900)
 	};
 	ERROR geterror(int id)

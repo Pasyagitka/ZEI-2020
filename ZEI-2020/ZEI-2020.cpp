@@ -11,6 +11,7 @@
 #include "Out.h"
 #include "Polish.h"
 #include "MFST.h"
+//TODO: цикл
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -19,11 +20,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	wchar_t idpath[] = L"../Id.txt";
 	
 	Log::LOG log = Log::INITLOG;
-	IT::ID id = IT::INITID;
-	LT::LEX lx = LT::INITLEX;
 	Out::OUT out = Out::INITOUT;
-	LT::LexTable ltable = LT::Create(LT_TABLE_SIZE);
-	IT::IdTable itable = IT::Create(TI_TABLE_SIZE);
+	LT::LexTable lextable = LT::Create(LT_TABLE_SIZE);
+	IT::IdTable idtable = IT::Create(TI_TABLE_SIZE);
 	try
 	{
 		std::cout << "_________________ Входные параметры ________________________________________________" << std::endl << std::endl;
@@ -31,7 +30,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		std::wcout << " -in: " << parm.in << "\n-out: " << parm.out << "\n-log: " << parm.log << std::endl << std::endl;
 
 		log = Log::getlog(parm.log);
-		Log::WriteLine(log, (char*)"Тест: ", "без ошибок ", "");
 
 		out = Out::getout(parm.out);
 		In::IN in = In::getin(parm.in);
@@ -49,27 +47,21 @@ int _tmain(int argc, _TCHAR* argv[])
 		Log::WriteIn(log, in);
 	
 		
-		Lan::Analysis((char*)in.text, log, ltable, itable);
-		//TODO: ошибку записи если закрыт lex id и тп
-		id = IT::getid(idpath);
-		lx = LT::getlex(lexpath);
-		
-		//LT::WriteLex(lx, ltable);
-		IT::WriteId(id, itable);	
-		
+		Lan::Analysis((char*)in.text, log, lextable, idtable);
 
-		Pn::ToPolish(ltable, itable);
-		LT::WriteLex(lx, ltable);
 
-		//MFST_TRACE_START //отладка
-		//	MFST::Mfst synt = MFST::Mfst::Mfst(ltable, GRB::getGreibach()); //автомат
-		//	//mfst.start();		//старт синтаксического анализа
-		//synt.start();
-		//synt.savededucation();
-		//synt.printrules();
+		//Pn::ToPolish(ltable, itable);
+		Log::WriteLexTable(log, lextable);
+		Log::WriteIdTable(log, idtable);
+
+		MFST_TRACE_START //отладка
+			MFST::Mfst synt = MFST::Mfst::Mfst(lextable, GRB::getGreibach()); //автомат
+			//mfst.start();		//старт синтаксического анализа
+		synt.start();
+		synt.savededucation();
+		synt.printrules();
 		
-		LT::Close(lx);
-		IT::Close(id);
+	
 		Log::Close(log);
 		//delete in.text;
 	}

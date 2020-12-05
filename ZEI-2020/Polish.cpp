@@ -6,6 +6,7 @@
 #include <queue>
 #include <string>
 #include <iostream>
+//TODO: польская нотация или {}
 //TODO первое вхождение идентификатора? str
 //TODO как он узнает, что это за функция была?? b h - там где-то идентификатор удаляется
 namespace Pn {

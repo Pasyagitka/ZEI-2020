@@ -29,6 +29,8 @@
 #define LEX_RIGHTBRACE	']'
 #define LEX_LEFTHESIS	'('
 #define LEX_RIGHTHESIS	')'
+#define LEX_RIGHTFIGUREBRACE '}'
+#define LEX_LEFTFIGUREBRACE	'{'
 #define LEX_MORE		'>'
 #define LEX_LESS		'<'
 #define LEX_EQUALITY	'='
@@ -68,19 +70,8 @@ namespace LT
 		Entry* table;//массив строк таблицы лексем
 	};
 
-	struct LEX
-	{
-		wchar_t lexfile[PARM_MAX_SIZE];
-		std::ofstream* stream;
-	};
-
-	static const LEX INITLEX = { L"", NULL };	//для начальной инициализации Lex
 	LexTable Create(int);//создать таблицу лексем(емкость таблицы лексем < LT_MAXSIZE)
 	void Add(LexTable&, Entry&);//добавить строку в таблицу лексем(lextable, entry)
 	Entry GetEntry(LexTable&, int);	//получить строку таблицы лексем(lextable, 'номер получаемой строки')
 	void Delete(LexTable&);//удалить таблицу лексем
-	LEX getlex(wchar_t lexfile[]);
-	void Close(LEX lx);
-	void WriteLex(LEX lx, LT::LexTable& ltable); 
-	void WriteLexHeading(LEX lx); 
 }

@@ -31,7 +31,7 @@
 	/*@*/IN::F, /*A*/IN::T, /*B*/IN::T, /*C*/IN::T, /*D*/IN::T, /*E*/IN::T, /*F*/IN::T, /*G*/IN::T, /*H*/IN::T, /*I*/IN::T, /*J*/IN::T, /*K*/IN::T, /*L*/IN::T, /*M*/IN::T, /*N*/IN::T, /*O*/IN::T, \
 	/*P*/IN::T, /*Q*/IN::T, /*R*/IN::T, /*S*/IN::T, /*T*/IN::T, /*U*/IN::T, /*V*/IN::T, /*W*/IN::T, /*X*/IN::T, /*Y*/IN::T, /*Z*/IN::T, /*[*/IN::T, /*\*/IN::F, /*]*/IN::T, /*^*/IN::F, /*_*/IN::F, \
 	/*`*/IN::F, /*a*/IN::T, /*b*/IN::T, /*c*/IN::T, /*d*/IN::T, /*e*/IN::T, /*f*/IN::T, /*g*/IN::T, /*h*/IN::T, /*i*/IN::T, /*j*/IN::T, /*k*/IN::T, /*l*/IN::T, /*m*/IN::T, /*n*/IN::T, /*o*/IN::T, \
-	/*p*/IN::T, /*q*/IN::T, /*r*/IN::T, /*s*/IN::T, /*t*/IN::T, /*u*/IN::T, /*v*/IN::T, /*w*/IN::T, /*x*/IN::T, /*y*/IN::T, /*z*/IN::T, /*{*/IN::F, /*|*/IN::F, /*}*/IN::F, /*~*/IN::F,      IN::F, \
+	/*p*/IN::T, /*q*/IN::T, /*r*/IN::T, /*s*/IN::T, /*t*/IN::T, /*u*/IN::T, /*v*/IN::T, /*w*/IN::T, /*x*/IN::T, /*y*/IN::T, /*z*/IN::T, /*{*/IN::T, /*|*/IN::F, /*}*/IN::T, /*~*/IN::F,      IN::F, \
 	\
 		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F, \
 		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F,		 IN::F, \

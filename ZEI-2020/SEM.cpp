@@ -1,9 +1,11 @@
 //#include "SEM.h"
 //#include "Error.h"
+//#include "LT.h"
+//#include "IT.h"
 //
-//namespace SA
+//namespace SM
 //{
-//	void ZeroDivision(LT::LexTable& ltable, char* literal)
+//	void DivideByZero(LT::LexTable& ltable, char* literal)
 //	{
 //		for (unsigned int i = 0; i < (unsigned int)ltable.size; i++)
 //		{
@@ -13,7 +15,7 @@
 //			}
 //		}
 //	}
-//	void OneDvv(LT::LexTable& ltable, bool flag)
+//	void OneLib(LT::LexTable& ltable, bool flag)
 //	{
 //		int k = 0;
 //		if (flag)
@@ -24,44 +26,44 @@
 //		{
 //			for (unsigned int i = 0; i < (unsigned int)ltable.size; i++)
 //			{
-//				if (ltable.table[i].lexema == LEX_DVV)
+//				if (ltable.table[i].lexema == LEX_LIB)
 //				{
 //					throw ERROR_THROW(705, ltable.table[i].sn, ltable.table[i].indxTI);
 //				}
 //			}
 //		}
 //	}
-//	void BoolLt(LT::LexTable& ltable, IT::IdTable& itable)
+//	void LogicalLiteral(LT::LexTable& ltable, IT::IdTable& itable)
 //	{
 //		for (unsigned int i = 0; i < (unsigned int)ltable.size; i++)
 //		{
-//			if (ltable.table[i].lexema == LEX_ID && ltable.table[i - 2].lexema == LEX_IF && ltable.table[i + 1].lexema == LEX_RIGHTHESIS)
+//			if (ltable.table[i].lexema == LEX_ID && ltable.table[i - 2].lexema == LEX_WHEN && ltable.table[i + 1].lexema == LEX_RIGHTHESIS)
 //			{
 //				for (unsigned int j = 0; j < (unsigned int)itable.size; j++)
 //				{
 //					if (strcmp(ltable.table[i].buf, itable.table[j].id) == 0)
 //					{
-//						if (itable.table[j].iddatatype != IT::BOOL)
+//						if (itable.table[j].iddatatype != IT::LGCL)
 //						{
 //							throw ERROR_THROW(703, ltable.table[i].sn, ltable.table[i].indxTI);
 //						}
 //					}
 //				}
 //			}
-//			if (ltable.table[i].lexema == LEX_LITERAL && ltable.table[i - 2].lexema == LEX_IF && ltable.table[i + 1].lexema == LEX_RIGHTHESIS)
+//			if (ltable.table[i].lexema == LEX_LITERAL && ltable.table[i - 2].lexema == LEX_WHEN && ltable.table[i + 1].lexema == LEX_RIGHTHESIS)
 //			{
 //				for (unsigned int j = 0; j < (unsigned int)itable.size; j++)
 //				{
 //					if (strcmp(ltable.table[i].buf, itable.table[j].value.vstr->str) == 0)
 //					{
-//						if (itable.table[j].iddatatype != IT::BOOL)
+//						if (itable.table[j].iddatatype != IT::LGCL)
 //						{
 //							throw ERROR_THROW(703, ltable.table[i].sn, ltable.table[i].indxTI);
 //						}
 //					}
 //					if (ltable.table[i].sign == itable.table[j].value.vint)
 //					{
-//						if (itable.table[j].iddatatype != IT::BOOL)
+//						if (itable.table[j].iddatatype != IT::LGCL)
 //						{
 //							throw ERROR_THROW(703, ltable.table[i].sn, ltable.table[i].indxTI);
 //						}
@@ -98,7 +100,7 @@
 //					{
 //						if (strcmp(buf[l], itable.table[j].id) == 0)
 //						{
-//							if (itable.table[j].iddatatype != IT::INT)
+//							if (itable.table[j].iddatatype != IT::TINY)
 //							{
 //								throw ERROR_THROW(706, n, m);
 //							}
@@ -128,7 +130,7 @@
 //					{
 //						if (strcmp(buf[l], itable.table[j].id) == 0)
 //						{
-//							if (itable.table[j].iddatatype != IT::INT)
+//							if (itable.table[j].iddatatype != IT::TINY)
 //							{
 //								throw ERROR_THROW(707, n, m);
 //							}
@@ -182,7 +184,7 @@
 //	{
 //		for (unsigned int i = 0; i < (unsigned int)ltable.size; i++)
 //		{
-//			if (ltable.table[i].lexema == LEX_ID && ltable.table[i - 1].lexema == LEX_STRING && line == ltable.table[i].sn && ltable.table[i].indxTI == col)
+//			if (ltable.table[i].lexema == LEX_ID && ltable.table[i - 1].lexema == LEX_SYMBOLIC && line == ltable.table[i].sn && ltable.table[i].indxTI == col)
 //			{
 //				for (unsigned int j = 0; j < (unsigned int)itable.size; j++)
 //				{
@@ -199,7 +201,7 @@
 //		for (unsigned int i = 0; i < (unsigned int)ltable.size; i++)
 //		{
 //			int k = 0;
-//			if (ltable.table[i].lexema != LEX_INTEGER && ltable.table[i].lexema != LEX_FUNCTION && ltable.table[i + 1].lexema == LEX_ID)
+//			if (ltable.table[i].lexema != LEX_TINY && ltable.table[i].lexema != LEX_FUNCTION && ltable.table[i + 1].lexema == LEX_ID)
 //			{
 //				for (unsigned int j = 0; j < (unsigned int)itable.size; j++)
 //				{
@@ -227,7 +229,7 @@
 //						datatype = itable.table[j].iddatatype;
 //					}
 //				}
-//				while (ltable.table[i].lexema != LEX_RETURN)
+//				while (ltable.table[i].lexema != LEX_GIVEBACK)
 //				{
 //					i++;
 //				}
@@ -279,7 +281,7 @@
 //					{
 //						if (strcmp(buf[0], itable.table[j].id) == 0)
 //						{
-//							if (itable.table[j].iddatatype != IT::INT)
+//							if (itable.table[j].iddatatype != IT::TINY)
 //							{
 //								throw ERROR_THROW(702, ltable.table[i].sn, ltable.table[i].indxTI);
 //							}
@@ -293,7 +295,7 @@
 //					{
 //						if (strcmp(buf[0], itable.table[j].id) == 0)
 //						{
-//							if (itable.table[j].iddatatype != IT::STR)
+//							if (itable.table[j].iddatatype != IT::SYMB)
 //							{
 //								throw ERROR_THROW(702, ltable.table[i].sn, ltable.table[i].indxTI);
 //							}
@@ -384,8 +386,7 @@
 //						break;
 //					}
 //				}
-//				while (ltable.table[i].lexema != LEX_
-
+//				while (ltable.table[i].lexema != LEX_POINT)
 //				{
 //					if (ltable.table[i].lexema == LEX_LITERAL)
 //					{
@@ -447,7 +448,7 @@
 //			}
 //			if (ltable.table[i].lexema == LEX_ID && ltable.table[i - 1].lexema == LEX_FUNCTION)
 //			{
-//				strcpy(buffer, ltable.table[i].buf);
+//				strcpy_s(buffer, ltable.table[i].buf);
 //				while (ltable.table[i].lexema != LEX_RIGHTHESIS)
 //				{
 //					if (ltable.table[i].lexema == LEX_ID)
@@ -488,7 +489,7 @@
 //					{
 //						if (strcmp(ltable.table[i + 2].buf, itable.table[j].id) == 0)
 //						{
-//							if (itable.table[j].iddatatype != IT::STR)
+//							if (itable.table[j].iddatatype != IT::SYMB)
 //							{
 //								throw ERROR_THROW(700, ltable.table[i].sn, ltable.table[i].indxTI);
 //							}
@@ -501,14 +502,14 @@
 //					{
 //						if (strcmp(ltable.table[i + 2].buf, itable.table[j].value.vstr->str) == 0)
 //						{
-//							if (itable.table[j].iddatatype != IT::STR)
+//							if (itable.table[j].iddatatype != IT::SYMB)
 //							{
 //								throw ERROR_THROW(700, ltable.table[i].sn, ltable.table[i].indxTI);
 //							}
 //						}
 //						if (strcmp(ltable.table[i + 2].buf, itable.table[j].value.vbool) == 0)
 //						{
-//							if (itable.table[j].iddatatype != IT::STR)
+//							if (itable.table[j].iddatatype != IT::SYMB)
 //							{
 //								throw ERROR_THROW(700, ltable.table[i].sn, ltable.table[i].indxTI);
 //							}
@@ -526,7 +527,7 @@
 //						{
 //							if (strcmp(ltable.table[i].buf, itable.table[j].id) == 0)
 //							{
-//								if (itable.table[j].iddatatype != IT::STR)
+//								if (itable.table[j].iddatatype != IT::SYMB)
 //								{
 //									throw ERROR_THROW(700, ltable.table[i].sn, ltable.table[i].indxTI);
 //								}
@@ -539,14 +540,14 @@
 //						{
 //							if (strcmp(ltable.table[i].buf, itable.table[j].value.vstr->str) == 0)
 //							{
-//								if (itable.table[j].iddatatype != IT::STR)
+//								if (itable.table[j].iddatatype != IT::SYMB)
 //								{
 //									throw ERROR_THROW(700, ltable.table[i].sn, ltable.table[i].indxTI);
 //								}
 //							}
 //							if (strcmp(ltable.table[i].buf, itable.table[j].value.vbool) == 0)
 //							{
-//								if (itable.table[j].iddatatype != IT::STR)
+//								if (itable.table[j].iddatatype != IT::SYMB)
 //								{
 //									throw ERROR_THROW(700, ltable.table[i].sn, ltable.table[i].indxTI);
 //								}

@@ -49,14 +49,6 @@ namespace IT
 		Entry* table;//массив строк таблицы идентификаторов
 	};
 
-	struct ID
-	{
-		wchar_t idfile[PARM_MAX_SIZE];
-		std::ofstream* stream;
-	};
-
-	static const ID INITID = { L"", NULL };//для начальной инициализации ID
-	ID getid(wchar_t idfile[]);	//сформировать структуру ID
 	IdTable Create(int size);	//емкость таблицы идентификаторов < TI_MAXSIZE
 	void Add(IdTable& itable, Entry entry);
 	Entry GetEntry(IdTable& itable, int n);
@@ -65,7 +57,4 @@ namespace IT
 		char id[ID_MAXSIZE]		//идентификатор
 	);
 	void Delete(IdTable& itable);
-	void WriteId(ID id, IT::IdTable& itable); 
-	void Close(ID id); 
-	void WriteIdHeading(ID id); 
 }
