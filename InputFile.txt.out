@@ -3,11 +3,11 @@ tiny func foo(symbolic str)
 set tiny p : symblen(str)!
 giveback p!
 ]
- 
 perform 
 [
 set tiny x : 10!
-set tiny y : 017!
+set tiny y : 010!
+y : y/2!
 set tiny a : x+y+2!
 set symbolic str : "sp ace"!
 set symbolic mystr : "а бв?гдежзикла	мопростуфхцч"!
@@ -24,5 +24,9 @@ set symbolic nb : symbtotiny(mystr)!
 show(nb)!
 ]
 set tiny z :(x*y)*(x/y)!
+loop(z < 5)
+[
+ z : z+1!
+]
 show(z)!
 ]

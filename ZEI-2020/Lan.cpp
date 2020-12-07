@@ -4,11 +4,12 @@
 #include "IT.h"
 #include "FST.h"
 
-#include "SEM.h"
+
+
 #include <string>
 #include "FSTExpr.h"
 #define EMPTY_LITERAL "-"
-//TODO: max длина строки
+
 //TODO: получается номер и у H(16)
 namespace Lan
 {
@@ -43,9 +44,9 @@ namespace Lan
 			}//TODO: добавить знаки,чтоб выражения х=х распознавались правильно +-=пробел*/<>
 			if (inText[i] == LEX_SPACE || inText[i] == LEX_ENDL 
 				|| inText[i] == LEX_POINT || inText[i] == LEX_COMMA || inText[i] == LEX_EXCLAMATION || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_RIGHTFIGUREBRACE || inText[i] == LEX_LEFTFIGUREBRACE
-				|| inText[i + 1] == LEX_POINT || inText[i + 1] == LEX_COMMA || inText[i +1 ] == LEX_EXCLAMATION || inText[i +1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS || inText[i+1] == LEX_RIGHTBRACE || inText[i+1] == LEX_LEFTBRACE || inText[i + 1] == LEX_RIGHTFIGUREBRACE || inText[i + 1] == LEX_LEFTFIGUREBRACE
-				|| inText[i + 1] == LEX_MINUS || inText[i + 1] == LEX_PLUS || inText[i + 1] == LEX_EQUALITY || inText[i + 1] == LEX_STAR || inText[i + 1] == LEX_SLASH
-				|| inText[i] == LEX_MINUS || inText[i] == LEX_PLUS || inText[i] == LEX_EQUALITY || inText[i] == LEX_STAR || inText[i] == LEX_SLASH  
+				|| inText[i + 1] == LEX_POINT || inText[i + 1] == LEX_COMMA || inText[i +1 ] == LEX_EXCLAMATION || inText[i +1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS || inText[i+1] == LEX_RIGHTBRACE || inText[i+1] == LEX_LEFTBRACE || inText[i + 1] == LEX_RIGHTFIGUREBRACE || inText[i + 1] == LEX_LEFTFIGUREBRACE 
+				|| inText[i + 1] == LEX_MINUS || inText[i + 1] == LEX_PLUS || inText[i + 1] == LEX_EQUALITY || inText[i + 1] == LEX_STAR || inText[i + 1] == LEX_SLASH /*| inText[i + 1] == LEX_LESS || inText[i + 1] == LEX_MORE */ || inText[i + 1] == LEX_RIGHTSHIFT || inText[i + 1] == LEX_LEFTSHIFT
+				|| inText[i] == LEX_MINUS || inText[i] == LEX_PLUS || inText[i] == LEX_EQUALITY || inText[i] == LEX_STAR || inText[i] == LEX_SLASH /*|| inText[i] == LEX_LESS || inText[i] == LEX_MORE*/ || inText[i] == LEX_RIGHTSHIFT || inText[i] == LEX_LEFTSHIFT
 				)
 			{
 				if (quoteFlag) 	continue;
@@ -56,6 +57,7 @@ namespace Lan
 				else
 					if (!quoteFlag) token[tokenlen - 1] = LEX_END;
 					
+
 				tokenlen = 0;
 				tokenIsCommited = true;
 				if (token[tokenlen] == LEX_SPACE || token[tokenlen] == LEX_ENDL)	continue;
@@ -180,6 +182,14 @@ namespace Lan
 					delete newLTEntry;
 					continue;
 				}
+				FST::FST FSTLoop(token, FST_LOOP);
+				if (FST::execute(FSTLoop)) {
+					LT::Entry* newLTEntry = new LT::Entry{ LEX_LOOP, currentLine, IT::IsId(idtable, token) };
+					LT::Add(*newLexTable, *newLTEntry);
+					idType = IT::F;
+					delete newLTEntry;
+					continue;
+				}
 				FST::FST FSTSet(token, FST_SET);
 				if (FST::execute(FSTSet)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_SET, currentLine, IT::IsId(idtable, token)  };
@@ -195,9 +205,9 @@ namespace Lan
 					strcpy_s(newIDEntry->id, token);
 					newIDEntry->idtype = idType;
 					newIDEntry->iddatatype = dataType;
-					newIDEntry->value.vint = TI_INT_DEFAULT;
-					newIDEntry->value.vstr->len = TI_STR_DEFAULT;
-					strcpy_s(newIDEntry->value.vstr->str, "");
+					newIDEntry->value.vtiny = TI_INT_DEFAULT;
+					newIDEntry->value.vsymb->len = TI_STR_DEFAULT;
+					strcpy_s(newIDEntry->value.vsymb->str, "");
 					newIDEntry->idxfirstLE = currentLine;
 					IT::Add(*newIDTable, *newIDEntry);
 
@@ -212,7 +222,7 @@ namespace Lan
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_LIB, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					strcpy_s(postfix, token);
-					//SA::OneDvv(*ltable, flag);
+					/*SA::OneLib(lextable, flag);*/
 					flag = true;
 					delete newLTEntry;
 					continue;
@@ -239,9 +249,9 @@ namespace Lan
 					strcpy_s(newIDEntry->id, token);
 					newIDEntry->idtype = idType;
 					newIDEntry->iddatatype = dataType;
-					newIDEntry->value.vint = TI_INT_DEFAULT;
-					newIDEntry->value.vstr->len = TI_STR_DEFAULT;
-					strcpy_s(newIDEntry->value.vstr->str, "");
+					newIDEntry->value.vtiny = TI_INT_DEFAULT;
+					newIDEntry->value.vsymb->len = TI_STR_DEFAULT;
+					strcpy_s(newIDEntry->value.vsymb->str, "");
 					newIDEntry->idxfirstLE = currentLine;
 					IT::Add(*newIDTable, *newIDEntry);
 
@@ -259,9 +269,9 @@ namespace Lan
 					strcpy_s(newIDEntry->id, token);
 					newIDEntry->idtype = idType;
 					newIDEntry->iddatatype = dataType;
-					newIDEntry->value.vint = TI_INT_DEFAULT;
-					newIDEntry->value.vstr->len = TI_STR_DEFAULT;
-					strcpy_s(newIDEntry->value.vstr->str, "");
+					newIDEntry->value.vtiny = TI_INT_DEFAULT;
+					newIDEntry->value.vsymb->len = TI_STR_DEFAULT;
+					strcpy_s(newIDEntry->value.vsymb->str, "");
 					newIDEntry->idxfirstLE = currentLine;
 					IT::Add(*newIDTable, *newIDEntry);
 
@@ -278,7 +288,7 @@ namespace Lan
 					strcpy_s(newIDEntry->id, EMPTY_LITERAL);
 					newIDEntry->iddatatype = IT::LGCL;
 					newIDEntry->idtype = IT::L;
-					strcpy_s(newIDEntry->value.vstr->str, token);
+					strcpy_s(newIDEntry->value.vsymb->str, token);
 					strcpy_s(newIDEntry->value.vbool, token);
 					for (int i = 0; i < newIDTable->size; i++) {
 						if (strcmp((*newIDTable).table[i].value.vbool, newIDEntry->value.vbool) == 0) {
@@ -299,22 +309,22 @@ namespace Lan
 					delete newIDEntry;
 					continue;
 				}
-				////HACK не понятно, правильно ли работает 0dec, 09hex
+				//HACK проверить, правильно ли работает 0dec, 09hex
 				FST::FST FSTTinyLiteral10(token, FST_TINYLITERAL10);
 				FST::FST FSTTinyLiteral8(token, FST_TINYLITERAL8);
 				if (FST::execute(FSTTinyLiteral10) || FST::execute(FSTTinyLiteral8)) {
 					int bufNum = std::strtol(token, NULL, 0); //HACK перевод в 8-ричную 
-					//SA::ZeroDivision(*ltable, buffer);
+					//SA::DivideByZero(lextable, token);
 					IT::Entry* newIDEntry = new IT::Entry{};
 					strcpy_s(newIDEntry->id, EMPTY_LITERAL);
 					newIDEntry->iddatatype = IT::TINY;
 					newIDEntry->idtype = IT::L;
-					if (bufNum > MAXTINY && bufNum < MINTINY)	//TINY
+					if (bufNum > MAXTINY || bufNum < MINTINY)	//TINY
 						throw ERROR_THROW_IN(309, currentLine, currentColumn);
-					newIDEntry->value.vint = (int)bufNum;
-					strcpy_s(newIDEntry->value.vstr->str, token);
+					newIDEntry->value.vtiny = (int)bufNum;
+					strcpy_s(newIDEntry->value.vsymb->str, token);
 					for (int i = 0; i < newIDTable->size; i++) {
-						if (newIDEntry->value.vint == (*newIDTable).table[i].value.vint) {
+						if (newIDEntry->value.vtiny == (*newIDTable).table[i].value.vtiny) {
 							check = true;
 							break;
 						}
@@ -338,13 +348,13 @@ namespace Lan
 					strcpy_s(newIDEntry->id, EMPTY_LITERAL);
 					newIDEntry->iddatatype = IT::SYMB;
 					newIDEntry->idtype = IT::L;
-					if (strlen(token) > 128) //max длина строки будет
+					if (strlen(token) > SYMBMAXLEN) //max длина строки будет
 						throw ERROR_THROW_IN(310, currentLine, currentColumn);
-					newIDEntry->value.vstr->len = strlen(token);
-					strcpy_s(newIDEntry->value.vstr->str, token);
+					newIDEntry->value.vsymb->len = strlen(token);
+					strcpy_s(newIDEntry->value.vsymb->str, token);
 					for (int i = 0; i < newIDTable->size; i++)
 					{
-						if (strcmp(newIDEntry->value.vstr->str, (*newIDTable).table[i].value.vstr->str) == 0)
+						if (strcmp(newIDEntry->value.vsymb->str, (*newIDTable).table[i].value.vsymb->str) == 0)
 						{
 
 							check = true;
@@ -413,6 +423,22 @@ namespace Lan
 					delete newLTEntry;
 					continue;
 				}
+				FST::FST FSTMore(token, FST_MORE);
+				if (FST::execute(FSTMore)) {
+					LT::Entry* newLTEntry = new  LT::Entry{ LEX_MORE, currentLine, LT_TI_NULLIDX };
+					newLTEntry->sign = 1;
+					LT::Add(*newLexTable, *newLTEntry);
+					delete newLTEntry;
+					continue;
+				}
+				FST::FST FSTLess(token, FST_LESS);
+				if (FST::execute(FSTLess)) {
+					LT::Entry* newLTEntry = new  LT::Entry{ LEX_LESS, currentLine, LT_TI_NULLIDX };
+					newLTEntry->sign = 1;
+					LT::Add(*newLexTable, *newLTEntry);
+					delete newLTEntry;
+					continue;
+				}
 				FST::FST FSTLeftshift(token, FST_LEFTSHIFT);
 				if (FST::execute(FSTLeftshift)) {
 					LT::Entry* newLTEntry = new  LT::Entry{ LEX_LEFTSHIFT, currentLine, LT_TI_NULLIDX };
@@ -439,8 +465,8 @@ namespace Lan
 						strcpy_s(postfix, token);
 					strcpy_s(newIDEntry->postfix, postfix);
 					bool isExecute = false;
-					//SA::Proverka(*ltable, *itable);
-					//SA::Pereobyavl(*ltable, *itable, buffer, postfix, line, col);
+					/*SA::Proverka(lextable, idtable);
+					SA::Pereobyavl(lextable, idtable, token, postfix, currentLine, currentColumn);*/
 					for (int i = 0; i <= (*newIDTable).size; i++)
 						if (strcmp((*newIDTable).table[i].id, token) == 0)
 						{
@@ -454,9 +480,9 @@ namespace Lan
 						strcpy_s(newIDEntry->id, token);
 						newIDEntry->idtype = idType;
 						newIDEntry->iddatatype = dataType;
-						newIDEntry->value.vint = TI_INT_DEFAULT;
-						newIDEntry->value.vstr->len = TI_STR_DEFAULT;
-						strcpy_s(newIDEntry->value.vstr->str, "");
+						newIDEntry->value.vtiny = TI_INT_DEFAULT;
+						newIDEntry->value.vsymb->len = TI_STR_DEFAULT;
+						strcpy_s(newIDEntry->value.vsymb->str, "");
 						newIDEntry->idxfirstLE = currentLine;
 						IT::Add(*newIDTable, *newIDEntry);
 					}

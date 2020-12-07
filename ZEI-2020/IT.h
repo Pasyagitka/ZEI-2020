@@ -33,12 +33,12 @@ namespace IT
 		union
 		{
 			char vbool[6];
-			int vint;//значение инт
+			int vtiny;//значение инт
 			struct
 			{
 				int len;//длина строки стр
 				char str[TI_STR_MAXSIZE - 1];//строка
-			}vstr[TI_STR_MAXSIZE];//значение стр
+			}vsymb[TI_STR_MAXSIZE];//значение стр
 		}value;//значение идентификатора
 	};
 	

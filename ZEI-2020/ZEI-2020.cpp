@@ -11,7 +11,6 @@
 #include "Out.h"
 #include "Polish.h"
 #include "MFST.h"
-//TODO: цикл
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -49,19 +48,28 @@ int _tmain(int argc, _TCHAR* argv[])
 		
 		Lan::Analysis((char*)in.text, log, lextable, idtable);
 
+		//MFST_TRACE_START(log) //отладка
+		//	MFST::Mfst synt = MFST::Mfst::Mfst(lextable, GRB::getGreibach()); //автомат
+		//	//mfst.start();		//старт синтаксического анализа
+		//synt.start(log);
+		//synt.savededucation();
+		//synt.printrules(log);
 
-		//Pn::ToPolish(ltable, itable);
 		Log::WriteLexTable(log, lextable);
 		Log::WriteIdTable(log, idtable);
 
-		MFST_TRACE_START //отладка
-			MFST::Mfst synt = MFST::Mfst::Mfst(lextable, GRB::getGreibach()); //автомат
-			//mfst.start();		//старт синтаксического анализа
-		synt.start();
-		synt.savededucation();
-		synt.printrules();
-		
-	
+		MFST_TRACE_START(log);
+		MFST::Mfst mfst(lextable, GRB::getGreibach());
+		mfst.start(log);
+
+		mfst.savededucation();
+		//if (parm.tree)
+			mfst.printrules(log);
+
+		//Pn::ToPolish(lextable, idtable);
+
+		//Log::WriteLexTable(log, lextable);
+
 		Log::Close(log);
 		//delete in.text;
 	}

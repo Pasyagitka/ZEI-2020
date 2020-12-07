@@ -1,5 +1,6 @@
 #include "MFST.h"
 #include "LAN.h"
+#include "Log.h"
 #include "GRB.h"
 #include <iostream>
 
@@ -58,7 +59,7 @@ namespace MFST
 		nrulechain = -1;
 	}
 
-	Mfst::RC_STEP Mfst::step()
+	Mfst::RC_STEP Mfst::step(Log::LOG log)
 	{
 		RC_STEP rc = SURPRISE;
 		if (lenta_position < lenta_size)
@@ -74,18 +75,18 @@ namespace MFST
 						char lbuf[256];
 						char rbuf[256];
 						char sbuf[256];
-						MFST_TRACE1
-							savestate();
+						MFST_TRACE1(log)
+							savestate(log);
 						st.pop();
 						push_chain(chain);
 						rc = NS_OK;
-						MFST_TRACE2
+						MFST_TRACE2(log)
 					}
 					else
 					{
-						MFST_TRACE4("TNS_NORULECHAIN/NS_NORULE");
+						MFST_TRACE4(log, "TNS_NORULECHAIN/NS_NORULE");
 						savediagnosis(NS_NORULECHAIN);
-						rc = restate() ? NS_NORULECHAIN : NS_NORULE;
+						rc = restate(log) ? NS_NORULECHAIN : NS_NORULE;
 					}
 				}
 				else
@@ -100,18 +101,18 @@ namespace MFST
 				nrulechain = -1;
 				rc = TS_OK;
 				char sbuf[256], lbuf[256];
-				MFST_TRACE3
+				MFST_TRACE3(log)
 			}
 			else
 			{
-				MFST_TRACE4("TS_NOK/NS_NORULECHAIN");
-				rc = restate() ? TS_NOK : NS_NORULECHAIN;
+				MFST_TRACE4(log, "TS_NOK/NS_NORULECHAIN");
+				rc = restate(log) ? TS_NOK : NS_NORULECHAIN;
 			}
 		}
 		else
 		{
 			rc = LENTA_END;
-			MFST_TRACE4("LENTA_END");
+			MFST_TRACE4(log, "LENTA_END");
 		}
 		return rc;
 	}
@@ -123,14 +124,14 @@ namespace MFST
 		return true;
 	}
 
-	bool Mfst::savestate()
+	bool Mfst::savestate(Log::LOG log)
 	{
 		storestate.push(MfstState(lenta_position, st, nrule, nrulechain));
-		MFST_TRACE6("SAVESTATE:", storestate.size());
+		MFST_TRACE6(log, "SAVESTATE:", storestate.size());
 		return true;
 	}
 
-	bool Mfst::restate()
+	bool Mfst::restate(Log::LOG log)
 	{
 		bool rc = false;
 		MfstState state;
@@ -142,9 +143,9 @@ namespace MFST
 			nrule = state.nrule;
 			nrulechain = state.nrulechain;
 			storestate.pop();
-			MFST_TRACE5("RESTATE");
+			MFST_TRACE5(log, "RESTATE");
 			char rbuf[256], lbuf[256], sbuf[256];
-			MFST_TRACE2
+			MFST_TRACE2(log)
 		}
 		return rc;
 	}
@@ -164,38 +165,38 @@ namespace MFST
 		return rc;
 	}
 
-	bool Mfst::start()
+	bool Mfst::start(Log::LOG log)
 	{
 		bool rc = false;
 		RC_STEP rc_step = SURPRISE;
 		char buf[MFST_DIAGN_MAXSIZE];
-		rc_step = step();
+		rc_step = step(log);
 		while (rc_step == NS_OK || rc_step == NS_NORULECHAIN || rc_step == TS_OK || rc_step == TS_NOK)
-			rc_step = step();
+			rc_step = step(log);
 		switch (rc_step)
 		{
 		case LENTA_END:
-			MFST_TRACE4("------->LENTA_END");
-			std::cout << std::setfill('-') << std::setw(100) << ' ' << std::setfill(' ') << std::endl;
-			sprintf_s(buf, MFST_DIAGN_MAXSIZE, "%d	¬сего строк: %d, разбор завершен без ошибок", 0, lenta_size);
-			std::cout << buf << std::endl;
+			MFST_TRACE4(log, "------->LENTA_END");
+			*log.stream << std::setfill('-') << std::setw(100) << ' ' << std::setfill(' ') << std::endl;
+			sprintf_s(buf, MFST_DIAGN_MAXSIZE, "¬сего строк: %d, разбор завершен без ошибок\n",  lenta_size);
+			*log.stream << buf << std::endl;
 			rc = true;
 			break;
 		case NS_NORULE:
-			MFST_TRACE4("------>NS_NORULE");
-			std::cout << std::setfill('-') << std::setw(100) << ' ' << std::setfill(' ') << std::endl;
-			std::cout << getDiagnosis(0, buf) << std::endl;
-			std::cout << getDiagnosis(1, buf) << std::endl;
-			std::cout << getDiagnosis(2, buf) << std::endl;
+			MFST_TRACE4(log, "------>NS_NORULE");
+			*log.stream << std::setfill('-') << std::setw(100) << ' ' << std::setfill(' ') << std::endl;
+			*log.stream << getDiagnosis(0, buf) << std::endl;
+			*log.stream << getDiagnosis(1, buf) << std::endl;
+			*log.stream << getDiagnosis(2, buf) << std::endl;
 			break;
 		case NS_NORULECHAIN:
-			MFST_TRACE4("------>NS_NORULENORULECHAIN");
+			MFST_TRACE4(log, "------>NS_NORULENORULECHAIN");
 			break;
 		case NS_ERROR:
-			MFST_TRACE4("------>NS_ERROR");
+			MFST_TRACE4(log, "------>NS_ERROR");
 			break;
 		case SURPRISE:
-			MFST_TRACE4("------>SURPRISE");
+			MFST_TRACE4(log, "------>SURPRISE");
 			break;
 		}
 		return rc;
@@ -237,18 +238,17 @@ namespace MFST
 		return rc;
 	}
 
-	void Mfst::printrules()
+	void Mfst::printrules(Log::LOG& log)
 	{
 		MfstState state;
 		GRB::Rule rule;
-		auto getContainer = storestate.c;
-		for (auto a = getContainer.begin(); a != getContainer.end(); ++a)
+		for (unsigned short k = 0; k < storestate.size(); k++)
 		{
-			state = *a;
+			state = storestate.c[k];
 			rule = grebach.getRule(state.nrule);
 			char rbuf[256];
-			MFST_TRACE7
-		}
+			MFST_TRACE7(log)
+		};
 	}
 
 	bool Mfst::savededucation()

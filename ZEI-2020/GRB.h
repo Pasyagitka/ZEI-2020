@@ -3,6 +3,7 @@
 typedef short GRBALPHABET;
 #define NS(n) GRB::Rule::Chain::N(n)
 #define TS(n) GRB::Rule::Chain::T(n)
+#define ISNS(n) GRB::Rule::Chain::isN(n)
 
 namespace GRB
 {

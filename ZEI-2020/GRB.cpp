@@ -1,7 +1,6 @@
 #include <cstring>
 #include "GRB.h"
 #include "GRBRules.h"
-#define GRB_ERROR_SERIES 600
 
 namespace GRB
 {

@@ -93,7 +93,7 @@ namespace Log
 
 	void WriteIdTable(LOG newLog, IT::IdTable& idtable)
 	{
-		*newLog.stream << "\n\n------------ Таблица идентификаторов--------------------------------------------------------------------" << std::endl;
+		*newLog.stream << "\n\n------------ Таблица идентификаторов -----------------------------------------------------------------------" << std::endl;
 		*newLog.stream << "Строка\tТип ID\t\tТип данных\tИмя\t\tЗначение\n";
 		for (unsigned int i = 0; i < (unsigned int)idtable.size; i++)
 		{
@@ -112,12 +112,13 @@ namespace Log
 
 			*newLog.stream << "\t\t" << idtable.table[i].id << "\t\t";
 
-			if (idtable.table[i].iddatatype == IT::TINY)			*newLog.stream << idtable.table[i].value.vint;
-			else if (idtable.table[i].iddatatype == IT::SYMB)	*newLog.stream << idtable.table[i].value.vstr->str;
+			if (idtable.table[i].iddatatype == IT::TINY)			*newLog.stream << idtable.table[i].value.vtiny;
+			else if (idtable.table[i].iddatatype == IT::SYMB)	*newLog.stream << idtable.table[i].value.vsymb->str;
 			else if (idtable.table[i].iddatatype == IT::LGCL)	*newLog.stream << idtable.table[i].value.vbool;
 
 			*newLog.stream << std::endl;
 		}
+		*newLog.stream << "----------------------------------------------------------------------------------------------------------------------------" << std::endl;
 	}
 
 

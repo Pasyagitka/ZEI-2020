@@ -4,7 +4,23 @@
 
 namespace GRB {
 
-	// irl, lrl,    ijl,  ljl
+	/*
+		S-> tfiFBS	|	p[N]	|	tfiFB??			//неверная структура программы
+		F-> (P)		|   ()							//список параметров функции
+		P-> ti		|  ti,P							//параметры функции при её объявлении
+		B-> [NgI!]									//отсутствует тело функции
+		I-> l       |   i							//Недопустимое выражение. Ожидаются только литералы и идентификаторы
+		U-> {N}	??									// Ошибка в теле процедуры
+		N-> sti:E!N |   sti:E!   |  sti!N | irl!N |      sti! | w(E)[N]o[N]N  | w(E)[N]o[N]  | i=E!N | h(i)! | h(i)!N |
+			h(l)!   |   h(l)!N   |  w(E)[N]N | w(E)[N] | 
+		R-> i | ibi | ibl | lbi | lbl				//Ошибка в условном выражении
+		K->(W)  | ()								 //Ошибка в вызове функции
+		E-> bK | i | l | (E) | iK | pK | SK| !K	| iM | lM | (E)M | iKM | bKM | !KM  // Ошибка в вызове функции
+		W-> i | l | i,W | l&W
+		M-> +E | =E| *E| /E | -E | +EM | =EM | -EM | *EM | /EM    // ошибка в арифметическом выражении /сдвигах
+		X->										     // Неверная конструкция в теле цикла/условного выражения
+			
+	*/
 
 	Greibach greibach(
 		NS('S'), TS('$'),                     // стартовый символ, дно стека
@@ -44,50 +60,58 @@ namespace GRB {
 			1,
 			Rule::Chain(3, TS('{'), NS('N'), TS('}'))//??
 		),
+		//TODO семантический проверка операций со строкой и числом и тд
 		Rule(
 			NS('N'), GRB_ERROR_SERIES + 5,    // Неверная конструкция в теле функции
-			27,
+			21,
 			Rule::Chain(7, TS('s'), TS('t'), TS('i'), TS(':'), NS('E'), TS('!'), NS('N')),//need
 			Rule::Chain(6, TS('s'), TS('t'), TS('i'), TS(':'), NS('E'), TS('!')),//need
 			Rule::Chain(5, TS('s'), TS('t'), TS('i'), TS('!'), NS('N')),//need
-			Rule::Chain(5, TS('i'), NS('r'), TS('l'), TS('!'), NS('N')),//need
-			Rule::Chain(4, TS('i'), NS('r'), TS('l'), TS('!')),//need
-			Rule::Chain(4, TS('l'), NS('r'), TS('l'), TS('!')),//need
-			Rule::Chain(5, TS('l'), NS('r'), TS('l'), TS('!'), NS('N')),//need
+
+			Rule::Chain(7, TS('i'), TS(':'), NS('I'), TS('/'), TS('l'), TS('!'), NS('N')),//need
+			Rule::Chain(7, TS('i'), TS(':'), NS('I'), TS('\\'), TS('l'), TS('!'), NS('N')),//need
+			Rule::Chain(6, TS('i'), TS(':'), NS('I'), TS('/'), TS('l'), TS('!')),//need
+			Rule::Chain(6, TS('i'), TS(':'), NS('I'), TS('\\'), TS('l'), TS('!')),//need
+
+			Rule::Chain(5, TS('i'), TS(':'), NS('E'), TS('!'), NS('N')),//need	
+			Rule::Chain(4, TS('i'), TS(':'), NS('E'), TS('!')),//need
+
+			Rule::Chain(8, TS('y'), TS('('), NS('R'), TS(')'), TS('['), NS('N'), TS(']'), NS('N')),//need
+			Rule::Chain(7, TS('y'), TS('('), NS('R'), TS(')'), TS('['), NS('N'), TS(']')),//need
+
 			Rule::Chain(4, TS('s'), TS('t'), TS('i'), TS('!')),//need
 			Rule::Chain(12, TS('w'), TS('('), NS('E'), TS(')'), TS('['), NS('N'), TS(']'),TS('o'), TS('['), NS('N'), TS(']'), NS('N')),//need
 			Rule::Chain(11, TS('w'), TS('('), NS('E'), TS(')'), TS('['), NS('N'), TS(']'),TS('o'), TS('['), NS('N'), TS(']')),//need
-			Rule::Chain(5, TS('i'), TS('='), NS('E'), TS('!'), NS('N')),//need
+			Rule::Chain(5, TS('i'), TS(':'), NS('E'), TS('!'), NS('N')),//need тут было =
 			Rule::Chain(5, TS('h'), TS('('), TS('i'), TS(')'), TS('!')),//need
 			Rule::Chain(6, TS('h'), TS('('), TS('i'), TS(')'), TS('!'), NS('N')),//need
 			Rule::Chain(5, TS('h'), TS('('), TS('l'), TS(')'), TS('!')),//need
 			Rule::Chain(6, TS('h'), TS('('), TS('l'), TS(')'), TS('!'), NS('N')),//need
 			Rule::Chain(8, TS('w'), TS('('), NS('E'), TS(')'), TS('['), NS('N'), TS(']'), NS('N')),//need
-			Rule::Chain(7, TS('w'), TS('('), NS('E'), TS(')'), TS('['), NS('N'), TS(']')),//need
-			Rule::Chain(4, TS('i'), TS('='), NS('E'), TS('!')),
-			Rule::Chain(7, TS('c'), TS('['), NS('R'), TS(']'), TS('{'), NS('X'), TS('}')),
-			Rule::Chain(6, TS('S'), NS('K'), TS('.'), NS('N')),
-			Rule::Chain(6, TS('!'), NS('K'), TS('.'), NS('N')),
-			Rule::Chain(6, TS('o'), TS('['), NS('I'), TS(']'), TS('.'), NS('N')),
-			Rule::Chain(3, TS('n'), TS('.'), NS('N')),
-			Rule::Chain(4, TS('i'), NS('K'), TS('.'), NS('N')),
-			
-			Rule::Chain(12, TS('c'), TS('['), NS('R'), TS(']'), TS('{'), NS('X'), TS('}'), TS('u'), TS('{'), NS('X'), TS('}'), NS('N')),//?
-			Rule::Chain(6, TS('P'), NS('K'), TS('.'), NS('N')),//?
-			
-			Rule::Chain(11, TS('c'), TS('['), NS('R'), TS(']'), TS('{'), NS('X'), TS('}'), TS('u'), TS('{'), NS('X'), TS('}')),
-			
-			Rule::Chain(3, TS('h'), NS('K'), TS('!')),
-			Rule::Chain(3, TS('i'), NS('K'), TS('!'))
+			Rule::Chain(7, TS('w'), TS('('), NS('E'), TS(')'), TS('['), NS('N'), TS(']'))//need
+			//Rule::Chain(4, TS('i'), TS('='), NS('E'), TS('!')),
+			//Rule::Chain(7, TS('c'), TS('['), NS('R'), TS(']'), TS('{'), NS('X'), TS('}')),
+			//Rule::Chain(6, TS('S'), NS('K'), TS('.'), NS('N')),
+			//Rule::Chain(6, TS('!'), NS('K'), TS('.'), NS('N')),
+			//Rule::Chain(6, TS('o'), TS('['), NS('I'), TS(']'), TS('.'), NS('N')),
+			//Rule::Chain(3, TS('n'), TS('.'), NS('N')),
+			//Rule::Chain(4, TS('i'), NS('K'), TS('.'), NS('N')),
+			//Rule::Chain(12, TS('c'), TS('['), NS('R'), TS(']'), TS('{'), NS('X'), TS('}'), TS('u'), TS('{'), NS('X'), TS('}'), NS('N')),//?
+			//Rule::Chain(6, TS('P'), NS('K'), TS('.'), NS('N')),//?
+			//Rule::Chain(11, TS('c'), TS('['), NS('R'), TS(']'), TS('{'), NS('X'), TS('}'), TS('u'), TS('{'), NS('X'), TS('}')),
+			//Rule::Chain(3, TS('h'), NS('K'), TS('!')),
+			//Rule::Chain(3, TS('i'), NS('K'), TS('!'))
 		),
 		Rule(
 			NS('R'), GRB_ERROR_SERIES + 6,    // Ошибка в условном выражении
-			5,
+			7,
 			Rule::Chain(1, TS('i')),
-			Rule::Chain(3, TS('i'), TS('b'), TS('i')),
-			Rule::Chain(3, TS('i'), TS('b'), TS('l')),
-			Rule::Chain(3, TS('l'), TS('b'), TS('i')),
-			Rule::Chain(3, TS('l'), TS('b'), TS('l'))
+			Rule::Chain(3, TS('i'), TS('<'), NS('I')),
+			Rule::Chain(3, TS('l'), TS('<'), NS('I')),
+			Rule::Chain(3, TS('i'), TS('>'), NS('I')),
+			Rule::Chain(3, TS('l'), TS('>'), NS('I')),
+			Rule::Chain(3, TS('i'), TS('='), NS('I')),
+			Rule::Chain(3, TS('l'), TS('='), NS('I'))
 		),
 		Rule(
 			NS('K'), GRB_ERROR_SERIES + 7,    // Ошибка в вызове функции
@@ -120,7 +144,7 @@ namespace GRB {
 			Rule::Chain(1, TS('i')),
 			Rule::Chain(1, TS('l')),
 			Rule::Chain(3, TS('i'), TS(','), NS('W')),
-			Rule::Chain(3, TS('l'), TS('&'), NS('W'))
+			Rule::Chain(3, TS('l'), TS(','), NS('W'))
 		),
 		Rule(
 			NS('M'), GRB_ERROR_SERIES + 8,    // ошибка в арифметическом выражении

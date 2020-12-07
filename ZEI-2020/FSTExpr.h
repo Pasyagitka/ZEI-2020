@@ -1,5 +1,6 @@
 #pragma once
 
+#pragma region TYPESOFDATA
 #define FST_TINY 5, \
 	FST::NODE(1, FST::RELATION('t', 1)),\
 	FST::NODE(1, FST::RELATION('i', 2)),\
@@ -27,6 +28,7 @@
 	FST::NODE(1, FST::RELATION('a', 6)),\
 	FST::NODE(1, FST::RELATION('l', 7)),\
 	FST::NODE()
+#pragma endregion
 
 #define FST_FUNC 5, \
     FST::NODE(1, FST::RELATION('f', 1)), \
@@ -67,6 +69,13 @@
 	FST::NODE(1, FST::RELATION('h', 2)),\
 	FST::NODE(1, FST::RELATION('o', 3)),\
 	FST::NODE(1, FST::RELATION('w', 4)),\
+	FST::NODE()
+
+#define FST_LOOP 5, \
+	FST::NODE(1, FST::RELATION('l', 1)),\
+	FST::NODE(1, FST::RELATION('o', 2)),\
+	FST::NODE(1, FST::RELATION('o', 3)),\
+	FST::NODE(1, FST::RELATION('p', 4)),\
 	FST::NODE()
 
 #define FST_LIB 4, \
@@ -132,6 +141,7 @@
 	FST::RELATION('y', 1), FST::RELATION('z', 1)),\
     FST::NODE()
 
+#pragma region LITERAL
 #define FST_TINYLITERAL10 2, \
 	FST::NODE(20, \
 	FST::RELATION('1', 0), FST::RELATION('2', 0), FST::RELATION('3', 0), FST::RELATION('4', 0), FST::RELATION('5', 0), FST::RELATION('6', 0),\
@@ -151,7 +161,6 @@
 	FST::RELATION('7', 2), FST::RELATION('0', 2)),\
 	FST::NODE()
 
-//TODO: LAN loop
 #define FST_SYMBOLICLITERAL 4, \
 	FST::NODE(1, FST::RELATION('"', 1)),\
 	FST::NODE(156, \
@@ -202,6 +211,7 @@
     FST::NODE(1, FST::RELATION('s',4)),\
     FST::NODE(1, FST::RELATION('e',5)),\
     FST::NODE()
+#pragma endregion
 
 #define FST_EXCLAMATION 2,\
     FST::NODE(1, FST::RELATION('!',1)),\
@@ -239,35 +249,50 @@
 	FST::NODE(1, FST::RELATION('}', 1)),\
 	FST::NODE()
 
-#define FST_EQUALITY 2, \
-   FST::NODE(1, FST::RELATION('=', 1)),\
-   FST::NODE()
 
 #define FST_COMPARE 2, \
    FST::NODE(1, FST::RELATION(':', 1)),\
    FST::NODE()
 
-#define FST_PLUS 2, \
-   FST::NODE(1, FST::RELATION('+', 1)),\
-   FST::NODE()
 
-#define FST_MINUS 2, \
-  FST::NODE(1, FST::RELATION('-', 1)),\
-  FST::NODE()
+#pragma region ARIFM
+	#define FST_PLUS 2, \
+	   FST::NODE(1, FST::RELATION('+', 1)),\
+	   FST::NODE()
 
-#define FST_STAR 2, \
-  FST::NODE(1, FST::RELATION('*', 1)),\
-  FST::NODE()
+	#define FST_MINUS 2, \
+	  FST::NODE(1, FST::RELATION('-', 1)),\
+	  FST::NODE()
 
-#define FST_SLASH 2, \
-  FST::NODE(1, FST::RELATION('/', 1)),\
-  FST::NODE()
+	#define FST_STAR 2, \
+	  FST::NODE(1, FST::RELATION('*', 1)),\
+	  FST::NODE()
 
-#define FST_LEFTSHIFT 2, \
-  FST::NODE(1, FST::RELATION('<', 1)),\
-  FST::NODE()
+	#define FST_SLASH 2, \
+	  FST::NODE(1, FST::RELATION('#', 1)),\
+	  FST::NODE()
+#pragma endregion
 
-#define FST_RIGHTSHIFT 2, \
-  FST::NODE(1, FST::RELATION('>', 1)),\
-  FST::NODE()
+#pragma region SHIFTS
+	#define FST_LEFTSHIFT 2, \
+	  FST::NODE(1, FST::RELATION('\\', 1)),\
+	  FST::NODE()
 
+	#define FST_RIGHTSHIFT 2, \
+	  FST::NODE(1, FST::RELATION('/', 1)),\
+	  FST::NODE()
+#pragma endregion
+
+#pragma region LOGICAL
+	#define FST_EQUALITY 2, \
+	   FST::NODE(1, FST::RELATION('=', 1)),\
+	   FST::NODE()
+
+	#define FST_LESS 2, \
+	  FST::NODE(1, FST::RELATION('<', 1)),\
+	  FST::NODE()
+
+	#define FST_MORE 2, \
+	  FST::NODE(1, FST::RELATION('>', 1)),\
+	  FST::NODE()
+#pragma endregion

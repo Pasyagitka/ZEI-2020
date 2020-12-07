@@ -14,18 +14,21 @@ namespace Pn {
 		for (int i = 0; i < lextable.size; i++) {
 			if (lextable.table[i].lexema == ':')
 				PolishNotation(i +1, lextable, idtable);
-			if (lextable.table[i].lexema == 'h')
-				PolishNotation(i, lextable, idtable);
+			/*if (lextable.table[i].lexema == 'h')
+				PolishNotation(i, lextable, idtable);*/
 		}
 	}
 
 	//switch
 	int GetPriority(char c) {
-		if (c == LEX_LEFTHESIS || c == LEX_RIGHTHESIS) return 0;
-		if (c == LEX_COMMA) return 1;
-		if (c == LEX_PLUS || c == LEX_MINUS) return 2;
-		if (c == LEX_STAR || c == LEX_SLASH) return 3;
-		return 0;
+		switch (c)
+		{
+		case LEX_LEFTHESIS: case LEX_RIGHTHESIS:		return 0;
+		case LEX_COMMA:									return 1;
+		case LEX_PLUS:  case LEX_MINUS:					return 2;
+		case LEX_STAR: case LEX_SLASH:					return 3;
+		default:										return 0;
+		}
 	}
 
 
@@ -42,12 +45,13 @@ namespace Pn {
 			temp = LT::GetEntry(lextable, i);
 
 
-			if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL || temp.lexema == LEX_LIBFUNC || temp.lexema == LEX_SHOW)
+			if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL /*|| temp.lexema == LEX_LIBFUNC || temp.lexema == LEX_SHOW*/)
 			{
-				if (lextable.table[i].indxTI != -1 && (idtable.table[lextable.table[i].indxTI].idtype== IT::F
-					|| idtable.table[lextable.table[i].indxTI].idtype == IT::B))
-					functionflag = true; //идентификатор функции удаляется А ТИП???
-				else ResultingString += temp.lexema;
+				//if (lextable.table[i].indxTI != -1 && (idtable.table[lextable.table[i].indxTI].idtype== IT::F
+				//	|| idtable.table[lextable.table[i].indxTI].idtype == IT::B))
+				//	functionflag = true; //идентификатор функции удаляется А ТИП???
+				//else 
+				ResultingString += temp.lexema;
 				continue;
 			}
 
@@ -68,7 +72,7 @@ namespace Pn {
 				continue;
 			}
 			if (temp.lexema == LEX_COMMA) {
-				paramcounter++;
+				//paramcounter++;
 				while (stack.top() == LEX_PLUS || stack.top() == LEX_MINUS || stack.top() == LEX_STAR || stack.top() == LEX_SLASH) {
 					ResultingString += stack.top();
 					stack.pop();
@@ -87,11 +91,11 @@ namespace Pn {
 					stack.pop();
 				}
 				stack.pop();
-				if (functionflag) {
+				/*if (functionflag) {
 					ResultingString += LEX_AT;
 					ResultingString += std::to_string(paramcounter + 1);
 					functionflag = false;
-				}
+				}*/
 				continue;
 			}
 

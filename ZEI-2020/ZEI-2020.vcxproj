@@ -154,7 +154,7 @@
     <ClCompile Include="Out.cpp" />
     <ClCompile Include="Parm.cpp" />
     <ClCompile Include="Polish.cpp" />
-    <ClCompile Include="SEM.cpp" />
+    <ClCompile Include="Sem.cpp" />
     <ClCompile Include="ZEI-2020.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,7 +172,7 @@
     <ClInclude Include="Out.h" />
     <ClInclude Include="Parm.h" />
     <ClInclude Include="Polish.h" />
-    <ClInclude Include="SEM.h" />
+    <ClInclude Include="Sem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

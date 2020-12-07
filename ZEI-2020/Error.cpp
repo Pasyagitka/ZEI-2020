@@ -37,7 +37,7 @@ namespace Error
 		ERROR_ENTRY(306, "[LA] Таблица идентификаторов, вероятно, ещё не создана"),
 		ERROR_ENTRY(307, "[LA] Недопустимый номер строки таблицы идентификаторов"),
 		ERROR_ENTRY(308, "[LA] Превышена максимальная длина имени идентификатора"),	
-		ERROR_ENTRY(309, "[LA] Значение вне диапазона для литерала типа tiny [-128; +127]"),
+		ERROR_ENTRY(309, "[LA] Значение вне диапазона для литерала типа tiny [-128; +127]d"),
 		ERROR_ENTRY(310, "[LA] Превышена максимальная длина литерала типа symbolic"),
 		ERROR_ENTRY(311, "[LA] Ошибка лексического разбора"),	ERROR_ENTRY_NODEF(312),ERROR_ENTRY_NODEF(313),ERROR_ENTRY_NODEF(314),ERROR_ENTRY_NODEF(315),
 		ERROR_ENTRY_NODEF(116),ERROR_ENTRY_NODEF(117),ERROR_ENTRY_NODEF(118),ERROR_ENTRY_NODEF(119),
@@ -58,12 +58,7 @@ namespace Error
 		ERROR_ENTRY(508, "[SX] Ошибка в арифметическом выражении"),
 		ERROR_ENTRY(511, "[SX] Неверная конструкция в теле цикла/условного выражения"),
 
-
-
-
-
-		//Семантика [SM]
-		ERROR_ENTRY_NODEF100(600), ERROR_ENTRY_NODEF100(700), ERROR_ENTRY_NODEF100(800), ERROR_ENTRY_NODEF100(900)
+		ERROR_ENTRY(600, "[SM]"),
 	};
 	ERROR geterror(int id)
 	{

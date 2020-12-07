@@ -20,8 +20,8 @@
 #define LEX_PERFORM		'p'
 #define LEX_LOOP		'y'
 #define LEX_SET			's'
-#define LEX_LEFTSHIFT   'j'
-#define LEX_RIGHTSHIFT	'r'
+#define LEX_LEFTSHIFT   '\\'
+#define LEX_RIGHTSHIFT	'/'
 
 #define LEX_POINT		'.'
 #define LEX_COMMA		','
@@ -38,7 +38,7 @@
 #define LEX_PLUS		'+'
 #define LEX_MINUS		'-'
 #define LEX_STAR		'*'
-#define LEX_SLASH		'/'
+#define LEX_SLASH		'#'
 #define LEX_ENDL		'\n'
 #define LEX_END			'\0'
 #define LEX_SPACE		' '
@@ -57,10 +57,8 @@ namespace LT
 		char lexema;
 		int sn;//номер строки в тексте
 		int indxTI;//индекс в таблице идентификаторов или LT_TI_NULLIDX
-		int parm; // количество параметров в функции
 		char buf[300]; // буффер для связи с таблицей лексем
 		int sign;
-		//int priority;
 	};
 
 	struct LexTable//экземпяр таблицы лексем
