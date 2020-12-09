@@ -11,10 +11,11 @@
 #define MFST_DIAGN_NUMBER 3
 
 
-#define MFST_TRACE_START(LOG)		*log.stream	<< std::setw(4) << std::left << "Шаг" << ':'\
+#define MFST_TRACE_START(LOG)		*log.stream	<< "\n--------- Синтаксический анализ --------------------------------------------------------------------\n" \
+												<< std::setw(4) << std::left << "Шаг" << ':'\
 												<< std::setw(35) << std::left << " Правило"\
 												<< std::setw(50) << std::left << " Входная лента"\
-												<< std::setw(20) << std::left << " Стек" << std::endl;
+												<< std::setw(15) << std::left << " Стек" << std::endl;
 #define MFST_TRACE1(LOG)			*log.stream <<std::setw(4)<<std::left<<++FST_TRACE_n<<": " \
 												<<std::setw(35)<<std::left<<rule.getCRule(rbuf,nrulechain)\
 												<<std::setw(50)<<std::left<<getCLenta(lbuf, lenta_position)\

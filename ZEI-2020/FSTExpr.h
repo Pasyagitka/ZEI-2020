@@ -268,7 +268,7 @@
 	  FST::NODE(1, FST::RELATION('*', 1)),\
 	  FST::NODE()
 
-	#define FST_SLASH 2, \
+	#define FST_DIVISION 2, \
 	  FST::NODE(1, FST::RELATION('#', 1)),\
 	  FST::NODE()
 #pragma endregion
@@ -294,5 +294,9 @@
 
 	#define FST_MORE 2, \
 	  FST::NODE(1, FST::RELATION('>', 1)),\
+	  FST::NODE()
+
+	#define FST_INEQUALITY 2, \
+	  FST::NODE(1, FST::RELATION('^', 1)),\
 	  FST::NODE()
 #pragma endregion

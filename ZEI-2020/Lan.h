@@ -6,6 +6,10 @@
 #define MAXTINY 127
 #define SYMBMAXLEN 255
 
+#define EMPTY_LITERAL "-"
+#define POSTFIXGLOBAL "GLB"
+#define EMPTYSYMBLITERAL "\"\""
+
 namespace Lan {
-	void Analysis(char *inText, Log::LOG, LT::LexTable&, IT::IdTable&);
+	void Analysis(char inText[], Log::LOG, LT::LexTable& lextable, IT::IdTable& idtable);
 }

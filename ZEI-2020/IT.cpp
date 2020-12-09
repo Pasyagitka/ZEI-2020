@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iomanip>
 #include "Log.h"
+#include "Lan.h"
 
 namespace IT
 {
@@ -32,7 +33,7 @@ namespace IT
 
 	Entry GetEntry(IdTable& itable, int nstr)
 	{
-		if (itable.size > nstr)
+		if (itable.size < nstr)
 			throw ERROR_THROW(307); //недопустимый номер стрки
 		return itable.table[nstr];
 	}
@@ -40,6 +41,14 @@ namespace IT
 	int IsId(IdTable& idtable, char id[ID_MAXSIZE]) {
 		for (int i = 0; i < idtable.size; i++) {
 			if (!strcmp(idtable.table[i].id, id))
+				return i; //idtable.table[i].idxfirstLE;
+		}
+		return TI_NULLIDX;
+	}	
+
+	int IsId(IdTable& idtable, char id[ID_MAXSIZE], char *postfix) {
+		for (int i = 0; i < idtable.size; i++) {
+			if ( !strcmp(idtable.table[i].id, id) && (!strcmp(idtable.table[i].postfix, postfix) || !strcmp(idtable.table[i].postfix, POSTFIXGLOBAL)))
 				return i; //idtable.table[i].idxfirstLE;
 		}
 		return TI_NULLIDX;

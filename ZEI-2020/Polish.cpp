@@ -26,7 +26,7 @@ namespace Pn {
 		case LEX_LEFTHESIS: case LEX_RIGHTHESIS:		return 0;
 		case LEX_COMMA:									return 1;
 		case LEX_PLUS:  case LEX_MINUS:					return 2;
-		case LEX_STAR: case LEX_SLASH:					return 3;
+		case LEX_STAR: case LEX_DIVISION:					return 3;
 		default:										return 0;
 		}
 	}
@@ -55,7 +55,7 @@ namespace Pn {
 				continue;
 			}
 
-			if (temp.lexema == LEX_PLUS || temp.lexema == LEX_MINUS || temp.lexema == LEX_STAR || temp.lexema == LEX_SLASH) {
+			if (temp.lexema == LEX_PLUS || temp.lexema == LEX_MINUS || temp.lexema == LEX_STAR || temp.lexema == LEX_DIVISION) {
 				if (stack.empty()) {
 					stack.push(temp.lexema);
 				}
@@ -73,7 +73,7 @@ namespace Pn {
 			}
 			if (temp.lexema == LEX_COMMA) {
 				//paramcounter++;
-				while (stack.top() == LEX_PLUS || stack.top() == LEX_MINUS || stack.top() == LEX_STAR || stack.top() == LEX_SLASH) {
+				while (stack.top() == LEX_PLUS || stack.top() == LEX_MINUS || stack.top() == LEX_STAR || stack.top() == LEX_DIVISION) {
 					ResultingString += stack.top();
 					stack.pop();
 				}

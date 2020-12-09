@@ -34,11 +34,12 @@
 #define LEX_MORE		'>'
 #define LEX_LESS		'<'
 #define LEX_EQUALITY	'='
+#define LEX_INEQUALITY	'^'
 #define LEX_COMPARE		':' //?
 #define LEX_PLUS		'+'
 #define LEX_MINUS		'-'
 #define LEX_STAR		'*'
-#define LEX_SLASH		'#'
+#define LEX_DIVISION	'#'
 #define LEX_ENDL		'\n'
 #define LEX_END			'\0'
 #define LEX_SPACE		' '

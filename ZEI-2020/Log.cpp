@@ -94,7 +94,7 @@ namespace Log
 	void WriteIdTable(LOG newLog, IT::IdTable& idtable)
 	{
 		*newLog.stream << "\n\n------------ Таблица идентификаторов -----------------------------------------------------------------------" << std::endl;
-		*newLog.stream << "Строка\tТип ID\t\tТип данных\tИмя\t\tЗначение\n";
+		*newLog.stream << "Строка\tТип ID\t\tТип данных\tИмя\t\tВидимость\tЗначение\n";
 		for (unsigned int i = 0; i < (unsigned int)idtable.size; i++)
 		{
 			*newLog.stream << idtable.table[i].idxfirstLE << "\t";
@@ -103,6 +103,8 @@ namespace Log
 			else if (idtable.table[i].idtype == IT::L)*newLog.stream << "literal";
 			else if (idtable.table[i].idtype == IT::F)*newLog.stream << "function";
 			else if (idtable.table[i].idtype == IT::B)*newLog.stream << "libfunc";
+			else if (idtable.table[i].idtype == IT::P)*newLog.stream << "param";
+
 
 			*newLog.stream << "\t\t";
 
@@ -110,11 +112,13 @@ namespace Log
 			else if (idtable.table[i].iddatatype == IT::SYMB)*newLog.stream << "symbolic";
 			else if (idtable.table[i].iddatatype == IT::LGCL)*newLog.stream << "logical";
 
-			*newLog.stream << "\t\t" << idtable.table[i].id << "\t\t";
+			*newLog.stream << "\t\t" << idtable.table[i].id << "\t";
+
+			*newLog.stream << "\t" << idtable.table[i].postfix << "\t\t";
 
 			if (idtable.table[i].iddatatype == IT::TINY)			*newLog.stream << idtable.table[i].value.vtiny;
 			else if (idtable.table[i].iddatatype == IT::SYMB)	*newLog.stream << idtable.table[i].value.vsymb->str;
-			else if (idtable.table[i].iddatatype == IT::LGCL)	*newLog.stream << idtable.table[i].value.vbool;
+			else if (idtable.table[i].iddatatype == IT::LGCL)	*newLog.stream << idtable.table[i].value.vlogical;
 
 			*newLog.stream << std::endl;
 		}

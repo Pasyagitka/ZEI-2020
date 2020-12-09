@@ -4,11 +4,10 @@
 #include "IT.h"
 #include "FST.h"
 
-
-
 #include <string>
 #include "FSTExpr.h"
-#define EMPTY_LITERAL "-"
+#include "Sem.h"
+
 
 //TODO: получается номер и у H(16)
 namespace Lan
@@ -19,15 +18,18 @@ namespace Lan
 		int currentLine = 1, currentColumn = 0, tokenlen = 0;
 		bool tokenIsCommited(false), check(false), newLineFlag(false), flag(false);
 		bool quoteFlag(false);
-
+		int entryPoint = 0;
+		//TODO строка отнять кавычки
 		char postfix[10];
-		char token[258];
+		char token[258]{};
 		char anotherbuf[10];
+
+		int parameterscounter = 0;
 
 		LT::LexTable* newLexTable = &lextable;
 		IT::IdTable* newIDTable = &idtable;
-		IT::IDDATATYPE dataType;
-		IT::IDTYPE idType;
+		IT::IDDATATYPE dataType = IT::IDDATATYPE::UNDEF;
+		IT::IDTYPE idType = IT::IDTYPE::U;
 
 		for (int i = 0; i < strlen(inText); i++)
 		{
@@ -45,8 +47,8 @@ namespace Lan
 			if (inText[i] == LEX_SPACE || inText[i] == LEX_ENDL 
 				|| inText[i] == LEX_POINT || inText[i] == LEX_COMMA || inText[i] == LEX_EXCLAMATION || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_RIGHTFIGUREBRACE || inText[i] == LEX_LEFTFIGUREBRACE
 				|| inText[i + 1] == LEX_POINT || inText[i + 1] == LEX_COMMA || inText[i +1 ] == LEX_EXCLAMATION || inText[i +1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS || inText[i+1] == LEX_RIGHTBRACE || inText[i+1] == LEX_LEFTBRACE || inText[i + 1] == LEX_RIGHTFIGUREBRACE || inText[i + 1] == LEX_LEFTFIGUREBRACE 
-				|| inText[i + 1] == LEX_MINUS || inText[i + 1] == LEX_PLUS || inText[i + 1] == LEX_EQUALITY || inText[i + 1] == LEX_STAR || inText[i + 1] == LEX_SLASH /*| inText[i + 1] == LEX_LESS || inText[i + 1] == LEX_MORE */ || inText[i + 1] == LEX_RIGHTSHIFT || inText[i + 1] == LEX_LEFTSHIFT
-				|| inText[i] == LEX_MINUS || inText[i] == LEX_PLUS || inText[i] == LEX_EQUALITY || inText[i] == LEX_STAR || inText[i] == LEX_SLASH /*|| inText[i] == LEX_LESS || inText[i] == LEX_MORE*/ || inText[i] == LEX_RIGHTSHIFT || inText[i] == LEX_LEFTSHIFT
+				|| inText[i + 1] == LEX_MINUS || inText[i + 1] == LEX_PLUS || inText[i + 1] == LEX_EQUALITY || inText[i + 1] == LEX_STAR || inText[i + 1] == LEX_DIVISION /*| inText[i + 1] == LEX_LESS || inText[i + 1] == LEX_MORE */ || inText[i + 1] == LEX_RIGHTSHIFT || inText[i + 1] == LEX_LEFTSHIFT
+				|| inText[i] == LEX_MINUS || inText[i] == LEX_PLUS || inText[i] == LEX_EQUALITY || inText[i] == LEX_STAR || inText[i] == LEX_DIVISION /*|| inText[i] == LEX_LESS || inText[i] == LEX_MORE*/ || inText[i] == LEX_RIGHTSHIFT || inText[i] == LEX_LEFTSHIFT
 				)
 			{
 				if (quoteFlag) 	continue;
@@ -131,7 +133,10 @@ namespace Lan
 				FST::FST FSTTiny(token, FST_TINY);
 				if (FST::execute(FSTTiny)) {
 					dataType = IT::TINY;
-					idType = IT::V;
+					if (idType == IT::F)
+						idType = IT::P;
+					else
+						idType = IT::V;
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_TINY, currentLine, IT::IsId(idtable, token) };
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable, *newLTEntry);
@@ -140,8 +145,11 @@ namespace Lan
 				}
 				FST::FST FSTSymbolic(token, FST_SYMBOLIC);
 				if (FST::execute(FSTSymbolic)) {
+					if (idType == IT::F)
+						idType = IT::P;
+					else 
+						idType = IT::V;
 					dataType = IT::SYMB;
-					idType = IT::V;
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_SYMBOLIC, currentLine, IT::IsId(idtable, token) };
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable, *newLTEntry);
@@ -151,7 +159,10 @@ namespace Lan
 				FST::FST FSTLogical(token, FST_LOGICAL);
 				if (FST::execute(FSTLogical)) {
 					dataType = IT::LGCL;
-					idType = IT::V;
+					if (idType == IT::F)
+						idType = IT::P;
+					else
+						idType = IT::V;
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_LOGICAL, currentLine, IT::IsId(idtable, token) };
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable, *newLTEntry);
@@ -176,9 +187,11 @@ namespace Lan
 				}
 				FST::FST FSTPerform(token, FST_PERFORM);
 				if (FST::execute(FSTPerform)) {
+					entryPoint++;
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_PERFORM, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
-					idType = IT::F;
+					/*idType = IT::F;*/
+					strcpy_s(postfix, "perform");
 					delete newLTEntry;
 					continue;
 				}
@@ -186,7 +199,6 @@ namespace Lan
 				if (FST::execute(FSTLoop)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_LOOP, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
-					idType = IT::F;
 					delete newLTEntry;
 					continue;
 				}
@@ -205,8 +217,10 @@ namespace Lan
 					strcpy_s(newIDEntry->id, token);
 					newIDEntry->idtype = idType;
 					newIDEntry->iddatatype = dataType;
-					newIDEntry->value.vtiny = TI_INT_DEFAULT;
-					newIDEntry->value.vsymb->len = TI_STR_DEFAULT;
+					newIDEntry->value.vtiny = TI_TINY_DEFAULT;
+					newIDEntry->value.vsymb->len = TI_SYMB_DEFAULT;
+					newIDEntry->parameters.count = 1;
+					newIDEntry->parameters.typeofparameter = IT::SYMB;
 					strcpy_s(newIDEntry->value.vsymb->str, "");
 					newIDEntry->idxfirstLE = currentLine;
 					IT::Add(*newIDTable, *newIDEntry);
@@ -243,14 +257,14 @@ namespace Lan
 				}
 				FST::FST FSTSymblen(token, FST_SYMBLEN);
 				if (FST::execute(FSTSymblen)) {
-					idType = IT::B;
-					dataType = IT::SYMB;
 					IT::Entry* newIDEntry = new IT::Entry{};
 					strcpy_s(newIDEntry->id, token);
-					newIDEntry->idtype = idType;
-					newIDEntry->iddatatype = dataType;
-					newIDEntry->value.vtiny = TI_INT_DEFAULT;
-					newIDEntry->value.vsymb->len = TI_STR_DEFAULT;
+					newIDEntry->idtype = IT::B;
+					newIDEntry->iddatatype = IT::TINY;
+					newIDEntry->value.vtiny = TI_TINY_DEFAULT;
+					newIDEntry->value.vsymb->len = TI_SYMB_DEFAULT;
+					newIDEntry->parameters.count = 1;
+					newIDEntry->parameters.typeofparameter = IT::SYMB;
 					strcpy_s(newIDEntry->value.vsymb->str, "");
 					newIDEntry->idxfirstLE = currentLine;
 					IT::Add(*newIDTable, *newIDEntry);
@@ -264,13 +278,15 @@ namespace Lan
 				FST::FST FSTSymbtotiny(token, FST_SYMBTOTINY);
 				if (FST::execute(FSTSymbtotiny)) {
 					idType = IT::B;
-					dataType = IT::SYMB;
+					dataType = IT::TINY;
 					IT::Entry* newIDEntry = new IT::Entry{};
 					strcpy_s(newIDEntry->id, token);
 					newIDEntry->idtype = idType;
 					newIDEntry->iddatatype = dataType;
-					newIDEntry->value.vtiny = TI_INT_DEFAULT;
-					newIDEntry->value.vsymb->len = TI_STR_DEFAULT;
+					newIDEntry->value.vtiny = TI_TINY_DEFAULT;
+					newIDEntry->value.vsymb->len = TI_SYMB_DEFAULT;
+					newIDEntry->parameters.count = 1;
+					newIDEntry->parameters.typeofparameter = IT::SYMB;
 					strcpy_s(newIDEntry->value.vsymb->str, "");
 					newIDEntry->idxfirstLE = currentLine;
 					IT::Add(*newIDTable, *newIDEntry);
@@ -288,10 +304,9 @@ namespace Lan
 					strcpy_s(newIDEntry->id, EMPTY_LITERAL);
 					newIDEntry->iddatatype = IT::LGCL;
 					newIDEntry->idtype = IT::L;
-					strcpy_s(newIDEntry->value.vsymb->str, token);
-					strcpy_s(newIDEntry->value.vbool, token);
+					strcpy_s(newIDEntry->value.vlogical, token);
 					for (int i = 0; i < newIDTable->size; i++) {
-						if (strcmp((*newIDTable).table[i].value.vbool, newIDEntry->value.vbool) == 0) {
+						if (strcmp((*newIDTable).table[i].value.vlogical, newIDEntry->value.vlogical) == 0) {
 							check = true;
 							break;
 						}
@@ -301,7 +316,7 @@ namespace Lan
 					if (!check) {
 						IT::Add(*newIDTable, *newIDEntry);
 					}
-					LT::Entry *newLTEntry = new LT::Entry{ LEX_LITERAL, currentLine, IT::IsId(idtable, token) };
+					LT::Entry *newLTEntry = new LT::Entry{ LEX_LITERAL, currentLine, idtable.size - 1 };
 					newLTEntry->sign = -1;
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable, *newLTEntry);
@@ -314,7 +329,7 @@ namespace Lan
 				FST::FST FSTTinyLiteral8(token, FST_TINYLITERAL8);
 				if (FST::execute(FSTTinyLiteral10) || FST::execute(FSTTinyLiteral8)) {
 					int bufNum = std::strtol(token, NULL, 0); //HACK перевод в 8-ричную 
-					//SA::DivideByZero(lextable, token);
+					//Деление на 0 тут не проверить, так как может быть выражение
 					IT::Entry* newIDEntry = new IT::Entry{};
 					strcpy_s(newIDEntry->id, EMPTY_LITERAL);
 					newIDEntry->iddatatype = IT::TINY;
@@ -333,7 +348,7 @@ namespace Lan
 					newIDEntry->idxfirstLE = currentLine;
 					if (!check)
 						IT::Add(*newIDTable, *newIDEntry);
-					LT::Entry *newLTEntry = new LT::Entry{ LEX_LITERAL, currentLine, IT::IsId(idtable, token) };
+					LT::Entry *newLTEntry = new LT::Entry{ LEX_LITERAL, currentLine, idtable.size-1 };
 					newLTEntry->sign = bufNum;
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable,* newLTEntry);
@@ -368,7 +383,7 @@ namespace Lan
 						IT::Add(*newIDTable, *newIDEntry);
 					}
 
-					LT::Entry *newLTEntry = new  LT::Entry{ LEX_LITERAL, currentLine, IT::IsId(idtable, token) };
+					LT::Entry *newLTEntry = new  LT::Entry{ LEX_LITERAL, currentLine, idtable.size - 1 };
 					newLTEntry->sign = -1;
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable, *newLTEntry);
@@ -415,9 +430,9 @@ namespace Lan
 					delete newLTEntry;
 					continue;
 				}
-				FST::FST FSTSlash(token, FST_SLASH);
-				if (FST::execute(FSTSlash)) {
-					LT::Entry *newLTEntry = new  LT::Entry{ LEX_SLASH, currentLine, LT_TI_NULLIDX };
+				FST::FST FSTDivision(token, FST_DIVISION);
+				if (FST::execute(FSTDivision)) {
+					LT::Entry *newLTEntry = new  LT::Entry{ LEX_DIVISION, currentLine, LT_TI_NULLIDX };
 					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
@@ -434,6 +449,14 @@ namespace Lan
 				FST::FST FSTLess(token, FST_LESS);
 				if (FST::execute(FSTLess)) {
 					LT::Entry* newLTEntry = new  LT::Entry{ LEX_LESS, currentLine, LT_TI_NULLIDX };
+					newLTEntry->sign = 1;
+					LT::Add(*newLexTable, *newLTEntry);
+					delete newLTEntry;
+					continue;
+				}
+				FST::FST FSTInequality(token, FST_INEQUALITY);
+				if (FST::execute(FSTInequality)) {
+					LT::Entry* newLTEntry = new  LT::Entry{ LEX_INEQUALITY, currentLine, LT_TI_NULLIDX };
 					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
@@ -461,12 +484,29 @@ namespace Lan
 						throw ERROR_THROW_IN(308, currentLine, currentColumn);
 					IT::Entry* newIDEntry = new IT::Entry{};
 					strcpy_s(anotherbuf, token);
-					if (idType == IT::F)
+					if (idType == IT::F) {
 						strcpy_s(postfix, token);
-					strcpy_s(newIDEntry->postfix, postfix);
+						strcpy_s(newIDEntry->postfix, POSTFIXGLOBAL);
+					}
+					else strcpy_s(newIDEntry->postfix, postfix);
 					bool isExecute = false;
-					/*SA::Proverka(lextable, idtable);
-					SA::Pereobyavl(lextable, idtable, token, postfix, currentLine, currentColumn);*/
+
+					int idx = IT::IsId(idtable, token, postfix); //такая переменная имя+постфикс определена
+
+					if (lextable.table[lextable.size - 2].lexema == LEX_SET && idx != TI_NULLIDX) //перед ней SET и она  определена? - нельзя, ошибка
+						throw ERROR_THROW_IN(606, currentLine, currentColumn);
+
+					if (idType == IT::P) {
+						(idtable.table[idtable.size-1]).parameters.count++;
+						(idtable.table[idtable.size-1]).parameters.typeofparameter = dataType;
+					}
+					else 
+					{
+						if (idx == TI_NULLIDX && lextable.table[lextable.size - 2].lexema != LEX_SET && lextable.table[lextable.size - 1].lexema != LEX_FUNCTION) //если не определена и мы сейчас не определяем то надо ошибку
+							throw ERROR_THROW_IN(604, currentLine, currentColumn);
+					}
+
+			
 					for (int i = 0; i <= (*newIDTable).size; i++)
 						if (strcmp((*newIDTable).table[i].id, token) == 0)
 						{
@@ -480,8 +520,8 @@ namespace Lan
 						strcpy_s(newIDEntry->id, token);
 						newIDEntry->idtype = idType;
 						newIDEntry->iddatatype = dataType;
-						newIDEntry->value.vtiny = TI_INT_DEFAULT;
-						newIDEntry->value.vsymb->len = TI_STR_DEFAULT;
+						newIDEntry->value.vtiny = TI_TINY_DEFAULT;
+						newIDEntry->value.vsymb->len = TI_SYMB_DEFAULT;
 						strcpy_s(newIDEntry->value.vsymb->str, "");
 						newIDEntry->idxfirstLE = currentLine;
 						IT::Add(*newIDTable, *newIDEntry);
@@ -496,5 +536,7 @@ namespace Lan
 				throw ERROR_THROW_IN(311, currentLine, currentColumn);
 			}
 		}
-	}
+		if (entryPoint == 0) 		throw  ERROR_THROW(602);
+		if (entryPoint > 1) 		throw  ERROR_THROW(603);
+	}	
 }
