@@ -98,7 +98,7 @@ namespace Sem
 				//TODO: set symbolic r : foo(r)!
 				case LEX_ID: case LEX_LIBFUNC: case LEX_SHOW: { //параметры функции
 					if ((idtable.table[lextable.table[i].indxTI].idtype == IT::F || idtable.table[lextable.table[i].indxTI].idtype == IT::B)//функция или библиотечная
-						&& lextable.table[i - 1].lexema != LEX_FUNCTION) {
+						&& lextable.table[i - 1].lexema != LEX_FUNCTION) { //не объявление функции
 						int paramCounter = 0;
 						IT::Entry ITEntry = IT::GetEntry(idtable, lextable.table[i].indxTI);
 						for (int j = i + 2; lextable.table[j].lexema != LEX_RIGHTHESIS; j++)
@@ -124,6 +124,15 @@ namespace Sem
 					break;
 				}
 
+				//case LEX_SET: { //Не так работает
+				//	int y = i + 2;
+				//	IT::Entry DeclaringEntry = IT::GetEntry(idtable, lextable.table[y].indxTI);
+				//	for (y = y+2; lextable.table[y].lexema != LEX_EXCLAMATION; y++) {
+				//		if (DeclaringEntry.id == lextable.table[y].buf)
+				//			throw ERROR_THROW_IN(605, lextable.table[y].sn, 0);
+				//	}
+				//	break;
+				//}
 
 			}
 		}

@@ -57,10 +57,7 @@ namespace IT
 	IdTable Create(int size);	//емкость таблицы идентификаторов < TI_MAXSIZE
 	void Add(IdTable& itable, Entry entry);
 	Entry GetEntry(IdTable& itable, int n);
-	int IsId(						//возврат: номер строки (если есть), TI_NULLIDX(если нет)
-		IdTable& idtable,		//экземпляр таблицы идентификаторов
-		char id[ID_MAXSIZE]		//идентификатор
-	);
+	int IsId(IdTable& idtable,	char id[ID_MAXSIZE]);
 	int IsId(IdTable& idtable, char id[ID_MAXSIZE], char* postfix);
 	void Delete(IdTable& itable);
 }

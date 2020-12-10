@@ -105,9 +105,9 @@ namespace In
 				Pointer++;
 				continue;
 			}
-			if (in.text[i] == IN_CODE_ENDL && in.text[i + 1] == IN_CODE_ENDL) {
+			/*if (in.text[i] == IN_CODE_ENDL && in.text[i + 1] == IN_CODE_ENDL) {
 				in.size--;  continue;
-			}
+			}*/
 			if (in.text[i] == IN_CODE_SPACE) {
 				switch (in.text[i + 1]) {
 					case IN_CODE_SPACE: {

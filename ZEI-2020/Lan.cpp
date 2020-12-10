@@ -7,7 +7,7 @@
 #include <string>
 #include "FSTExpr.h"
 #include "Sem.h"
-
+//Норм ли что библитечные функции записываются в id столько раз сколько вызываются
 
 //TODO: получается номер и у H(16)
 namespace Lan
@@ -267,6 +267,7 @@ namespace Lan
 					newIDEntry->parameters.typeofparameter = IT::SYMB;
 					strcpy_s(newIDEntry->value.vsymb->str, "");
 					newIDEntry->idxfirstLE = currentLine;
+
 					IT::Add(*newIDTable, *newIDEntry);
 
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_LIBFUNC, currentLine, IT::IsId(idtable, token) , 1 };
@@ -317,7 +318,6 @@ namespace Lan
 						IT::Add(*newIDTable, *newIDEntry);
 					}
 					LT::Entry *newLTEntry = new LT::Entry{ LEX_LITERAL, currentLine, idtable.size - 1 };
-					newLTEntry->sign = -1;
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
@@ -338,7 +338,7 @@ namespace Lan
 						throw ERROR_THROW_IN(309, currentLine, currentColumn);
 					newIDEntry->value.vtiny = (int)bufNum;
 					strcpy_s(newIDEntry->value.vsymb->str, token);
-					for (int i = 0; i < newIDTable->size; i++) {
+					for (int i = 0; i < newIDTable->size; i++) { //не добавляем если уже встречался
 						if (newIDEntry->value.vtiny == (*newIDTable).table[i].value.vtiny) {
 							check = true;
 							break;
@@ -349,7 +349,6 @@ namespace Lan
 					if (!check)
 						IT::Add(*newIDTable, *newIDEntry);
 					LT::Entry *newLTEntry = new LT::Entry{ LEX_LITERAL, currentLine, idtable.size-1 };
-					newLTEntry->sign = bufNum;
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable,* newLTEntry);
 					delete newLTEntry;
@@ -384,7 +383,6 @@ namespace Lan
 					}
 
 					LT::Entry *newLTEntry = new  LT::Entry{ LEX_LITERAL, currentLine, idtable.size - 1 };
-					newLTEntry->sign = -1;
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
@@ -394,7 +392,6 @@ namespace Lan
 				FST::FST FSTEquality(token, FST_EQUALITY);
 				if (FST::execute(FSTEquality)) {
 					LT::Entry *newLTEntry = new LT::Entry{ LEX_EQUALITY, currentLine, LT_TI_NULLIDX };
-					newLTEntry->sign = 2;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -409,7 +406,6 @@ namespace Lan
 				FST::FST FSTPlus(token, FST_PLUS);
 				if (FST::execute(FSTPlus)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_PLUS, currentLine, LT_TI_NULLIDX };
-					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -417,7 +413,6 @@ namespace Lan
 				FST::FST FSTMinus(token, FST_MINUS);
 				if (FST::execute(FSTMinus)) {
 					LT::Entry* newLTEntry = new  LT::Entry{ LEX_MINUS, currentLine, LT_TI_NULLIDX };
-					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -425,7 +420,6 @@ namespace Lan
 				FST::FST FSTStar(token, FST_STAR);
 				if (FST::execute(FSTStar)) {
 					LT::Entry *newLTEntry = new  LT::Entry{ LEX_STAR, currentLine, LT_TI_NULLIDX };
-					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -433,7 +427,6 @@ namespace Lan
 				FST::FST FSTDivision(token, FST_DIVISION);
 				if (FST::execute(FSTDivision)) {
 					LT::Entry *newLTEntry = new  LT::Entry{ LEX_DIVISION, currentLine, LT_TI_NULLIDX };
-					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -441,7 +434,6 @@ namespace Lan
 				FST::FST FSTMore(token, FST_MORE);
 				if (FST::execute(FSTMore)) {
 					LT::Entry* newLTEntry = new  LT::Entry{ LEX_MORE, currentLine, LT_TI_NULLIDX };
-					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -449,7 +441,6 @@ namespace Lan
 				FST::FST FSTLess(token, FST_LESS);
 				if (FST::execute(FSTLess)) {
 					LT::Entry* newLTEntry = new  LT::Entry{ LEX_LESS, currentLine, LT_TI_NULLIDX };
-					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -457,7 +448,6 @@ namespace Lan
 				FST::FST FSTInequality(token, FST_INEQUALITY);
 				if (FST::execute(FSTInequality)) {
 					LT::Entry* newLTEntry = new  LT::Entry{ LEX_INEQUALITY, currentLine, LT_TI_NULLIDX };
-					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -465,7 +455,6 @@ namespace Lan
 				FST::FST FSTLeftshift(token, FST_LEFTSHIFT);
 				if (FST::execute(FSTLeftshift)) {
 					LT::Entry* newLTEntry = new  LT::Entry{ LEX_LEFTSHIFT, currentLine, LT_TI_NULLIDX };
-					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -473,7 +462,6 @@ namespace Lan
 				FST::FST FSTRightshift(token, FST_RIGHTSHIFT);
 				if (FST::execute(FSTRightshift)) {
 					LT::Entry* newLTEntry = new  LT::Entry{ LEX_RIGHTSHIFT, currentLine, LT_TI_NULLIDX };
-					newLTEntry->sign = 1;
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;

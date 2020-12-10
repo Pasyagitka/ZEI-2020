@@ -59,7 +59,6 @@ namespace LT
 		int sn;//номер строки в тексте
 		int indxTI;//индекс в таблице идентификаторов или LT_TI_NULLIDX
 		char buf[300]; // буффер дл€ св€зи с таблицей лексем
-		int sign;
 	};
 
 	struct LexTable//экземп€р таблицы лексем
