@@ -2,7 +2,6 @@
 #include "LT.h"
 #include "Error.h"
 
-//TODO проблемы с пробелами ^ / \ и др
 //TODO сделать строку до 127 символов
 //Сделано: значения литерала tiny, symbolic, не 1 perform, переопределение, не определено, нельзя свдвигать строку, параметры функций
 
@@ -16,7 +15,7 @@ namespace Sem
 	void Analysis(LT::LexTable lextable, IT::IdTable idtable, Log::LOG log) {
 		for (int i = 0; i < lextable.size; i++) {
 			switch (lextable.table[i].lexema) {
-				case LEX_COMPARE:	{
+				case LEX_ASSIGN:	{
 					int y = i + 1;
 					IT::IDDATATYPE lefttype = idtable.table[lextable.table[i - 1].indxTI].iddatatype;
 					IT::IDDATATYPE righttype = lefttype;
@@ -96,7 +95,7 @@ namespace Sem
 				}
 				
 				//TODO: set symbolic r : foo(r)!
-				case LEX_ID: case LEX_LIBFUNC: case LEX_SHOW: { //параметры функции
+				case LEX_ID: case LEX_LIBFUNC: case LEX_SHOW: case LEX_SHOWSTR: { //параметры функции
 					if ((idtable.table[lextable.table[i].indxTI].idtype == IT::F || idtable.table[lextable.table[i].indxTI].idtype == IT::B)//функция или библиотечная
 						&& lextable.table[i - 1].lexema != LEX_FUNCTION) { //не объявление функции
 						int paramCounter = 0;
@@ -114,8 +113,6 @@ namespace Sem
 								{
 									throw  ERROR_THROW_IN(610, lextable.table[i].sn, 0);
 								}
-								//HACK: нельзя передать число в show
-								//TODO: неверная строка ошибки - первого определения
 							}
 						}
 						if (paramCounter < ITEntry.parameters.count)
@@ -124,6 +121,7 @@ namespace Sem
 					break;
 				}
 
+						   //TODO: семантика
 				//case LEX_SET: { //Не так работает
 				//	int y = i + 2;
 				//	IT::Entry DeclaringEntry = IT::GetEntry(idtable, lextable.table[y].indxTI);

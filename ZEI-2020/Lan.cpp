@@ -7,6 +7,7 @@
 #include <string>
 #include "FSTExpr.h"
 #include "Sem.h"
+
 //TODO: запретить определение фукнции фнутри другой функции/внутри main - мб это улучишть области видимости?
 //Норм ли что библитечные функции записываются в id столько раз сколько вызываются
 
@@ -39,23 +40,17 @@ namespace Lan
 
 			tokenIsCommited = false;
 
-			if (newLineFlag)
-			{
+			if (newLineFlag)	{
 				currentLine++;
 				currentColumn = 0;
 				newLineFlag = false;
-			}//TODO: добавить знаки,чтоб выражения х=х распознавались правильно +-=пробел*/<>
-			if (inText[i] == LEX_SPACE || inText[i] == LEX_ENDL 
-				|| inText[i] == LEX_POINT || inText[i] == LEX_COMMA || inText[i] == LEX_EXCLAMATION || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_RIGHTFIGUREBRACE || inText[i] == LEX_LEFTFIGUREBRACE
-				|| inText[i + 1] == LEX_POINT || inText[i + 1] == LEX_COMMA || inText[i +1 ] == LEX_EXCLAMATION || inText[i +1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS || inText[i+1] == LEX_RIGHTBRACE || inText[i+1] == LEX_LEFTBRACE || inText[i + 1] == LEX_RIGHTFIGUREBRACE || inText[i + 1] == LEX_LEFTFIGUREBRACE 
-				|| inText[i + 1] == LEX_MINUS || inText[i + 1] == LEX_PLUS || inText[i + 1] == LEX_EQUALITY || inText[i + 1] == LEX_STAR || inText[i + 1] == LEX_DIVISION /*| inText[i + 1] == LEX_LESS || inText[i + 1] == LEX_MORE */ || inText[i + 1] == LEX_RIGHTSHIFT || inText[i + 1] == LEX_LEFTSHIFT
-				|| inText[i] == LEX_MINUS || inText[i] == LEX_PLUS || inText[i] == LEX_EQUALITY || inText[i] == LEX_STAR || inText[i] == LEX_DIVISION /*|| inText[i] == LEX_LESS || inText[i] == LEX_MORE*/ || inText[i] == LEX_RIGHTSHIFT || inText[i] == LEX_LEFTSHIFT
-				)
-			{
+			}
+
+			if (inText[i] == LEX_SPACE || inText[i] == LEX_ENDL || S || SNEXT || ARIFM || ARIFMNEXT || LOGIC || LOGICNEXT) {
 				if (quoteFlag) 	continue;
 				if (inText[i] == LEX_ENDL)	newLineFlag = true;
 
-				if (tokenlen == 1 || inText[i+1] == LEX_EXCLAMATION || inText[i+1] == LEX_POINT || inText[i+1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS ||  inText[i+1] == LEX_COMMA || inText[i+1] == LEX_RIGHTFIGUREBRACE || inText[i+1] == LEX_LEFTFIGUREBRACE)
+				if (tokenlen == 1 ||  inText[i+1] == LEX_ASSIGN ||inText[i+1] == LEX_EXCLAMATION || inText[i+1] == LEX_LEFTHESIS || inText[i+1] == LEX_RIGHTHESIS	|| ARIFMNEXT || LOGICNEXT)
 					token[tokenlen] = LEX_END;
 				else
 					if (!quoteFlag) token[tokenlen - 1] = LEX_END;
@@ -71,13 +66,6 @@ namespace Lan
 				FST::FST FSTExclamation(token, FST_EXCLAMATION);
 				if (FST::execute(FSTExclamation)) {
 					LT::Entry *newLTEntry = new LT::Entry{ LEX_EXCLAMATION, currentLine, LT_TI_NULLIDX };
-					LT::Add(*newLexTable, *newLTEntry);
-					delete newLTEntry;
-					continue;
-				}
-				FST::FST FSTPoint (token, FST_POINT);
-				if (FST::execute(FSTPoint)) {
-					LT::Entry* newLTEntry = new LT::Entry{ LEX_POINT, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -106,27 +94,6 @@ namespace Lan
 				FST::FST FSTLeftbrace(token, FST_LEFTBRACE);
 				if (FST::execute(FSTLeftbrace)) {
 					LT::Entry* newLTEntry = new LT::Entry{ LEX_LEFTBRACE, currentLine, IT::IsId(idtable, token) };
-					LT::Add(*newLexTable, *newLTEntry);
-					delete newLTEntry;
-					continue;
-				}
-				FST::FST FSTRightfigurebrace(token, FST_RIGHTFIGUREBRACE);
-				if (FST::execute(FSTRightfigurebrace)) {
-					LT::Entry* newLTEntry = new LT::Entry{ LEX_RIGHTFIGUREBRACE, currentLine, IT::IsId(idtable, token) };
-					LT::Add(*newLexTable, *newLTEntry);
-					delete newLTEntry;
-					continue;
-				}
-				FST::FST FSTLeftfigurebrace(token, FST_LEFTFIGUREBRACE);
-				if (FST::execute(FSTLeftfigurebrace)) {
-					LT::Entry* newLTEntry = new LT::Entry{ LEX_LEFTFIGUREBRACE, currentLine, IT::IsId(idtable, token) };
-					LT::Add(*newLexTable, *newLTEntry);
-					delete newLTEntry;
-					continue;
-				}
-				FST::FST FSTComma(token, FST_COMMA);
-				if (FST::execute(FSTComma)) {
-					LT::Entry* newLTEntry = new LT::Entry{ LEX_COMMA, currentLine, IT::IsId(idtable, token) };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;
@@ -213,8 +180,31 @@ namespace Lan
 				FST::FST FSTShow(token, FST_SHOW);
 				if (FST::execute(FSTShow)) {;
 					idType = IT::B;
-
+					//а logical
 					IT::Entry *newIDEntry = new IT::Entry{};
+					strcpy_s(newIDEntry->id, token);
+					newIDEntry->idtype = idType;
+					newIDEntry->iddatatype = dataType;
+					newIDEntry->value.vtiny = TI_TINY_DEFAULT;
+					newIDEntry->value.vsymb->len = TI_SYMB_DEFAULT;
+					newIDEntry->parameters.count = 1;
+					newIDEntry->parameters.typeofparameter = IT::TINY;
+					strcpy_s(newIDEntry->value.vsymb->str, "");
+					newIDEntry->idxfirstLE = currentLine;
+					IT::Add(*newIDTable, *newIDEntry);
+
+					LT::Entry* newLTEntry = new LT::Entry{ LEX_SHOW, currentLine, IT::IsId(idtable, token) , 1};
+					LT::Add(*newLexTable, *newLTEntry);
+					delete newLTEntry;
+					delete newIDEntry;
+					continue;
+				}
+				FST::FST FSTShowstr(token, FST_SHOWSTR);
+				if (FST::execute(FSTShowstr)) {
+					;
+					idType = IT::B;
+
+					IT::Entry* newIDEntry = new IT::Entry{};
 					strcpy_s(newIDEntry->id, token);
 					newIDEntry->idtype = idType;
 					newIDEntry->iddatatype = dataType;
@@ -226,20 +216,10 @@ namespace Lan
 					newIDEntry->idxfirstLE = currentLine;
 					IT::Add(*newIDTable, *newIDEntry);
 
-					LT::Entry* newLTEntry = new LT::Entry{ LEX_SHOW, currentLine, IT::IsId(idtable, token) , 1};
+					LT::Entry* newLTEntry = new LT::Entry{ LEX_SHOWSTR, currentLine, IT::IsId(idtable, token) , 1 };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					delete newIDEntry;
-					continue;
-				}
-				FST::FST FSTLib(token, FST_LIB);
-				if (FST::execute(FSTLib)) {
-					LT::Entry* newLTEntry = new LT::Entry{ LEX_LIB, currentLine, IT::IsId(idtable, token) };
-					LT::Add(*newLexTable, *newLTEntry);
-					strcpy_s(postfix, token);
-					/*SA::OneLib(lextable, flag);*/
-					flag = true;
-					delete newLTEntry;
 					continue;
 				}
 				FST::FST FSTWhen(token, FST_WHEN);
@@ -325,12 +305,16 @@ namespace Lan
 					delete newIDEntry;
 					continue;
 				}
-				//HACK проверить, правильно ли работает 0dec, 09hex
 				FST::FST FSTTinyLiteral10(token, FST_TINYLITERAL10);
 				FST::FST FSTTinyLiteral8(token, FST_TINYLITERAL8);
 				if (FST::execute(FSTTinyLiteral10) || FST::execute(FSTTinyLiteral8)) {
-					int bufNum = std::strtol(token, NULL, 0); //HACK перевод в 8-ричную 
-					//Деление на 0 тут не проверить, так как может быть выражение
+					int bufNum;
+					if (token[strlen(token) - 1] == 'q') {
+						token[strlen(token) - 1] = LEX_END;
+						bufNum = std::strtol(token, NULL, 8); //HACK перевод в 8-ричную, можно сделать еще 
+					}
+					else 
+						bufNum = std::strtol(token, NULL, 0);
 					IT::Entry* newIDEntry = new IT::Entry{};
 					strcpy_s(newIDEntry->id, EMPTY_LITERAL);
 					newIDEntry->iddatatype = IT::TINY;
@@ -397,9 +381,9 @@ namespace Lan
 					delete newLTEntry;
 					continue;
 				}
-				FST::FST FSTCompare(token, FST_COMPARE);
-				if (FST::execute(FSTCompare)) {
-					LT::Entry *newLTEntry = new LT::Entry{ LEX_COMPARE, currentLine, LT_TI_NULLIDX };
+				FST::FST FSTAssign(token, FST_ASSIGN);
+				if (FST::execute(FSTAssign)) {
+					LT::Entry *newLTEntry = new LT::Entry{ LEX_ASSIGN, currentLine, LT_TI_NULLIDX };
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
 					continue;

@@ -13,7 +13,7 @@
 #include "MFST.h"
 #include "Sem.h"
 #include "CodeGen.h"
-
+//TODO: функции стлиб возвращают int > tiny
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -41,7 +41,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		std::cout << "Всего строк   : " << in.lines << std::endl;
 		std::cout << "Пропущено     : " << in.ignor << std::endl;
 
-		Out::WriteOut(out, in);
+		//Out::WriteOut(out, in);
 		
 
 		Log::WriteLog(log);
@@ -52,15 +52,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		Lan::Analysis((char*)in.text, log, lextable, idtable);
 
 		
-
-
 		MFST_TRACE_START(log);
 		MFST::Mfst mfst(lextable, GRB::getGreibach());
 		mfst.start(log);
 		mfst.savededucation();
 		mfst.printrules(log);
 
-		
 
 		Sem::Analysis(lextable, idtable, log);
 		
@@ -68,9 +65,9 @@ int _tmain(int argc, _TCHAR* argv[])
 		Pn::ToPolish(lextable, idtable);
 		Log::WriteLexTable(log, lextable);
 		Log::WriteIdTable(log, idtable);
+
 		//Log::WriteLexTable(log, lextable);
 	
-
 		//CG::Generate(lextable,idtable, log, out);
 		Out::Close(out);
 		Log::Close(log);

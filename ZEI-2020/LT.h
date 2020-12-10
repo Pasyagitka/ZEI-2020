@@ -13,7 +13,8 @@
 #define LEX_LIB			'z'
 #define LEX_WHEN		'w' //if
 #define LEX_OTHERWISE	'o' // else
-#define LEX_SHOW		'h'		//вывод h
+#define LEX_SHOW		'h'		//вывод tiny
+#define LEX_SHOWSTR		'r'		//вывод строки
 #define LEX_FUNCTION	'f'
 #define LEX_LIBFUNC		'b'
 #define LEX_GIVEBACK	'g'
@@ -23,19 +24,15 @@
 #define LEX_LEFTSHIFT   '\\'
 #define LEX_RIGHTSHIFT	'/'
 
-#define LEX_POINT		'.'
-#define LEX_COMMA		','
 #define LEX_LEFTBRACE	'['
 #define LEX_RIGHTBRACE	']'
 #define LEX_LEFTHESIS	'('
 #define LEX_RIGHTHESIS	')'
-#define LEX_RIGHTFIGUREBRACE '}'
-#define LEX_LEFTFIGUREBRACE	'{'
 #define LEX_MORE		'>'
 #define LEX_LESS		'<'
 #define LEX_EQUALITY	'='
 #define LEX_INEQUALITY	'^'
-#define LEX_COMPARE		':' //?
+#define LEX_ASSIGN		':' //?
 #define LEX_PLUS		'+'
 #define LEX_MINUS		'-'
 #define LEX_STAR		'*'
@@ -44,7 +41,6 @@
 #define LEX_END			'\0'
 #define LEX_SPACE		' '
 #define LEX_APOS		'\''
-#define LEX_SEMICOLON	';'
 #define LEX_QUOTE		'"'
 #define LEX_FREE		'%'	//для удаленных
 #define LEX_AT			'@'

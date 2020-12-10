@@ -2,10 +2,10 @@
 #include <tchar.h>
 
 #define PARM_IN L"-in:"					// ключ для файла исходного кода
-#define PARM_OUT L"-out:"				// ключ для файла объектного кода
+#define PARM_OUT L"-out:"		 
 #define PARM_LOG L"-log:"				// ключ для файла журнала
 #define PARM_MAX_SIZE 300				// максимальная длинна строки параметра
-#define PARAM_OUT_DEFAULT_EXT L".out"	//расширение файла объектного кода по умолчанию
+#define PARAM_OUT_DEFAULT_EXT L".asm"	
 #define PARM_LOG_DEFAULT_EXC  L".log"	// расширение файла протокола по умолчанию
 
 namespace Parm // обработка входных параметров

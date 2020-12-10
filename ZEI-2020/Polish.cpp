@@ -7,14 +7,16 @@
 #include <string>
 #include <iostream>
 //TODO первое вхождение идентификатора? str
-//TODO: есл что сюда можно дописать предыдущую лексему функции - i d h
+//TODO: есл что сюда можно дописать предыдущую лексему функции - i d h а r
+
+//TODO; входить в польскую когда надо и не трогать операторы сдвига и тп
 namespace Pn {
 	void ToPolish(LT::LexTable& lextable, IT::IdTable& idtable) {
 		for (int i = 0; i < lextable.size; i++) {
 			if (lextable.table[i].lexema == ':')
 				PolishNotation(i +1, lextable, idtable);
-			if (lextable.table[i].lexema == 'h')
-				PolishNotation(i, lextable, idtable);
+		/*	if (lextable.table[i].lexema == 'h')
+				PolishNotation(i, lextable, idtable);*/
 		}
 	}
 
@@ -23,9 +25,8 @@ namespace Pn {
 		switch (c)
 		{
 		case LEX_LEFTHESIS: case LEX_RIGHTHESIS:		return 0;
-		case LEX_COMMA:									return 1;
-		case LEX_PLUS:  case LEX_MINUS:					return 2;
-		case LEX_STAR: case LEX_DIVISION:				return 3;
+		case LEX_PLUS:  case LEX_MINUS:					return 1;
+		case LEX_STAR: case LEX_DIVISION:				return 2;
 		default:										return 0;
 		}
 	}
@@ -74,14 +75,15 @@ namespace Pn {
 				}
 				continue;
 			}
-			if (temp.lexema == LEX_COMMA) {
+			//может быть только 1 параметр или 0 у меня
+		/*	if (temp.lexema == LEX_COMMA) {
 				paramcounter++;
 				while (stack.top().lexema == LEX_PLUS || stack.top().lexema == LEX_MINUS || stack.top().lexema == LEX_STAR || stack.top().lexema == LEX_DIVISION) {
 					ResultingString.push_back(stack.top());
 					stack.pop();
 				}
 				continue;
-			}
+			}*/
 
 			if (temp.lexema == LEX_LEFTHESIS) {
 				stack.push(temp);

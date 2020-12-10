@@ -5,7 +5,7 @@
 #define IN_CODE_N '\0'			//символ конца
 #define IN_CODE_QUOTE			'"' 
 #define IN_CODE_SPACE			' '
-#define IN_CODE_COMPARE			':'
+#define IN_CODE_ASSIGN			':'
 #define IN_CODE_COMMA			','
 #define IN_CODE_LEFTBRACE		'{'
 #define IN_CODE_RIGHTBRACE		'}'
@@ -17,8 +17,11 @@
 #define IN_CODE_DIVISION		'#' 
 #define IN_CODE_EUALITY			'='
 #define IN_CODE_COMMENT			'~'
-#define IN_CODE_LEFTSHIFT       '<'
-#define IN_CODE_RIGHTSHIFT      '>'
+#define IN_CODE_LEFTSHIFT       '\\'
+#define IN_CODE_RIGHTSHIFT      '/'
+#define IN_CODE_LESS			'<'
+#define IN_CODE_MORE			'>'
+#define IN_CODE_INEQUALITY		'^'
 
 
 // таблица проверки входной информации, индекс = код (Windows-1251) символа

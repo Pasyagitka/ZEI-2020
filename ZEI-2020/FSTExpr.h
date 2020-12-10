@@ -71,6 +71,14 @@
 	FST::NODE(1, FST::RELATION('w', 4)),\
 	FST::NODE()
 
+#define FST_SHOWSTR 6, \
+	FST::NODE(1, FST::RELATION('s', 1)),\
+	FST::NODE(1, FST::RELATION('h', 2)),\
+	FST::NODE(1, FST::RELATION('o', 3)),\
+	FST::NODE(1, FST::RELATION('w', 4)),\
+	FST::NODE(1, FST::RELATION('s', 5)),\
+	FST::NODE()
+
 #define FST_LOOP 5, \
 	FST::NODE(1, FST::RELATION('l', 1)),\
 	FST::NODE(1, FST::RELATION('o', 2)),\
@@ -78,11 +86,6 @@
 	FST::NODE(1, FST::RELATION('p', 4)),\
 	FST::NODE()
 
-#define FST_LIB 4, \
-	FST::NODE(1, FST::RELATION('z', 1)),\
-	FST::NODE(1, FST::RELATION('e', 2)),\
-	FST::NODE(1, FST::RELATION('i', 3)),\
-	FST::NODE()
 
 #define FST_WHEN 5, \
    FST::NODE(1, FST::RELATION('w',1)),\
@@ -145,20 +148,20 @@
 #define FST_TINYLITERAL10 2, \
 	FST::NODE(20, \
 	FST::RELATION('1', 0), FST::RELATION('2', 0), FST::RELATION('3', 0), FST::RELATION('4', 0), FST::RELATION('5', 0), FST::RELATION('6', 0),\
-	FST::RELATION('7', 0), FST::RELATION('8', 0), FST::RELATION('9', 0),\
+	FST::RELATION('7', 0), FST::RELATION('8', 0), FST::RELATION('9', 0), FST::RELATION('0', 0),\
 	\
 	FST::RELATION('1', 1), FST::RELATION('2', 1), FST::RELATION('3', 1), FST::RELATION('4', 1), FST::RELATION('5', 1), FST::RELATION('6', 1),\
 	FST::RELATION('7', 1), FST::RELATION('8', 1), FST::RELATION('9', 1), FST::RELATION('0', 1)),\
 	FST::NODE()
 
 #define FST_TINYLITERAL8 3, \
-	FST::NODE(1, FST::RELATION('0', 1)),  \
 	FST::NODE(16, \
-	FST::RELATION('1', 1), FST::RELATION('1', 1), FST::RELATION('3', 1), FST::RELATION('4', 1), FST::RELATION('5', 1), FST::RELATION('6', 1),\
-	FST::RELATION('7', 1), FST::RELATION('0', 1),\
+	FST::RELATION('1', 0), FST::RELATION('2', 0), FST::RELATION('3', 0), FST::RELATION('4', 0), FST::RELATION('5', 0), FST::RELATION('6', 0),\
+	FST::RELATION('7', 0), FST::RELATION('0', 0),\
 	\
-	FST::RELATION('1', 2), FST::RELATION('2', 2), FST::RELATION('3', 2), FST::RELATION('4', 2), FST::RELATION('5', 2), FST::RELATION('6', 2),\
-	FST::RELATION('7', 2), FST::RELATION('0', 2)),\
+	FST::RELATION('1', 1), FST::RELATION('2', 1), FST::RELATION('3', 1), FST::RELATION('4', 1), FST::RELATION('5', 1), FST::RELATION('6', 1),\
+	FST::RELATION('7', 1), FST::RELATION('0', 1)),\
+	FST::NODE(1, FST::RELATION('q', 2)),  \
 	FST::NODE()
 
 #define FST_SYMBOLICLITERAL 4, \
@@ -217,14 +220,6 @@
     FST::NODE(1, FST::RELATION('!',1)),\
     FST::NODE()
 
-#define FST_POINT 2,\
-    FST::NODE(1, FST::RELATION('.',1)),\
-    FST::NODE()
-
-#define FST_COMMA 2,\
-    FST::NODE(1, FST::RELATION(',',1)),\
-    FST::NODE()
-
 #define FST_LEFTBRACE 2,\
     FST::NODE(1, FST::RELATION('[',1)),\
     FST::NODE()
@@ -241,19 +236,9 @@
 	FST::NODE(1, FST::RELATION(')', 1)),\
 	FST::NODE()
 
-#define FST_LEFTFIGUREBRACE 2,	\
-	FST::NODE(1, FST::RELATION('{', 1)),\
-	FST::NODE()
-
-#define FST_RIGHTFIGUREBRACE 2,	\
-	FST::NODE(1, FST::RELATION('}', 1)),\
-	FST::NODE()
-
-
-#define FST_COMPARE 2, \
+#define FST_ASSIGN 2, \
    FST::NODE(1, FST::RELATION(':', 1)),\
    FST::NODE()
-
 
 #pragma region ARIFM
 	#define FST_PLUS 2, \

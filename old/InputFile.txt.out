@@ -7,7 +7,7 @@ giveback mystr!
 perform 
 [
 
-set symbolic r : show("f")!
+
 set tiny x : 10!
 set tiny y : 016!
 
