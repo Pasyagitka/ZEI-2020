@@ -14,8 +14,8 @@ namespace Pn {
 		for (int i = 0; i < lextable.size; i++) {
 			if (lextable.table[i].lexema == ':')
 				PolishNotation(i +1, lextable, idtable);
-			/*if (lextable.table[i].lexema == 'h')
-				PolishNotation(i, lextable, idtable);*/
+			if (lextable.table[i].lexema == 'h')
+				PolishNotation(i, lextable, idtable);
 		}
 	}
 
@@ -45,12 +45,12 @@ namespace Pn {
 			temp = LT::GetEntry(lextable, i);
 
 
-			if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL /*|| temp.lexema == LEX_LIBFUNC || temp.lexema == LEX_SHOW*/)
+			if (temp.lexema == LEX_ID || temp.lexema == LEX_LITERAL || temp.lexema == LEX_LIBFUNC || temp.lexema == LEX_SHOW)
 			{
-				//if (lextable.table[i].indxTI != -1 && (idtable.table[lextable.table[i].indxTI].idtype== IT::F
-				//	|| idtable.table[lextable.table[i].indxTI].idtype == IT::B))
-				//	functionflag = true; //идентификатор функции удаляется А ТИП???
-				//else 
+				if (lextable.table[i].indxTI != -1 && (idtable.table[lextable.table[i].indxTI].idtype== IT::F
+					|| idtable.table[lextable.table[i].indxTI].idtype == IT::B))
+					functionflag = true; //идентификатор функции удаляется А ТИП???
+				else 
 				ResultingString += temp.lexema;
 				continue;
 			}
@@ -72,7 +72,7 @@ namespace Pn {
 				continue;
 			}
 			if (temp.lexema == LEX_COMMA) {
-				//paramcounter++;
+				paramcounter++;
 				while (stack.top() == LEX_PLUS || stack.top() == LEX_MINUS || stack.top() == LEX_STAR || stack.top() == LEX_DIVISION) {
 					ResultingString += stack.top();
 					stack.pop();
@@ -91,11 +91,11 @@ namespace Pn {
 					stack.pop();
 				}
 				stack.pop();
-				/*if (functionflag) {
+				if (functionflag) {
 					ResultingString += LEX_AT;
 					ResultingString += std::to_string(paramcounter + 1);
 					functionflag = false;
-				}*/
+				}
 				continue;
 			}
 
@@ -108,7 +108,7 @@ namespace Pn {
 					ResultingString += stack.top();
 					stack.pop();
 				}
-				//std::cout << ResultingString << std::endl; //таблица лексем
+				std::cout << ResultingString << std::endl; //таблица лексем
 				int i = lextable_pos;
 				int j = 0;
 				for (; lextable.table[i].lexema != LEX_EXCLAMATION; i++, j++) {

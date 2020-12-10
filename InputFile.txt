@@ -9,6 +9,7 @@ perform
 ~set symbolic r : foo(r)!
 set tiny x : 0!
 set tiny y : 010!
+
 y : x / 2!
 set tiny a : x+y+2!
 set symbolic 	str : "sp ace"!
