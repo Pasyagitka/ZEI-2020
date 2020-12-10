@@ -7,8 +7,9 @@ giveback mystr!
 perform 
 [
 
-set tiny x : 0!
-set tiny y : 010!
+set symbolic r : show("f")!
+set tiny x : 10!
+set tiny y : 016!
 
 y : x / 2!
 set tiny a : x+y+2!
@@ -17,7 +18,6 @@ set symbolic mystr : "а бв?гдежзикла	мопростуфхцч"!
 set logical mb : false! 
 when(x ^ y)
 [
-
 set tiny m!
 show("string")!
 
