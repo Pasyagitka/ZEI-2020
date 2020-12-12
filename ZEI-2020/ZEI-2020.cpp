@@ -51,7 +51,9 @@ int _tmain(int argc, _TCHAR* argv[])
 		
 		Lan::Analysis((char*)in.text, log, lextable, idtable);
 
-		
+		Log::WriteLexTable(log, lextable);
+		Log::WriteIdTable(log, idtable);
+
 		MFST_TRACE_START(log);
 		MFST::Mfst mfst(lextable, GRB::getGreibach());
 		mfst.start(log);
@@ -62,13 +64,16 @@ int _tmain(int argc, _TCHAR* argv[])
 		Sem::Analysis(lextable, idtable, log);
 		
 
-		Pn::ToPolish(lextable, idtable);
-		Log::WriteLexTable(log, lextable);
-		Log::WriteIdTable(log, idtable);
+		//Pn::ToPolish(lextable, idtable);
+		
 
 		//Log::WriteLexTable(log, lextable);
 	
+
+		CodeGeneration::StartGeneration(lextable, idtable, out);
 		//CG::Generate(lextable,idtable, log, out);
+		//Out::WriteOut(out, in);
+
 		Out::Close(out);
 		Log::Close(log);
 		//delete in.text;

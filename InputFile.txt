@@ -1,6 +1,6 @@
 tiny func  	 foo(symbolic str)
 [
-set symbolic mystr : "max"!
+shows("symblen")!
 set tiny p    : symblen(str)!
 giveback p!
 ]
@@ -8,14 +8,15 @@ perform
 [
 ~set symbolic r : foo(r)!
 ~set symbolic r : show("f")!
-set tiny x : 10!
-set tiny y : 16q!
+set tiny x : 100b!
+set tiny y : 16h!
 
 y : x / 2!
-set tiny a : x+y+2!
+set tiny a : x+y+22h!
 set symbolic 	str : "sp ace"!
 set symbolic  mystr : "а бв?гдежзикла	мопростуфхцч"!
 set logical mb : false!                                                                    ~алащуащуа
+set tiny foolen : foo(mystr)!
 when (x ^ y)
 [
 a:101!
@@ -24,13 +25,14 @@ show(a)!
 ]
 otherwise
 [
+show(foolen)!
 shows(str)!
 ]
 set tiny fef :  (x * 12)	* (a #y)!
 
 loop(fef < 5)
 [
-    fef : fef+1!
+ fef : fef+1!
 ]
 ~show(z)!
 ]

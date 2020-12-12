@@ -121,7 +121,6 @@ namespace Sem
 					break;
 				}
 
-						   //TODO: семантика
 				//case LEX_SET: { //Не так работает
 				//	int y = i + 2;
 				//	IT::Entry DeclaringEntry = IT::GetEntry(idtable, lextable.table[y].indxTI);

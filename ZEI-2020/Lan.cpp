@@ -1,8 +1,10 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Lan.h"
 #include "Log.h"
 #include "LT.h"
 #include "IT.h"
 #include "FST.h"
+
 
 #include <string>
 #include "FSTExpr.h"
@@ -21,12 +23,14 @@ namespace Lan
 		bool tokenIsCommited(false), check(false), newLineFlag(false), flag(false);
 		bool quoteFlag(false);
 		int entryPoint = 0;
-		//TODO строка отнять кавычки
 		char postfix[10];
 		char token[258]{};
 		char anotherbuf[10];
-
+		int literalcount = 1;
 		int parameterscounter = 0;
+
+		char* nLiteral = new char[3]{ "N" };
+		char* literal_c = new char[10]{ "" }; // строковая запись счетчика
 
 		LT::LexTable* newLexTable = &lextable;
 		IT::IdTable* newIDTable = &idtable;
@@ -39,6 +43,7 @@ namespace Lan
 			if (inText[i] == LEX_QUOTE)	quoteFlag = !quoteFlag;
 
 			tokenIsCommited = false;
+			strcpy(nLiteral, "N");
 
 			if (newLineFlag)	{
 				currentLine++;
@@ -283,21 +288,24 @@ namespace Lan
 				FST::FST FSTLogicalLiteralFalse(token, FST_FALSE);
 				if (FST::execute(FSTLogicalLiteralFalse) || FST::execute(FSTLogicalLiteralTrue)) {
 					IT::Entry* newIDEntry = new IT::Entry{};
-					strcpy_s(newIDEntry->id, EMPTY_LITERAL);
+					
+					_itoa_s(literalcount++, literal_c, sizeof(char) * 10, 10);
+					strcpy(newIDEntry->id, strcat(nLiteral, literal_c));
+
 					newIDEntry->iddatatype = IT::LGCL;
 					newIDEntry->idtype = IT::L;
 					strcpy_s(newIDEntry->value.vlogical, token);
-					for (int i = 0; i < newIDTable->size; i++) {
+					/*for (int i = 0; i < newIDTable->size; i++) {
 						if (strcmp((*newIDTable).table[i].value.vlogical, newIDEntry->value.vlogical) == 0) {
 							check = true;
 							break;
 						}
 						else check = false;
-					}
+					}*/
 					newIDEntry->idxfirstLE = currentLine;
-					if (!check) {
+					/*if (!check) {*/
 						IT::Add(*newIDTable, *newIDEntry);
-					}
+					/*}*/
 					LT::Entry *newLTEntry = new LT::Entry{ LEX_LITERAL, currentLine, idtable.size - 1 };
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable, *newLTEntry);
@@ -305,53 +313,76 @@ namespace Lan
 					delete newIDEntry;
 					continue;
 				}
+				FST::FST FSTTinyLiteral2(token, FST_TINYLITERAL2);
+				FST::FST FSTTinyLiteral16(token, FST_TINYLITERAL16);
 				FST::FST FSTTinyLiteral10(token, FST_TINYLITERAL10);
 				FST::FST FSTTinyLiteral8(token, FST_TINYLITERAL8);
-				if (FST::execute(FSTTinyLiteral10) || FST::execute(FSTTinyLiteral8)) {
+				if (FST::execute(FSTTinyLiteral10) || FST::execute(FSTTinyLiteral8) || FST::execute(FSTTinyLiteral16) || FST::execute(FSTTinyLiteral2)){
 					int bufNum;
 					if (token[strlen(token) - 1] == 'q') {
 						token[strlen(token) - 1] = LEX_END;
-						bufNum = std::strtol(token, NULL, 8); //HACK перевод в 8-ричную, можно сделать еще 
+						bufNum = std::strtol(token, NULL, 8); 
+					}
+					else if (token[strlen(token) - 1] == 'h') {
+						token[strlen(token) - 1] = LEX_END;
+						bufNum = std::strtol(token, NULL, 16);
+					}
+					else if (token[strlen(token) - 1] == 'b') {
+						token[strlen(token) - 1] = LEX_END;
+						bufNum = std::strtol(token, NULL, 2);
 					}
 					else 
-						bufNum = std::strtol(token, NULL, 0);
+						bufNum = std::strtol(token, NULL, 10);
 					IT::Entry* newIDEntry = new IT::Entry{};
-					strcpy_s(newIDEntry->id, EMPTY_LITERAL);
+
+					_itoa_s(literalcount++, literal_c, sizeof(char) * 10, 10);
+					strcpy(newIDEntry->id, strcat(nLiteral, literal_c));
+
 					newIDEntry->iddatatype = IT::TINY;
 					newIDEntry->idtype = IT::L;
 					if (bufNum > MAXTINY || bufNum < MINTINY)	//TINY
 						throw ERROR_THROW_IN(309, currentLine, currentColumn);
 					newIDEntry->value.vtiny = (int)bufNum;
 					strcpy_s(newIDEntry->value.vsymb->str, token);
-					for (int i = 0; i < newIDTable->size; i++) { //не добавляем если уже встречался
-						if (newIDEntry->value.vtiny == (*newIDTable).table[i].value.vtiny) {
-							check = true;
-							break;
-						}
-						else  check = false;
-					}
-					newIDEntry->idxfirstLE = currentLine;
-					if (!check)
+
+					/*if (IT::IsId(idtable, token) == TI_NULLIDX)*/
 						IT::Add(*newIDTable, *newIDEntry);
-					LT::Entry *newLTEntry = new LT::Entry{ LEX_LITERAL, currentLine, idtable.size-1 };
+					
+					//for (int i = 0; i < newIDTable->size; i++) { //не добавляем если уже встречался
+					//	if (newIDEntry->value.vtiny == (*newIDTable).table[i].value.vtiny) {
+					//		check = true;
+					//		break;
+					//	}
+					//	else  check = false;
+					//}
+					newIDEntry->idxfirstLE = currentLine; //или индекс
+					//if (!check)
+					//	IT::Add(*newIDTable, *newIDEntry);
+
+
+					LT::Entry *newLTEntry = new LT::Entry{ LEX_LITERAL, currentLine, idtable.size-1 };//-1
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable,* newLTEntry);
 					delete newLTEntry;
 					delete newIDEntry;
 					continue;
 				}
+				//TODO isliteral?
 				FST::FST FSTSymbolicLiteral(token, FST_SYMBOLICLITERAL);
 				if (FST::execute(FSTSymbolicLiteral)) {
 
 					IT::Entry* newIDEntry = new IT::Entry{};
-					strcpy_s(newIDEntry->id, EMPTY_LITERAL);
+
+					_itoa_s(literalcount++, literal_c, sizeof(char) * 10, 10);
+				    strcpy(newIDEntry->id, strcat(nLiteral, literal_c));
+	
 					newIDEntry->iddatatype = IT::SYMB;
 					newIDEntry->idtype = IT::L;
 					if (strlen(token) > SYMBMAXLEN) //max длина строки будет
 						throw ERROR_THROW_IN(310, currentLine, currentColumn);
 					newIDEntry->value.vsymb->len = strlen(token);
 					strcpy_s(newIDEntry->value.vsymb->str, token);
-					for (int i = 0; i < newIDTable->size; i++)
+					/*for (int i = 0; i < newIDTable->size; i++)
 					{
 						if (strcmp(newIDEntry->value.vsymb->str, (*newIDTable).table[i].value.vsymb->str) == 0)
 						{
@@ -362,12 +393,12 @@ namespace Lan
 						else check = false;
 					}
 					newIDEntry->idxfirstLE = currentLine;
-					if (!check)
+					if (!check)*/
 					{
 						IT::Add(*newIDTable, *newIDEntry);
 					}
 
-					LT::Entry *newLTEntry = new  LT::Entry{ LEX_LITERAL, currentLine, idtable.size - 1 };
+					LT::Entry *newLTEntry = new  LT::Entry{ LEX_LITERAL, currentLine, idtable.size-1 }; //-1
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;
@@ -499,7 +530,7 @@ namespace Lan
 						newIDEntry->idxfirstLE = currentLine;
 						IT::Add(*newIDTable, *newIDEntry);
 					}
-					LT::Entry *newLTEntry = new LT::Entry{ LEX_ID, currentLine, IT::IsId(idtable, token) };
+					LT::Entry *newLTEntry = new LT::Entry{ LEX_ID, currentLine, IT::IsId(idtable, token, postfix) };
 					strcpy_s(newLTEntry->buf, token);
 					LT::Add(*newLexTable, *newLTEntry);
 					delete newLTEntry;

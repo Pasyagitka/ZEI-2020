@@ -159,6 +159,7 @@
     <ClCompile Include="ZEI-2020.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CodeGen.h" />
     <ClInclude Include="Error.h" />
     <ClInclude Include="FSTExpr.h" />
     <ClInclude Include="FST.h" />
@@ -174,7 +175,6 @@
     <ClInclude Include="Parm.h" />
     <ClInclude Include="Polish.h" />
     <ClInclude Include="Sem.h" />
-    <ClInclude Include="CodeGen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

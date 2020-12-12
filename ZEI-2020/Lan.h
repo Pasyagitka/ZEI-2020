@@ -2,11 +2,13 @@
 #include "Log.h"
 #include "LT.h"
 #include "IT.h"
+
+
 #define MINTINY -128
 #define MAXTINY 127
 #define SYMBMAXLEN 127
 
-#define EMPTY_LITERAL " "
+
 #define POSTFIXGLOBAL "GLB"
 #define EMPTYSYMBLITERAL "\"\""
 

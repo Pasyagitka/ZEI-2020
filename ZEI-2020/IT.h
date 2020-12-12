@@ -26,7 +26,7 @@ namespace IT
 	struct Entry
 	{
 		short idxfirstLE;//индекс первой строки в таблице лексем
-		char id[ID_MAXSIZE * 2];//идентификатор(автоматически усекается до ID_MAXSIZE)
+		char id[ID_MAXSIZE * 2] = "";//идентификатор(автоматически усекается до ID_MAXSIZE)
 		char postfix[ID_MAXSIZE];
 		IDDATATYPE iddatatype = IDDATATYPE::UNDEF;//тип данных
 		IDTYPE idtype = IDTYPE::U;//тип идентификатора.

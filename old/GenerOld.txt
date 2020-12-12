@@ -1,0 +1,279 @@
+
+
+//#include "Out.h"
+//#include "Parm.h"
+//#include "LT.h"
+//#include "IT.h"
+//#include "Log.h"
+//#include "CodeGen.h"
+//#include <string>
+//#include <stack>
+//#include <iostream>
+//using namespace std;
+//
+//#define HEADER \
+//".586P\n\
+//.model flat, stdcall\n\
+//includelib libucrt.lib\n\
+//includelib kernel32.lib\n\
+//includelib \"../Debug/ZEI.lib\"\n" 
+//
+//#define PROTO	"ExitProcess PROTO : DWORD\n\
+//EXTRN show : PROC\n\
+//EXTRN symblen : PROC\n\
+//EXTRN symbtotiny : PROC\n"
+//
+//#define STACK   ".STACK 4096\n"
+//#define CONST	".CONST\n"
+//#define DATA	".DATA\n"
+//#define CODE	".CODE\n"
+//
+////TODO: представление bool в asm?
+//namespace CG {
+//	void Generate(LT::LexTable lextable, IT::IdTable idtable, Log::LOG log, Out::OUT out) {
+//		stack<char*> stk;
+//		int num_of_points = 0,
+//			num_of_ret = 0,
+//			num_of_ends = 0,
+//			countParm = 0;
+//		string strret = string(),
+//			func_name = string();
+//		bool flag_func = false,
+//			flag_ret = false,
+//			flag_go = false,
+//			flag_if = false,
+//			flag_then = false,
+//			flag_else = false,
+//			flag_strlen = false,
+//			flag_strcmp = false,
+//			flag_random = false,
+//			flag_callfunc = false,
+//			flag_condition = false,
+//			flag_dir = false;
+//
+//
+//
+//
+//
+//		*(out.stream) << HEADER << std::endl;
+//		*(out.stream) << PROTO << std::endl;
+//		*(out.stream) << STACK << std::endl;
+//		*(out.stream) << CONST << std::endl;
+//			
+//		for (int i = 0; i < idtable.size; i++)
+//		{
+//			if (idtable.table[i].idtype == IT::L)
+//			{
+//				*(out.stream) << "\t" << idtable.table[i].id;
+//				if (idtable.table[i].iddatatype == IT::SYMB)
+//					*(out.stream) << " BYTE " << idtable.table[i].value.vsymb->str << ", 0";
+//				if (idtable.table[i].iddatatype == IT::TINY )
+//					*(out.stream) << " SBYTE " << idtable.table[i].value.vtiny;
+//				if (idtable.table[i].iddatatype == IT::LGCL)
+//					*(out.stream) << " SBYTE " << (idtable.table[i].value.vlogical == "true") ? 1 : 0;
+//				*(out.stream) << '\n';
+//			}
+//		}
+//
+//		//Если литерал 0, он не пишется никуда, а строку сразу нулем
+//		*(out.stream) << DATA << std::endl;
+//
+//		for (int i = 0; i < lextable.size; i++)
+//		{
+//			if (lextable.table[i].lexema == LEX_SET)
+//			{
+//				if (idtable.table[lextable.table[i + 2].indxTI].idtype == IT::V)
+//				{
+//					*(out.stream) << "\t" << idtable.table[lextable.table[i + 2].indxTI].id << "-" << idtable.table[lextable.table[i + 2].indxTI].postfix;
+//					if (idtable.table[lextable.table[i + 2].indxTI].iddatatype == IT::SYMB)
+//					{
+//						*(out.stream) << " DWORD ?\n";
+//					}
+//					if (idtable.table[lextable.table[i + 2].indxTI].iddatatype == IT::TINY || idtable.table[lextable.table[i + 2].indxTI].iddatatype == IT::LGCL)
+//					{
+//						*(out.stream) << " SDWORD 0\n";
+//					}
+//				}
+//			}
+//		}
+//
+//
+//		*(out.stream) << CODE << std::endl;
+//		for (int i = 0; i < lextable.size; i++)
+//		{
+//			switch (lextable.table[i].lexema)	{
+//				case LEX_FUNCTION:			{
+//					while (lextable.table[i].lexema != LEX_RIGHTHESIS)
+//					{
+//						if (lextable.table[i].lexema == LEX_ID && idtable.table[lextable.table[i].indxTI].idtype == IT::F)
+//						{
+//							*(out.stream) << (func_name = string((char*)idtable.table[lextable.table[i].indxTI].id)) << " PROC ";
+//							cout << (func_name = string((char*)idtable.table[lextable.table[i].indxTI].id)) << " PROC ";
+//						}
+//						if (lextable.table[i].lexema == LEX_ID && idtable.table[lextable.table[i].indxTI].idtype == IT::P)
+//						{
+//							*(out.stream) << idtable.table[lextable.table[i].indxTI].id << " : ";
+//							cout << idtable.table[lextable.table[i].indxTI].id << " : ";
+//							if (idtable.table[lextable.table[i].indxTI].iddatatype == IT::SYMB)
+//							{
+//								*(out.stream) << "SDWORD";
+//								cout << "SDWORD";
+//
+//							}
+//							else
+//							{
+//								*(out.stream) << "DWORD";
+//								cout << "DWORD";
+//							}
+//						}
+//						i++;
+//					}
+//					flag_func = true;
+//					*(out.stream) << "\n";
+//					cout << "\n";
+//					break;
+//				}
+//
+//				case LEX_PERFORM:
+//				{
+//					flag_go = true;
+//					*(log.stream) << "main PROC\n";
+//					break;
+//				}
+//				case LEX_ASSIGN:
+//				{
+//					int result_position = i - 1;
+//					while (lextable.table[i].lexema != LEX_EXCLAMATION)
+//					{
+//						switch (lextable.table[i].lexema)	{
+//							case LEX_ID:
+//							case LEX_LITERAL: {
+//								if (idtable.table[lextable.table[i].indxTI].idtype == IT::F)
+//								{
+//									flag_callfunc = true;
+//								}
+//								if (idtable.table[lextable.table[i].indxTI].iddatatype == IT::TINY || idtable.table[lextable.table[i].indxTI].iddatatype == IT::LGCL)
+//								{
+//									*(out.stream) << "\tpush " << idtable.table[lextable.table[i].indxTI].id << "\n";
+//									cout << "\tpush " << idtable.table[lextable.table[i].indxTI].id << "\n";
+//									stk.push(idtable.table[lextable.table[i].indxTI].id);
+//									break;
+//								}
+//								if (idtable.table[lextable.table[i].indxTI].iddatatype == IT::SYMB)
+//								{
+//									char* s;
+//									if (idtable.table[lextable.table[i].indxTI].idtype == IT::L)
+//									{
+//										*(out.stream) << "\tpush offset " << idtable.table[lextable.table[i].indxTI].id << "\n";
+//										cout << "\tpush offset " << idtable.table[lextable.table[i].indxTI].id << "\n";
+//										s = new char[8]{ "offset " };
+//									}
+//									else
+//									{
+//										*(out.stream) << "\tpush " << idtable.table[lextable.table[i].indxTI].id << "\n";
+//										cout << "\tpush " << idtable.table[lextable.table[i].indxTI].id << "\n";
+//										s = new char[1]{ "" };
+//									}
+//									size_t len1 = strlen((char*)s);
+//									size_t len2 = strlen((char*)idtable.table[lextable.table[i].indxTI].id);
+//									char* result = (char*)malloc(len1 + len2 + 1);
+//									memcpy(result, s, len1);
+//									memcpy(result + len1, (char*)idtable.table[lextable.table[i].indxTI].id, len2 + 1);
+//									stk.push(result);
+//									break;
+//								}
+//							}
+//							case LEX_STAR: {
+//								*(out.stream) << "\tpop eax\n\tpop ebx\n";
+//								*(out.stream) << "\tmul ebx\n\tpush eax\n";
+//								cout << "\tpop eax\n\tpop ebx\n";
+//								cout << "\tmul ebx\n\tpush eax\n";
+//								break;
+//							}
+//							case LEX_PLUS: {
+//								*(out.stream) << "\tpop eax\n\tpop ebx\n";
+//								*(out.stream) << "\tadd eax, ebx\n\tpush eax\n";
+//								cout << "\tpop eax\n\tpop ebx\n";
+//								cout << "\tadd eax, ebx\n\tpush eax\n";
+//								break;
+//							}
+//							case LEX_MINUS: {
+//								*(out.stream) << "\tpop ebx\n\tpop eax\n";
+//								*(out.stream) << "\tsub eax, ebx\n\tpush eax\n";
+//								cout << "\tpop ebx\n\tpop eax\n";
+//								cout << "\tsub eax, ebx\n\tpush eax\n";
+//								break;
+//							}
+//							case LEX_DIVISION: {
+//								flag_dir = true;
+//								*(out.stream) << "\tpop ebx" << endl;
+//								*(out.stream) << "\tmov edx, 0 " << endl;
+//								*(out.stream) << "\tpop eax" << endl;
+//								*(out.stream) << "\tcmp ebx, 0" << endl;
+//								*(out.stream) << "\tje finish" << endl;
+//								*(out.stream) << "\tidiv ebx" << endl;
+//								*(out.stream) << "\tpush eax" << endl;
+//								cout << "\tpop ebx" << endl;
+//								cout << "\tmov edx, 0 " << endl;
+//								cout << "\tpop eax" << endl;
+//								cout << "\tcmp ebx, 0" << endl;
+//								cout << "\tje finish" << endl;
+//								cout << "\tidiv ebx" << endl;
+//								cout << "\tpush eax" << endl;
+//								break;
+//							}
+//								//<>\/
+//							case LEX_LIBFUNC: {
+//								if (idtable.table[lextable.table[i].indxTI].id == "symblen")
+//									flag_strlen = true;
+//								if (idtable.table[lextable.table[i].indxTI].id == "symbtotiny")
+//									flag_strcmp = true;
+//								break;
+//							}
+//							case '@': {
+//								countParm = (char)lextable.table[i + 1].lexema - '0';
+//								for (int j = 1; j <= countParm; j++) {
+//									*(out.stream) << "\tpop edx\n";
+//									cout << "\tpop edx\n";
+//								}
+//								for (int j = 1; j <= countParm; j++)
+//								{
+//									*(out.stream) << "\tpush " << stk.top() << "\n";
+//									cout << "\tpush " << stk.top() << "\n";
+//									stk.pop();
+//								}
+//								if (flag_callfunc && !flag_random && !flag_strlen && !flag_strcmp)
+//								{
+//									*(out.stream) << "\tcall " << idtable.table[lextable.table[i - countParm - 1].indxTI].id << "\n\tpush eax\n";
+//									cout << "\tcall " << idtable.table[lextable.table[i - countParm - 1].indxTI].id << "\n\tpush eax\n";
+//									flag_callfunc = false;
+//								}
+//								if (flag_strlen)
+//								{
+//									*(out.stream) << "\tcall Strlen;" << "\n" << "\tpush eax\n";
+//									cout << "\tcall Strlen;" << "\n" << "\tpush eax\n";
+//									flag_strlen = false;
+//								}
+//								if (flag_strcmp)
+//								{
+//									*(out.stream) << "\tcall Strcmp; " << "\n" << "\tpush eax\n";
+//									cout << "\tcall Strcmp; " << "\n" << "\tpush eax\n";
+//									flag_strcmp = false;
+//								}
+//								break;
+//							}
+//						}
+//						i++;
+//					}
+//
+//					*(out.stream) << "\tpop " << idtable.table[lextable.table[result_position].indxTI].id << "\n";
+//					cout << "\tpop " << idtable.table[lextable.table[result_position].indxTI].id << "\n";
+//					break;
+//				}
+//			}
+//		}
+//
+//	}
+//
+//	
+//}
