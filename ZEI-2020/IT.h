@@ -7,7 +7,9 @@
 #define TI_TINY_DEFAULT 0x00000000		//значение по умолчанию для типа инт
 #define TI_SYMB_DEFAULT 0x00				//значение по умолчанию для типа стр
 #define TI_NULLIDX 0xffffffff			//нет элемента таблицы идентификаторов
+
 #define TI_STR_MAXSIZE 255
+#define MAXPARMCOUNT 3
 
 
 namespace IT
@@ -42,8 +44,8 @@ namespace IT
 		}value;//значение идентификатора
 		struct
 		{
-			int count = 0; //0 или 1
-			IDDATATYPE typeofparameter = IDDATATYPE::UNDEF; //1 параметр максимум
+			int count = 0; 
+			IDDATATYPE typeofparameter[MAXPARMCOUNT];
 		} parameters;
 	};
 	

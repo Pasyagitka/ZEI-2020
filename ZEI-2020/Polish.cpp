@@ -17,7 +17,6 @@ namespace Pn {
 		}
 	}
 
-	//switch
 	int GetPriority(char c) {
 		switch (c)
 		{

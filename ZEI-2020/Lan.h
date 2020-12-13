@@ -13,8 +13,8 @@
 #define POSTFIXGLOBAL "GLB"
 #define EMPTYSYMBLITERAL "\"\""
 
-#define S		  inText[i] == LEX_ASSIGN	|| inText[i] == LEX_EXCLAMATION || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE
-#define SNEXT	  inText[i + 1] == LEX_ASSIGN || inText[i + 1] == LEX_EXCLAMATION || inText[i + 1] == LEX_LEFTHESIS || inText[i + 1] == LEX_RIGHTHESIS || inText[i + 1] == LEX_RIGHTBRACE || inText[i + 1] == LEX_LEFTBRACE
+#define S		  inText[i] == LEX_ASSIGN	|| inText[i] == LEX_EXCLAMATION || inText[i] == LEX_LEFTHESIS || inText[i] == LEX_RIGHTHESIS || inText[i] == LEX_RIGHTBRACE || inText[i] == LEX_LEFTBRACE || inText[i] == LEX_COMMA
+#define SNEXT	  inText[i + 1] == LEX_ASSIGN || inText[i + 1] == LEX_EXCLAMATION || inText[i + 1] == LEX_LEFTHESIS || inText[i + 1] == LEX_RIGHTHESIS || inText[i + 1] == LEX_RIGHTBRACE || inText[i + 1] == LEX_LEFTBRACE || inText[i+1] == LEX_COMMA
 
 #define ARIFM	  inText[i] == LEX_MINUS || inText[i] == LEX_PLUS || inText[i] == LEX_STAR || inText[i] == LEX_DIVISION 
 #define ARIFMNEXT inText[i+1] == LEX_MINUS || inText[i+1] == LEX_PLUS || inText[i+1] == LEX_STAR || inText[i+1] == LEX_DIVISION 

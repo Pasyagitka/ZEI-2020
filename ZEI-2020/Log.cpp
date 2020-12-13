@@ -112,9 +112,10 @@ namespace Log
 			else if (idtable.table[i].iddatatype == IT::SYMB)*newLog.stream << "symbolic";
 			else if (idtable.table[i].iddatatype == IT::LGCL)*newLog.stream << "logical";
 
-			*newLog.stream << "\t\t" << idtable.table[i].id << "\t";
+			(strlen(idtable.table[i].id) > 9) ?	*newLog.stream << "\t\t" << idtable.table[i].id << "\t" : 
+												*newLog.stream << "\t\t" << idtable.table[i].id << "\t\t";
 
-			*newLog.stream << "\t" << idtable.table[i].postfix << "\t\t";
+			*newLog.stream  << idtable.table[i].postfix << "\t\t";
 
 
 			if (idtable.table[i].iddatatype == IT::TINY)		*newLog.stream << idtable.table[i].value.vtiny;		
@@ -123,7 +124,6 @@ namespace Log
 
 			*newLog.stream << std::endl;
 		}
-		*newLog.stream << "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
 	}
 
 

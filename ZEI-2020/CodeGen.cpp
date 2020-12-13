@@ -1,18 +1,19 @@
 #include "CodeGen.h"
 #include <iostream>
 
-#define ARIFM (lextable.table[i + 1].lexema == LEX_LEFTSHIFT || lextable.table[i + 1].lexema == LEX_RIGHTSHIFT || lextable.table[i + 1].lexema == LEX_PLUS ||  lextable.table[i + 1].lexema == LEX_MINUS || lextable.table[i + 1].lexema == LEX_STAR || lextable.table[i + 1].lexema == LEX_DIVISION)
+#define ARIFM (lextable.table[i - 1].lexema == LEX_GIVEBACK ||lextable.table[i + 1].lexema == LEX_LEFTSHIFT || lextable.table[i + 1].lexema == LEX_RIGHTSHIFT || lextable.table[i + 1].lexema == LEX_PLUS ||  lextable.table[i + 1].lexema == LEX_MINUS || lextable.table[i + 1].lexema == LEX_STAR || lextable.table[i + 1].lexema == LEX_DIVISION)
 
-namespace CodeGeneration
+namespace CG
 {
-	void StartGeneration(LT::LexTable& lextable, IT::IdTable& idtable, Out::OUT out)
+	void Generation(LT::LexTable& lextable, IT::IdTable& idtable, Out::OUT out)
 	{
 		int shift = 0;
 		bool typeflag = false;
-		HEADER
+		*(out.stream) << "using System;\n\nnamespace CourseProject\n{\n\tclass ZEI2020\n\t{\n\t\t";
+
 		for (int i = 0; i < lextable.size; i++)
 		{
-			if (!typeflag && ARIFM) {
+			if (!typeflag && ARIFM && idtable.table[lextable.table[i].indxTI].iddatatype == IT::TINY ) {
 				typeflag = true;
 				if (lextable.table[i-1].lexema == '(') // (выражение) ->  (sbyte)((выражение)
 					*(out.stream) << "sbyte)((";
@@ -29,11 +30,11 @@ namespace CodeGeneration
 				case LEX_TINY: 	{ //LEX_SYMBOLIC LEX_LOGICAL
 					if (lextable.table[i + 1].lexema == LEX_FUNCTION)
 						*(out.stream) << "static ";
-					if (!strcmp(lextable.table[i].buf, "tiny"))
+					if (!strcmp(lextable.table[i].info, "tiny"))
 						*(out.stream) << "sbyte ";								
-					if (!strcmp(lextable.table[i].buf, "symbolic"))
+					if (!strcmp(lextable.table[i].info, "symbolic"))
 						*(out.stream) << "string ";
-					if (!strcmp(lextable.table[i].buf, "logical"))
+					if (!strcmp(lextable.table[i].info, "logical"))
 						*(out.stream) << "bool ";
 					break;
 				}
@@ -81,6 +82,7 @@ namespace CodeGeneration
 				case LEX_MORE:			{	*(out.stream) << " > ";		break;	}
 				case LEX_LESS:			{	*(out.stream) << " < ";		break;	}
 
+				case LEX_COMMA:		{	*(out.stream) << ", ";		break;	}
 				case LEX_LEFTHESIS: {	*(out.stream) << "(";		break;	}
 				case LEX_EXCLAMATION: {	*(out.stream) << ";";		break;  }
 				case LEX_RIGHTSHIFT: {	*(out.stream) << " >> ";	break;	}
@@ -90,7 +92,7 @@ namespace CodeGeneration
 				case LEX_RIGHTBRACE: {
 					if (i + 2 > lextable.size)
 					{
-						*(out.stream) << "while (Console.ReadKey().Key != ConsoleKey.Enter) {}" << std::endl << "\t" << "\t" << "}";
+						*(out.stream) << "Console.ReadKey();" << std::endl << "\t" << "\t" << "}";
 					}
 					else
 					{
@@ -112,7 +114,7 @@ namespace CodeGeneration
 						*(out.stream) << "\t";
 			}
 		}
-		END
+		*(out.stream) << std::endl << "\t" << "}" << std::endl << "}";
 	}
 }
 

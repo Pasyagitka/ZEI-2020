@@ -1,11 +1,15 @@
-symbolic func  	 foo(symbolic str)
+symbolic func  	 foo(symbolic str,tiny k,tiny m)
 [
 show("symblen")!
 set tiny p    : symblen(str)!
 show(str)!
 giveback str!
 ]
-
+tiny func  	 boo()
+[
+show("boo function")!
+giveback 19!
+]
 perform 
 [
 ~set symbolic r : foo(r)!
@@ -23,17 +27,16 @@ set symbolic 	str : "sp ace"!
 show(str)!
 set symbolic  mystr : "а бв?гдежзикла	мопростуфхцч"!
 set logical mb : true!                                                                    ~алащуащуа
+set logical mbd : true! 
 show(mb)!
-~set tiny foolen : foo(mystr)!
 show("convert to tiny mystr")!
 set tiny convert : symbtotiny(mystr)!
 show(convert)!
-set tiny converttwo : symbtotiny("124")!
-show(converttwo)!
-when (mb^ false)
+
+when (mb ^ false)
 [
 a:101!
-a: 101+1!
+a: 19+1!
 show(a)!
 ~show()!
 ]

@@ -72,7 +72,6 @@ namespace Sem
 					}
 					break;
 				}
-				//TODO: параметры функии
 
 				case LEX_FUNCTION:
 				{
@@ -91,9 +90,10 @@ namespace Sem
 					}
 					break;
 				}
-				case LEX_ID: case LEX_LIBFUNC: case LEX_SHOW:{ //параметры функции
-					if ((idtable.table[lextable.table[i].indxTI].idtype == IT::F || idtable.table[lextable.table[i].indxTI].idtype == IT::B)//функци€ или библиотечна€
-						&& lextable.table[i - 1].lexema != LEX_FUNCTION) { //не объ€вление функции
+				
+				case LEX_ID: case LEX_LIBFUNC:  {
+					if ((idtable.table[lextable.table[i].indxTI].idtype == IT::F || idtable.table[lextable.table[i].indxTI].idtype == IT::B)
+						&& lextable.table[i - 1].lexema != LEX_FUNCTION) { 
 						int paramCounter = 0;
 						IT::Entry* ITEntry = new IT::Entry();
 						*ITEntry = IT::GetEntry(idtable, lextable.table[i].indxTI);
@@ -106,7 +106,7 @@ namespace Sem
 								{
 									throw  ERROR_THROW_IN(611, lextable.table[i].sn, 0);
 								}
-								if (idtable.table[lextable.table[j].indxTI].iddatatype != ITEntry->parameters.typeofparameter && ITEntry->parameters.typeofparameter != IT::UNDEF)
+								if (idtable.table[lextable.table[j].indxTI].iddatatype	!= ITEntry->parameters.typeofparameter[paramCounter - 1])
 								{
 									throw  ERROR_THROW_IN(610, lextable.table[i].sn, 0);
 								}
@@ -117,14 +117,14 @@ namespace Sem
 						delete ITEntry;
 					}
 
-					if (idtable.table[lextable.table[i].indxTI].iddatatype != IT::TINY) {	//јрифметические операции можно производить только над типом tiny
+					if (idtable.table[lextable.table[i].indxTI].iddatatype != IT::TINY) {
 						for (int y = i + 1; lextable.table[y].lexema != LEX_EXCLAMATION && lextable.table[y].lexema != LEX_RIGHTHESIS; y++) {
 							if (lextable.table[y].lexema == LEX_PLUS || lextable.table[y].lexema == LEX_MINUS || lextable.table[y].lexema == LEX_STAR || lextable.table[y].lexema == LEX_DIVISION) {
 								throw  ERROR_THROW_IN(614, lextable.table[i].sn, 0);
 							}
 						}
 					}
-				
+
 					break;
 				}
 

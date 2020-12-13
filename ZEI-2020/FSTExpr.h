@@ -144,9 +144,6 @@
 	FST::RELATION('y', 1), FST::RELATION('z', 1)),\
     FST::NODE()
 
-
-//TODO: ввод
-
 #pragma region LITERAL
 
 #define FST_TINYLITERAL16 3, \
@@ -262,6 +259,10 @@
 
 #define FST_ASSIGN 2, \
    FST::NODE(1, FST::RELATION(':', 1)),\
+   FST::NODE()
+
+#define FST_COMMA 2, \
+   FST::NODE(1, FST::RELATION(',', 1)),\
    FST::NODE()
 
 #pragma region ARIFM

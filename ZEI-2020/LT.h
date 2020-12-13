@@ -22,6 +22,7 @@
 #define LEX_SET			's'
 #define LEX_LEFTSHIFT   '\\'
 #define LEX_RIGHTSHIFT	'/'
+#define LEX_COMMA		','
 
 #define LEX_LEFTBRACE	'['
 #define LEX_RIGHTBRACE	']'
@@ -41,7 +42,7 @@
 #define LEX_SPACE		' '
 #define LEX_APOS		'\''
 #define LEX_QUOTE		'"'
-#define LEX_FREE		'%'	//для удаленных
+#define LEX_FREE		'%'	//для удаленных Польская запись
 #define LEX_AT			'@'
 #define LEX_EXCLAMATION '!'
 
@@ -53,7 +54,7 @@ namespace LT
 		char lexema;
 		int sn;//номер строки в тексте
 		int indxTI;//индекс в таблице идентификаторов или LT_TI_NULLIDX
-		char buf[300]; // буффер для связи с таблицей лексем
+		char info[30]; 
 	};
 
 	struct LexTable//экземпяр таблицы лексем

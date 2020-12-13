@@ -4,12 +4,17 @@ namespace CourseProject
 {
 	class ZEI2020
 	{
-		static string foo(string str)
+		static string foo(string str, sbyte k, sbyte m)
 		{
 			Console.WriteLine("symblen");
 			sbyte p = ZEI2020stdlib.StandartLibrary.Symblen(str);
 			Console.WriteLine(str);
 			return str;
+		}
+		static sbyte boo()
+		{
+			Console.WriteLine("boo function");
+			return (sbyte)(19);
 		}
 		static void Main(string[] args)
 		{
@@ -25,16 +30,15 @@ namespace CourseProject
 			Console.WriteLine(str);
 			string mystr = "а бв?гдежзикла	мопростуфхцч";
 			bool mb = true;
+			bool mbd = true;
 			Console.WriteLine(mb);
 			Console.WriteLine("convert to tiny mystr");
 			sbyte convert = ZEI2020stdlib.StandartLibrary.SymbToTiny(mystr);
 			Console.WriteLine(convert);
-			sbyte converttwo = ZEI2020stdlib.StandartLibrary.SymbToTiny("124");
-			Console.WriteLine(converttwo);
 			if(mb != false)
 			{
 				a = 101;
-				a = (sbyte)(101 + 1);
+				a = (sbyte)(19 + 1);
 				Console.WriteLine(a);
 			}
 			else
@@ -47,7 +51,7 @@ namespace CourseProject
 				fef = (sbyte)(fef + 1);
 			}
 			Console.WriteLine(fef);
-		while (Console.ReadKey().Key != ConsoleKey.Enter) {}
+		Console.ReadKey();
 		}
 			
 	}
