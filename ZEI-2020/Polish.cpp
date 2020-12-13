@@ -6,10 +6,7 @@
 #include <queue>
 #include <string>
 #include <iostream>
-//TODO первое вхождение идентификатора? str
-//TODO: есл что сюда можно дописать предыдущую лексему функции - i d h а r
 
-//TODO; входить в польскую когда надо и не трогать операторы сдвига и тп
 namespace Pn {
 	void ToPolish(LT::LexTable& lextable, IT::IdTable& idtable) {
 		for (int i = 0; i < lextable.size; i++) {

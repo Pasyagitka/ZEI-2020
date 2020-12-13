@@ -4,37 +4,49 @@ namespace CourseProject
 {
 	class ZEI2020
 	{
-		static int foo(string str)
+		static string foo(string str)
 		{
 			Console.WriteLine("symblen");
-			int p  = ZEI2020stdlib.StandartLibrary.Symblen(str);
-			return p ;
+			sbyte p = ZEI2020stdlib.StandartLibrary.Symblen(str);
+			Console.WriteLine(str);
+			return str;
 		}
 		static void Main(string[] args)
 		{
-			int x  = 4;
-			int y  = 22;
-			y  = x  >> 2;
-			int a  = x  + y  + 34;
-			string str  = "sp ace";
-			string mystr  = "а бв?гдежзикла	мопростуфхцч";
-			bool mb  = false;
-			int foolen  = foo(mystr);
-			if(x  == y)
+			sbyte x = -100;
+			Console.WriteLine(x);
+			sbyte y = 31;
+			Console.WriteLine(y);
+			y = (sbyte)(x >> 2);
+			Console.WriteLine(y);
+			sbyte a = (sbyte)(x + y + 34);
+			Console.WriteLine(a);
+			string str = "sp ace";
+			Console.WriteLine(str);
+			string mystr = "а бв?гдежзикла	мопростуфхцч";
+			bool mb = true;
+			Console.WriteLine(mb);
+			Console.WriteLine("convert to tiny mystr");
+			sbyte convert = ZEI2020stdlib.StandartLibrary.SymbToTiny(mystr);
+			Console.WriteLine(convert);
+			sbyte converttwo = ZEI2020stdlib.StandartLibrary.SymbToTiny("124");
+			Console.WriteLine(converttwo);
+			if(mb != false)
 			{
-				a  = 101;
+				a = 101;
+				a = (sbyte)(101 + 1);
 				Console.WriteLine(a);
 			}
 			else
 			{
-				Console.WriteLine(foolen);
 				Console.WriteLine(str);
 			}
-			int fef  = (x  * 12) * (a  / y);
-			while(fef  < 5)
+			sbyte fef = (sbyte)((x - 12) / (a + y));
+			while(fef > 5)
 			{
-				fef  = fef  + 1;
+				fef = (sbyte)(fef + 1);
 			}
+			Console.WriteLine(fef);
 		while (Console.ReadKey().Key != ConsoleKey.Enter) {}
 		}
 			

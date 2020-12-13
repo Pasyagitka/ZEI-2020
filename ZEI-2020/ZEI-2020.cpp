@@ -13,13 +13,14 @@
 #include "MFST.h"
 #include "Sem.h"
 #include "CodeGen.h"
-//TODO: функции стлиб возвращают int > tiny
+//#define AUTO
+//TODO: добавить красоты в консоль
+//TODO: добавить стандартных функций
+//TODO: добавить несколько параметров функций
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	setlocale(LC_ALL, "Russian");
-	wchar_t lexpath[] = L"../Lex.txt";
-	wchar_t idpath[] = L"../Id.txt";
 	
 	Log::LOG log = Log::INITLOG;
 	Out::OUT out = Out::INITOUT;
@@ -54,27 +55,29 @@ int _tmain(int argc, _TCHAR* argv[])
 		Log::WriteLexTable(log, lextable);
 		Log::WriteIdTable(log, idtable);
 
+
 		MFST_TRACE_START(log);
 		MFST::Mfst mfst(lextable, GRB::getGreibach());
 		mfst.start(log);
 		mfst.savededucation();
 		mfst.printrules(log);
 
-
 		Sem::Analysis(lextable, idtable, log);
-		
-
+	
 		//Pn::ToPolish(lextable, idtable);
 		
-
-		//Log::WriteLexTable(log, lextable);
-	
-
 		CodeGeneration::StartGeneration(lextable, idtable, out);
-		//CG::Generate(lextable,idtable, log, out);
-		//Out::WriteOut(out, in);
+
 
 		Out::Close(out);
+		#ifdef AUTO
+				std::cout << "Исполняемый файл создается..." << std::endl;
+				system("C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\csc.exe -out:\"G:\\AAA.exe\" \"G:\\3 семестр\\ЯП курсовой проект\\ZEI-2020\\ZEI-CS\\OutputFile.cs\" \"G:\\3 семестр\\ЯП курсовой проект\\ZEI-2020\\ZEI2020stdlib\\StandartLibrary.cs\" -warn:0 ");
+				std::cout << "Запуск исполняемого файла!" << std::endl;
+				system("\"G:\\AAA.exe\"");
+		#endif 
+
+	
 		Log::Close(log);
 		//delete in.text;
 	}

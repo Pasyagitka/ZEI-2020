@@ -6,7 +6,8 @@
 
 #define MINTINY -128
 #define MAXTINY 127
-#define SYMBMAXLEN 127
+
+#define SYMBMAXLEN 255 + 2
 
 
 #define POSTFIXGLOBAL "GLB"

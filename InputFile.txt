@@ -1,38 +1,52 @@
-tiny func  	 foo(symbolic str)
+symbolic func  	 foo(symbolic str)
 [
-shows("symblen")!
+show("symblen")!
 set tiny p    : symblen(str)!
-giveback p!
+show(str)!
+giveback str!
 ]
+
 perform 
 [
 ~set symbolic r : foo(r)!
 ~set symbolic r : show("f")!
-set tiny x : 100b!
-set tiny y : 16h!
+set tiny x : m100!
+show(x)!
+set tiny y : 37q!
+show(y)!
 
 y : x / 2!
+show(y)!
 set tiny a : x+y+22h!
+show(a)!
 set symbolic 	str : "sp ace"!
+show(str)!
 set symbolic  mystr : "а бв?гдежзикла	мопростуфхцч"!
-set logical mb : false!                                                                    ~алащуащуа
-set tiny foolen : foo(mystr)!
-when (x ^ y)
+set logical mb : true!                                                                    ~алащуащуа
+show(mb)!
+~set tiny foolen : foo(mystr)!
+show("convert to tiny mystr")!
+set tiny convert : symbtotiny(mystr)!
+show(convert)!
+set tiny converttwo : symbtotiny("124")!
+show(converttwo)!
+when (mb^ false)
 [
 a:101!
+a: 101+1!
 show(a)!
 ~show()!
 ]
 otherwise
 [
-show(foolen)!
-shows(str)!
+~show(foolen)!
+show(str)!
 ]
-set tiny fef :  (x * 12)	* (a #y)!
+set tiny fef :  (x -12)	# (a +y)!
 
-loop(fef < 5)
+loop(fef>5)
 [
  fef : fef+1!
 ]
-~show(z)!
+show(fef)!
 ]

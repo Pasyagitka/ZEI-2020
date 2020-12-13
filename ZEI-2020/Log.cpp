@@ -45,20 +45,20 @@ namespace Log
 		localtime_s(&currentTime, &t);
 		char str[TIME_SIZE];
 		strftime(str, TIME_SIZE, "%d.%m.%Y %H:%M:%S", &currentTime);
-		*newLog.stream <<"------------ Протокол----------------------------------------------------------------" << str << "------------" << std::endl;
+		*newLog.stream <<"------------ Протокол------------------------------------------------------------------------------------ " << str << "---------------------------------------------" << std::endl;
 	}
 
 	void WriteParm(LOG newLog, Parm::PARM parameter) {
 		size_t n = 0;
 		char buffer[PARM_MAX_SIZE];
-		*newLog.stream << "\n--------- Параметры -------------------------------------------------------------------------------------" << std::endl;
+		*newLog.stream << "\n--------- Параметры -------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
 		wcstombs_s(&n, buffer, parameter.log, PARM_MAX_SIZE);		*newLog.stream << "-log: " << buffer << std::endl;
 		wcstombs_s(&n, buffer, parameter.out, PARM_MAX_SIZE);		*newLog.stream << "-out: " << buffer << std::endl;
 		wcstombs_s(&n, buffer, parameter.in, PARM_MAX_SIZE);		*newLog.stream << " -in: " << buffer << std::endl;
 	}
 
 	void WriteIn(LOG newLog, In::IN in) {
-		*newLog.stream << "\n--------- Исходные данные ----------------------------------------------------------------------------" << std::endl;
+		*newLog.stream << "\n--------- Исходные данные ----------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
 		*newLog.stream << "Количество символов: " << in.size << std::endl;
 		*newLog.stream << "Проигнорировано    : " << in.ignor << std::endl;
 		*newLog.stream << "Количество строк   : " << in.lines << std::endl;
@@ -77,7 +77,7 @@ namespace Log
 
 	void WriteLexTable(LOG newLog, LT::LexTable& lextable)
 	{
-		*newLog.stream << "\n------------ Таблица лексем ----------------------------------------------------------------------------";
+		*newLog.stream << "\n------------ Таблица лексем ----------------------------------------------------------------------------------------------------------------------------------------------------";
 		unsigned int compLine = -1;
 		for (unsigned int i = 0; i < (unsigned int)lextable.size; i++)
 		{
@@ -93,7 +93,7 @@ namespace Log
 
 	void WriteIdTable(LOG newLog, IT::IdTable& idtable)
 	{
-		*newLog.stream << "\n\n------------ Таблица идентификаторов -----------------------------------------------------------------------" << std::endl;
+		*newLog.stream << "\n\n------------ Таблица идентификаторов --------------------------------------------------------------------------------------------------------------------------------" << std::endl;
 		*newLog.stream << "Строка\tТип ID\t\tТип данных\tИмя\t\tВидимость\tЗначение\n";
 		for (unsigned int i = 0; i < (unsigned int)idtable.size; i++)
 		{
@@ -108,7 +108,7 @@ namespace Log
 
 			*newLog.stream << "\t\t";
 
-			if (idtable.table[i].iddatatype == IT::TINY)*newLog.stream << "tiny";
+			if (idtable.table[i].iddatatype == IT::TINY)	*newLog.stream << "tiny";
 			else if (idtable.table[i].iddatatype == IT::SYMB)*newLog.stream << "symbolic";
 			else if (idtable.table[i].iddatatype == IT::LGCL)*newLog.stream << "logical";
 
@@ -116,13 +116,14 @@ namespace Log
 
 			*newLog.stream << "\t" << idtable.table[i].postfix << "\t\t";
 
-			if (idtable.table[i].iddatatype == IT::TINY)			*newLog.stream << idtable.table[i].value.vtiny;
+
+			if (idtable.table[i].iddatatype == IT::TINY)		*newLog.stream << idtable.table[i].value.vtiny;		
 			else if (idtable.table[i].iddatatype == IT::SYMB)	*newLog.stream << idtable.table[i].value.vsymb->str;
 			else if (idtable.table[i].iddatatype == IT::LGCL)	*newLog.stream << idtable.table[i].value.vlogical;
 
 			*newLog.stream << std::endl;
 		}
-		*newLog.stream << "----------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		*newLog.stream << "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
 	}
 
 

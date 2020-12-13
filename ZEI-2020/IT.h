@@ -33,7 +33,7 @@ namespace IT
 		union
 		{
 			char vlogical[6];
-			int vtiny;//значение инт
+			int vtiny;//значение tiny
 			struct
 			{
 				int len;//длина строки стр

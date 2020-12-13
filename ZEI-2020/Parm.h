@@ -5,7 +5,7 @@
 #define PARM_OUT L"-out:"		 
 #define PARM_LOG L"-log:"				// ключ для файла журнала
 #define PARM_MAX_SIZE 300				// максимальная длинна строки параметра
-#define PARAM_OUT_DEFAULT_EXT L".asm"	
+#define PARAM_OUT_DEFAULT_EXT L".cs"	
 #define PARM_LOG_DEFAULT_EXC  L".log"	// расширение файла протокола по умолчанию
 
 namespace Parm // обработка входных параметров

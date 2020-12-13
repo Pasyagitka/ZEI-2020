@@ -4,17 +4,16 @@
 
 #define LT_TABLE_SIZE 300
 #define LT_MAXSIZE 4096					//максимальнео кол-во строк в таблице лексем
-#define LT_TI_NULLIDX  -1		//нет эл-та таблицы индентификаторов
+#define LT_TI_NULLIDX  -1				//нет эл-та таблицы индентификаторов
 #define LEX_TINY		't'
 #define LEX_SYMBOLIC	't'
 #define LEX_LOGICAL		't'
 #define LEX_ID			'i'
 #define LEX_LITERAL		'l'
-#define LEX_LIB			'z'
-#define LEX_WHEN		'w' //if
-#define LEX_OTHERWISE	'o' // else
-#define LEX_SHOW		'h'		//вывод tiny
-#define LEX_SHOWSTR		'r'		//вывод строки
+#define LEX_WHEN		'w' 
+#define LEX_OTHERWISE	'o' 
+#define LEX_SHOW		'h'		
+#define LEX_SHOWSTR		'r'		
 #define LEX_FUNCTION	'f'
 #define LEX_LIBFUNC		'b'
 #define LEX_GIVEBACK	'g'
@@ -32,7 +31,7 @@
 #define LEX_LESS		'<'
 #define LEX_EQUALITY	'='
 #define LEX_INEQUALITY	'^'
-#define LEX_ASSIGN		':' //?
+#define LEX_ASSIGN		':' 
 #define LEX_PLUS		'+'
 #define LEX_MINUS		'-'
 #define LEX_STAR		'*'
