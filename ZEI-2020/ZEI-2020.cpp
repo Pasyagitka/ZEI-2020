@@ -12,18 +12,19 @@
 #include "MFST.h"
 #include "Sem.h"
 #include "CodeGen.h"
-//#define AUTO
+#define AUTO
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	int phase = 0;
 	setlocale(LC_ALL, "Russian");
-	
 	Log::LOG log = Log::INITLOG;
 	Out::OUT out = Out::INITOUT;
-	LT::LexTable lextable = LT::Create(LT_TABLE_SIZE);
-	IT::IdTable idtable = IT::Create(TI_TABLE_SIZE);
 	try
 	{
+		LT::LexTable lextable = LT::Create(LT_TABLE_SIZE);
+		IT::IdTable idtable = IT::Create(TI_TABLE_SIZE);
+
 		Parm::PARM parm = Parm::getparm(argc, argv);
 
 		log = Log::getlog(parm.log);
@@ -35,22 +36,35 @@ int _tmain(int argc, _TCHAR* argv[])
 		Log::WriteParm(log, parm);
 		Log::WriteIn(log, in);
 
-		Lan::Analysis((char*)in.text, log, lextable, idtable);
+		if (Lan::Analysis((char*)in.text, log, lextable, idtable)) {
+			std::cout << "Лексический анализ завершен" << std::endl;
+			phase++;
+		}
 
 		Log::WriteLexTable(log, lextable);
 		Log::WriteIdTable(log, idtable);
 
 		MFST_TRACE_START(log);
 		MFST::Mfst mfst(lextable, GRB::getGreibach());
-		mfst.start(log);
+		if (mfst.start(log)) {
+			std::cout << "Синтаксический анализ завершен" << std::endl;
+			phase++;
+		}
 		mfst.savededucation();
 		mfst.printrules(log);
 
-		Sem::Analysis(lextable, idtable, log);
-	
-		//Pn::ToPolish(lextable, idtable);
+		if (Sem::Analysis(lextable, idtable, log)) {
+			std::cout << "Семантический анализ завершен" << std::endl;
+			phase++;
+		}
 		
-		CG::Generation(lextable, idtable, out);
+		if (CG::Generation(lextable, idtable, out)) {
+			std::cout << "Генерация кода завершена" << std::endl;
+			phase++;
+		}
+	
+		LT::Delete(lextable);
+		IT::Delete(idtable);
 
 		Log::Close(log);
 		Out::Close(out);
@@ -67,9 +81,9 @@ int _tmain(int argc, _TCHAR* argv[])
 			wcstombs_s(&n, cs, parm.out, PARM_MAX_SIZE);
 
 			sprintf_s(path, PARM_MAX_SIZE, "%s -out:\"%s\" \"%s\" \"%s\" -warn:0", csc, exe, cs, stdlib);
-					std::cout << "Исполняемый файл создается..." << std::endl;
+					std::cout << "Исполняемый файл создается на основе файла " << cs << std::endl;
 					system(path);
-					std::cout << "Запуск исполняемого файла!" << std::endl;
+					std::cout << "Запуск исполняемого файла! " << exe << std::endl;
 				system(exe);
 		#endif 
 	}

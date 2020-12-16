@@ -22,7 +22,7 @@ namespace CourseProject
 			Console.WriteLine(x);
 			sbyte y = 0;
 			y = (sbyte)(x >> 2);
-			y = (sbyte)(1 + ZEI2020stdlib.StandartLibrary.GenerTiny() + 2);
+			y = (sbyte)(ZEI2020stdlib.StandartLibrary.GenerTiny() + 2);
 			Console.WriteLine(y);
 			sbyte a = (sbyte)(x + y + 34);
 			Console.WriteLine(a);
@@ -35,7 +35,7 @@ namespace CourseProject
 			bool k = false;
 			bool mbd = ZEI2020stdlib.StandartLibrary.GenerLogical();
 			Console.WriteLine(mb);
-			sbyte convert = (sbyte)(2 + ZEI2020stdlib.StandartLibrary.SymbToTiny(str) + 1);
+			sbyte convert = (sbyte)(ZEI2020stdlib.StandartLibrary.SymbToTiny(str) + 1);
 			Console.WriteLine(convert);
 			if(mb != false)
 			{
@@ -52,7 +52,7 @@ namespace CourseProject
 				fef = (sbyte)(fef + 1);
 			}
 			Console.WriteLine(fef);
-		
+		Console.ReadKey();
 		}
 			
 	}

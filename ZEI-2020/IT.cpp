@@ -49,7 +49,7 @@ namespace IT
 	int IsId(IdTable& idtable, char id[ID_MAXSIZE], char *postfix) {
 		for (int i = 0; i < idtable.size; i++) {
 			if ( !strcmp(idtable.table[i].id, id) && (!strcmp(idtable.table[i].postfix, postfix) || !strcmp(idtable.table[i].postfix, POSTFIXGLOBAL)))
-				return i; //idtable.table[i].idxfirstLE;
+				return i; 
 		}
 		return TI_NULLIDX;
 	}

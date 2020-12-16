@@ -71,13 +71,6 @@
 	FST::NODE(1, FST::RELATION('w', 4)),\
 	FST::NODE()
 
-#define FST_SHOWSTR 6, \
-	FST::NODE(1, FST::RELATION('s', 1)),\
-	FST::NODE(1, FST::RELATION('h', 2)),\
-	FST::NODE(1, FST::RELATION('o', 3)),\
-	FST::NODE(1, FST::RELATION('w', 4)),\
-	FST::NODE(1, FST::RELATION('s', 5)),\
-	FST::NODE()
 
 #define FST_LOOP 5, \
 	FST::NODE(1, FST::RELATION('l', 1)),\
@@ -106,6 +99,7 @@
 	FST::NODE(1, FST::RELATION('e', 9)),\
 	FST::NODE()
 
+#pragma region Standlib
 #define FST_SYMBLEN 8,\
     FST::NODE(1, FST::RELATION('s',1)),\
     FST::NODE(1, FST::RELATION('y',2)),\
@@ -128,6 +122,41 @@
     FST::NODE(1, FST::RELATION('n',9)),\
     FST::NODE(1, FST::RELATION('y',10)),\
     FST::NODE()
+
+#define FST_GETTIME 8,\
+    FST::NODE(1, FST::RELATION('g',1)),\
+    FST::NODE(1, FST::RELATION('e',2)),\
+    FST::NODE(1, FST::RELATION('t',3)),\
+    FST::NODE(1, FST::RELATION('t',4)),\
+    FST::NODE(1, FST::RELATION('i',5)),\
+    FST::NODE(1, FST::RELATION('m',6)),\
+    FST::NODE(1, FST::RELATION('e',7)),\
+    FST::NODE()
+
+#define FST_GENERTINY 10,\
+    FST::NODE(1, FST::RELATION('g',1)),\
+    FST::NODE(1, FST::RELATION('e',2)),\
+    FST::NODE(1, FST::RELATION('n',3)),\
+    FST::NODE(1, FST::RELATION('e',4)),\
+    FST::NODE(1, FST::RELATION('r',5)),\
+    FST::NODE(1, FST::RELATION('t',6)),\
+    FST::NODE(1, FST::RELATION('i',7)),\
+    FST::NODE(1, FST::RELATION('n',8)),\
+    FST::NODE(1, FST::RELATION('y',9)),\
+    FST::NODE()
+
+#define FST_GENERLGCL 10,\
+    FST::NODE(1, FST::RELATION('g',1)),\
+    FST::NODE(1, FST::RELATION('e',2)),\
+    FST::NODE(1, FST::RELATION('n',3)),\
+    FST::NODE(1, FST::RELATION('e',4)),\
+    FST::NODE(1, FST::RELATION('r',5)),\
+    FST::NODE(1, FST::RELATION('l',6)),\
+    FST::NODE(1, FST::RELATION('g',7)),\
+    FST::NODE(1, FST::RELATION('c',8)),\
+    FST::NODE(1, FST::RELATION('l',9)),\
+    FST::NODE()
+#pragma endregion
 
 #define FST_ID 2, \
 	FST::NODE(52, \
@@ -310,3 +339,6 @@
 	  FST::NODE(1, FST::RELATION('^', 1)),\
 	  FST::NODE()
 #pragma endregion
+
+
+

@@ -5,5 +5,5 @@
 
 namespace CG
 {
-	void Generation(LT::LexTable & lextable, IT::IdTable& idtable, Out::OUT out);
+	bool Generation(LT::LexTable & lextable, IT::IdTable& idtable, Out::OUT out);
 }

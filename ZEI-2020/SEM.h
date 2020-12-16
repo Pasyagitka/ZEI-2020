@@ -4,5 +4,5 @@
 
 namespace Sem
 {
-	void Analysis(LT::LexTable lextable, IT::IdTable idtable, Log::LOG log);
+	bool Analysis(LT::LexTable lextable, IT::IdTable idtable, Log::LOG log);
 }

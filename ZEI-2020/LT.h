@@ -4,7 +4,7 @@
 
 #define LT_TABLE_SIZE 300
 #define LT_MAXSIZE 4096					//максимальнео кол-во строк в таблице лексем
-#define LT_TI_NULLIDX  -1				//нет эл-та таблицы индентификаторов
+#define LT_TI_NULLIDX	-1
 #define LEX_TINY		't'
 #define LEX_SYMBOLIC	't'
 #define LEX_LOGICAL		't'
@@ -13,7 +13,6 @@
 #define LEX_WHEN		'w' 
 #define LEX_OTHERWISE	'o' 
 #define LEX_SHOW		'h'		
-#define LEX_SHOWSTR		'r'		
 #define LEX_FUNCTION	'f'
 #define LEX_LIBFUNC		'b'
 #define LEX_GIVEBACK	'g'
@@ -51,16 +50,16 @@ namespace LT
 {
 	struct Entry//строка таблицы лексем
 	{
-		char lexema;
+		char lexema;	
 		int sn;//номер строки в тексте
-		int indxTI;//индекс в таблице идентификаторов или LT_TI_NULLIDX
-		char info[30]; 
+		int indxTI;//индекс в таблице идентификаторов или TI_NULLIDX
+		char info[30]; //информаци€ о лексеме
 	};
 
 	struct LexTable//экземп€р таблицы лексем
 	{
 		int maxsize;//емкость таблицы лексем( < LT_MAXSIZE)
-		int size;//текущий размер таблицы лексем ( < maxsize)
+		int size;//текущий размер таблицы лексем ( < LT_MAXSIZE)
 		Entry* table;//массив строк таблицы лексем
 	};
 

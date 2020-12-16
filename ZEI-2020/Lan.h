@@ -24,5 +24,5 @@
 
 
 namespace Lan {
-	void Analysis(char inText[], Log::LOG, LT::LexTable& lextable, IT::IdTable& idtable);
+	bool Analysis(char inText[], Log::LOG, LT::LexTable& lextable, IT::IdTable& idtable);
 }

@@ -18,5 +18,24 @@ namespace ZEI2020stdlib
             }
             return Convert.ToSByte(symbolic);
         }
+
+        public static string GetTime(string symbolic)
+        {
+            return symbolic+DateTime.Now.ToShortTimeString();
+        }
+
+        public static sbyte GenerTiny()
+        {
+            var rnd = new Random();
+            return (sbyte)rnd.Next(-129, 128);
+        }
+
+        public static bool GenerLogical()
+        {
+            var rnd = new Random();
+            if (rnd.Next(0, 10) % 2 == 0)
+                return false;
+            else return true;
+        }
     }
 }

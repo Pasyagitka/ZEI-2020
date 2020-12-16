@@ -7,46 +7,40 @@ giveback str!
 ]
 tiny func  	 boo()
 [
-show("boo function")!
-giveback 19!
+show("boo function")!	~êîììåíòàğèé
+giveback 29!
 ]
 perform 
 [
-~set symbolic r : foo(r)!
-~set symbolic r : show("f")!
-set tiny x : m100!
+set tiny x : m100! 
 show(x)!
-set tiny y : 37q!
-show(y)!
-
+set tiny y!
 y : x / 2!
+y: 1 + genertiny() + 2!
 show(y)!
-set tiny a : x+y+22h!
+set tiny a : x+y    + 22h!
 show(a)!
-set symbolic 	str : "sp ace"!
+set symbolic 	str: "sp ace"!
 show(str)!
 set symbolic  mystr : "à áâ?ãäåæçèêëà	ìîïğîñòóôõö÷"!
-set logical mb : true!                                                                    ~àëàùóàùóà
-set logical mbd : true! 
+set symbolic w : gettime(str)!
+show(w)!
+set logical mb : true!
+set logical k!
+set logical mbd : generlgcl()!
 show(mb)!
-show("convert to tiny mystr")!
-set tiny convert : symbtotiny(mystr)!
+set tiny convert : 2 + symbtotiny(str) +1!
 show(convert)!
-
-when (mb ^ false)
+when(mb ^ false) 
 [
-a:101!
 a: 19+1!
 show(a)!
-~show()!
 ]
-otherwise
+otherwise 
 [
-~show(foolen)!
 show(str)!
 ]
 set tiny fef :  (x -12)	# (a +y)!
-
 loop(fef>5)
 [
  fef : fef+1!

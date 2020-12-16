@@ -2,12 +2,6 @@
 
 namespace Error
 {
-	//серии ошибок : 0 - 99 - системные ошибки
-	//				100 - 109 - ошибки параметров
-	//				110 - 119 - ошибки открытия и чтения файлов
-	//				300 - 399 - Ошибки лексического анализа
-	//				400 - 499 - Ошибки синтаксического анализа
-	//				500 - 599 - Ошибки семантического анализа - диагностические сообщения подсистемы Error
 	ERROR errors[ERROR_MAX_ENTRY] = //таблица ошибок
 	{
 		ERROR_ENTRY(0, "[!] Недопустимый код ошибки"), // код ошибки вне диапазона 0 - ERROR_MAX_ENTRY
@@ -36,7 +30,7 @@ namespace Error
 		ERROR_ENTRY(306, "[LA] Таблица идентификаторов, вероятно, ещё не создана"),
 		ERROR_ENTRY(307, "[LA] Недопустимый номер строки таблицы идентификаторов"),
 		ERROR_ENTRY(308, "[LA] Превышена максимальная длина имени идентификатора"),	
-		ERROR_ENTRY(309, "[LA] Значение вне диапазона для литерала типа tiny [-128; +127]d"),
+		ERROR_ENTRY(309, "[LA] Значение вне диапазона для литерала типа tiny [-128; +127]"),
 		ERROR_ENTRY(310, "[LA] Превышена максимальная длина литерала типа symbolic"),
 		ERROR_ENTRY(311, "[LA] Ошибка лексического разбора"),	
 		ERROR_ENTRY_NODEF(312),ERROR_ENTRY_NODEF(313),ERROR_ENTRY_NODEF(314),ERROR_ENTRY_NODEF(315),
@@ -49,7 +43,7 @@ namespace Error
 		ERROR_ENTRY(502, "[SX] Неверный список параметров функции при её объявлении"),
 		ERROR_ENTRY(503, "[SX] Отсутствует тело функции"),
 		ERROR_ENTRY(504, "[SX] Неверное выражение. Ожидаются только идентификаторы и литералы"),
-		ERROR_ENTRY(505, "[SX] Ошибка в теле процедуры "),
+		ERROR_ENTRY_NODEF(505),
 		ERROR_ENTRY(506, "[SX] Неверная конструкция в теле функции"),
 		ERROR_ENTRY(507, "[SX] Ошибка в условном выражении"),
 		ERROR_ENTRY(508, "[SX] Ошибка в вызове функции"),
@@ -62,8 +56,8 @@ namespace Error
 		ERROR_ENTRY_NODEF10(520), ERROR_ENTRY_NODEF10(530), ERROR_ENTRY_NODEF10(540), ERROR_ENTRY_NODEF10(550),
 		ERROR_ENTRY_NODEF10(560), ERROR_ENTRY_NODEF10(570), ERROR_ENTRY_NODEF10(580), ERROR_ENTRY_NODEF10(590),
 
-		ERROR_ENTRY_NODEF(600, "[SM] "),	//Может неопределенная ошибка
-		ERROR_ENTRY_NODEF(601, "[SM]"),	
+		ERROR_ENTRY_NODEF(600),
+		ERROR_ENTRY_NODEF(601),	
 		ERROR_ENTRY(602, "[SM] Отсутствует точка входа в программу perform"),
 		ERROR_ENTRY(603, "[SM] Присутствует более одной точки входа в программу perform"),
 		ERROR_ENTRY(604, "[SM] Идентификатор не объявлен"),
@@ -80,7 +74,7 @@ namespace Error
 		ERROR_ENTRY(615, "[SM] Логические операции < > можно производить только над типом tiny"),
 		ERROR_ENTRY(616, "[SM] Логические операции = ^ можно производить только над типами tiny или logical"),
 		ERROR_ENTRY(617, "[SM] Неверное выражение. Несовпадение типов слева и справа от знака присваивания"),
-		ERROR_ENTRY_NODEF(618, "[SM]")
+		ERROR_ENTRY_NODEF(618)
 	};
 	ERROR geterror(int id)
 	{

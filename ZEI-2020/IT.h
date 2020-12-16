@@ -22,37 +22,38 @@ namespace IT
 
 	enum IDTYPE
 	{
-		V = 1, L, F, B, P, U //тип идентификатора(переменная, литерал), функция, библиотечная функция, параметр, не определено
+		V = 1, L, F, B, P, U //тип идентификатора(переменная, литерал), функция, 
+		//библиотечная функция, параметр, не определено
 	};
 
 	struct Entry
 	{
-		short idxfirstLE;//индекс первой строки в таблице лексем
+		short idxfirstLE;		//индекс первой строки в таблице лексем
 		char id[ID_MAXSIZE * 2] = "";//идентификатор(автоматически усекается до ID_MAXSIZE)
-		char postfix[ID_MAXSIZE];
-		IDDATATYPE iddatatype = IDDATATYPE::UNDEF;//тип данных
-		IDTYPE idtype = IDTYPE::U;//тип идентификатора.
+		char postfix[ID_MAXSIZE];	//постфикс для области видимости идентификатора
+		IDDATATYPE iddatatype = IDDATATYPE::UNDEF;	//тип данных 
+		IDTYPE idtype = IDTYPE::U;			//тип идентификатора.
 		union
 		{
-			char vlogical[6];
-			int vtiny;//значение tiny
+			char vlogical[6];				//значение logical
+			int vtiny;						//значение tiny
 			struct
 			{
-				int len;//длина строки стр
+				int len;					//длина строки стр
 				char str[TI_STR_MAXSIZE - 1];//строка
-			}vsymb[TI_STR_MAXSIZE];//значение стр
-		}value;//значение идентификатора
+			}vsymb[TI_STR_MAXSIZE];			//значение стр
+		}value;						//значение идентификатора
 		struct
 		{
-			int count = 0; 
+			int count = 0;			
 			IDDATATYPE typeofparameter[MAXPARMCOUNT];
-		} parameters;
+		} parameters;			//параметры (если идентификатор - функция)
 	};
 	
 	struct IdTable//экземпляр таблицы идентификаторов
 	{
 		int maxsize;//макс емкость таблицы идентификаторов( < TI_MAXSIZE)
-		int size;//текущий размер таблицы идентификаторов ( < maxsize)
+		int size;//текущий размер таблицы идентификаторов ( < TI_MAXSIZE)
 		Entry* table;//массив строк таблицы идентификаторов
 	};
 
