@@ -41,7 +41,7 @@ otherwise
 show(str)!
 ]
 set tiny fef :  (x -12)	# (a +y)!
-loop(fef>5)
+loop(fef=5)
 [
  fef : fef+1!
 ]

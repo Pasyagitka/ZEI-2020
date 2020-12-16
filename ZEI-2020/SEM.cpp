@@ -2,7 +2,6 @@
 #include "LT.h"
 #include "Error.h"
 
-//Сделано: значения литерала tiny, symbolic, не 1 perform, переопределение, не определено, нельзя свдвигать строку, параметры функций
 namespace Sem
 {
 	bool Analysis(LT::LexTable lextable, IT::IdTable idtable, Log::LOG log) {
